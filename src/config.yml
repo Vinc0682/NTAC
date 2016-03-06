@@ -1,0 +1,232 @@
+#GENERAL INFORMATION
+
+#String formating:
+#Colors:
+#You can use the essentials color codes
+#        http://ess.khhq.net/mc/
+
+# Orig Chars --> Will be replaced with
+#
+# %n         --> A new line
+# %nn        --> 5 new lines
+
+#Unit: Tick:
+#"Tick" is a minecraft-time-unit.
+#20 Ticks equal one second
+#Example = 3 Seconds = 3 * 20 = 60 Ticks
+
+#ENABLED MODULES
+Enabled:
+
+  #Combat
+  Killaura-NPC: true #Stable DEFAULT: true
+  Anti-Knockback: false #Need PvPManager Support DEFAULT: false
+  Auto-Clicker: true #Code stable, customize dat settings DEFAULT: true
+
+  #Player
+  SkinDerp: true #Stable, even in AAC --> Hive! DEFAULT: true
+  Headless: true #To test :D
+
+  #Movement (all require movement base enabled)
+  Anti-AFK: true #Beta, testing on newtownia.net + more subchecks'll be added soon! DEFAULT: true
+  Sneak: true #Stable, patches a NC+ Bypass DEFAULT: true
+  NoSlowBlock: true #Stable, patches a NC+ Bypass DEFAULT: true
+  Fast-Ladder: true # In development, NC+ is unable to fix it :(
+
+#Some options for the bases of NTAC
+Bases:
+  #The movement base is a part of the integrated framework which keeps
+  #tracking the player movement and saves serveral position data
+  #Can be disabled if you don't use any of the movement checks
+  #If disabled the movement base, enabled movement checks will be buggy / not working
+  Enable-Movement-Base: true
+
+#Killaura NPC-Check settings
+Killaura-NPC:
+  #The commands run when a player is suspected for killaura
+  #Each violation is equal to a hit
+  Actions:
+    5:
+      - 'ntac kick %PLAYER% %nn&cNTAC &7> &c&lKillaura%n%n&c                Hacken ist auf newtownia.net verboten.%n%n'
+      - 'ntac notify %PLAYER% got kicked for killaura. VL %VL%'
+
+  #Frequency to reset the violations's in TICKS DEFAULT: 20
+  Clear-Frequency: 20
+
+  #Combat time
+  #Time (in milliseconds (1000 ms equal 1 sec) the bot is visible after
+  #hitting an entity
+  #DEFAULT: 5000  (equals 5 seconds)
+  Combat-Time: 5000
+
+  #Frequency till the bot changes his name
+  Change-Bot-Frequency: 200
+
+  #The minimum and maximum angle the bot will have (in relation to the player)
+  #DEFAULT MIN: 100 (To adjust since these values were generic)
+  #DEFAULT MAX: 120
+  Angle-Min: 100
+  Angle-Max: 120
+
+  #The minimum and maximum distance between the bot and the player
+  #DEFAULT MIN: 2
+  #DEFAULT MAX: 4
+  Distance-Min: 2
+  Distance-Max: 4
+
+  #The frequecy (in ms) the bot switch the side
+  Switch-Time: 1000
+
+#Anti-Knockback / NoVelocity-Check
+Anti-Knockback:
+
+  #Adjustment (Ticks) to prevent false positives DEFAULT: 2
+  Adjustment: 2
+
+  #The message shown when sb. gets kicked for NoVelocity DEFAULT: No Knockback
+  Kick-Message: No Knockback
+
+#Auto-Clicker-Check, in development
+Auto-Clicker:
+
+  #The count of stored delays, set higher to reduce false positives, will use more cpu and ram
+  Delay-Count: 10
+
+  #How many milliseconds should be used as puffer to make the check usefull
+  Timer-Puffer: 12
+
+  #The vl is equal to the amount of detected attacs
+  Actions:
+    5: "ntac notify %PLAYER% is suspected for autoclicker. VL %VL%"
+    10:
+      - "ntac kick %PLAYER% %nn&cNTAC &7> &c&lAutoClicker%n%n&c                Hacken ist auf newtownia.net verboten.%n%n"
+      - "ntac notify %PLAYER% got kicked for autoclicker. VL %VL%"
+
+  #The time until the VL get's invalidated (in ms)
+  #NOTE: The VL only get's invalidated when there are no new VLs.
+  Invalidate-Threshold: 5000
+
+
+#Skinderp-Properties:
+SkinDerp:
+
+  #Time between skin-changes to make a change legit (Milliseconds) DEFAULT: 100
+  Time-Threshold: 100
+
+  #Count of unlegit changes till the player get kicked DEFAULT: 10
+  Count-Threshold: 10
+
+  #Kick-message DEFAULT: Skinderp
+  Kick-Message: Skinderp
+
+  #The commands run when a player is suspected for killaura
+  #Each violation is equal to a hit
+  Actions:
+    10:
+      - 'ntac kick %PLAYER% %nn&cNTAC &7> &c&lSkinderp%n%n&c                Hacken ist auf newtownia.net verboten.%n%n'
+      - 'ntac notify %PLAYER% got kicked for skinderp. VL %VL%'
+
+#Headless
+Headless:
+
+  #The commands run when someone get suspected for headless, the vl is equal to the count of suspicious movements
+  Actions:
+    1:
+      - 'ntac kick %PLAYER% %nn&cNTAC &7> &c&lHeadless%n%n&c                Hacken ist auf newtownia.net verboten.%n%n'
+      - 'ntac notify %PLAYER% got kicked for headless. VL %VL%'
+
+#Anti-AFK
+Anti-AFK:
+  #Time (in seconds) of a player being afk until he get's kicked. DEFAULT: 300
+  Kick-Threshold: 180
+
+  #Frequency for the check weather a player should be kicked. DEFAULT: 100
+  Kick-Check-Frequency: 100
+
+  #The message shown when a player is kicked cause AFK. DEFAULT: AFK
+  Kick-Message: '%nn&cNTAC &7> &c&lAFK%n%n&c            Du wurdest gekickt, weil du 3 Minuten AFK warst!%n%n'
+
+  #Subcheck-Properties
+
+  #Move-In-Range-Check
+  #This check checks weather the player has moved a several distance
+  Move-In-Range:
+
+    #Should this subcheck be enabled DEFAULT: true
+    Enabled: false
+
+    #This is the distance a player have to walk until the movement is
+    #recognized as not-afk (bot) movement by the MoveInRange-Check
+    #This is limit to 2 for testings purposes and to limit false-positives at the
+    #beginning. DEFAULT: 2
+    Range-Threshold: 2
+
+  #Push-Device-Check
+  #This check checks weather the player is in water, lava or riding to kill
+  #AFK-Maschines, experimental (and work in progress)
+  Push-Device-Check:
+
+    #Should this subcheck be enabled DEFAULT: true
+    Enabled: true
+
+    #Should movements in water be marked as AFK. DEFAULT: true
+    Mark-In-Water: true
+
+    #Should movements in lava be marked as AFK. DEFAULT: true
+    Mark-In-Lava: true
+
+    #Should movements while the player is riding or using a minecart be marked as AFK. DEFAULT: true
+    Mark-In-Vehicle: true
+
+    #The delay (ms) until a player is unmarked, required to ignore steps in afk-maschines (also fixes infinite jump-maschines) DEFAULT: 3000
+    Unmark-Delay: 3000
+
+#Sneak properties
+#NOTE: This check isn't ment to be a completly check for Sneak. It is a patch for NC+ fixes a bypass (for NC+)
+Sneak:
+
+  #The time between to sneak actions to get detected as legit.
+  Sneak-Threshold: 40
+
+  #Actions, the vl equals the count of detected packets
+  Actions:
+    3: 'cancel'
+    20:
+      - 'ntac notify %PLAYER% is suspected for sneak VL %VL%'
+      - 'cancel'
+    100:
+      - 'ntac kick %PLAYER% %nn&cNTAC &7> &c&lSneak%n%n&c                Hacken ist auf newtownia.net verboten.%n%n'
+      - 'ntac notify %PLAYER% got kicked for sneak VL %VL%'
+
+  #The time until the VL get's invalidated (in ms)
+  #NOTE: The VL only get's invalidated when there are no new VLs.
+  Invalidate-Threshold: 1000
+
+  #The frequencie (in ticks) for the invalidate-cycle
+  Invalidate-Freq: 5
+
+#NoSlowBlock properties
+#NOTE: This check isn't ment to be a completly check for NoSlow. This just fixes a bypass for NC+ allowing
+#to NoSlow while blocking releasing the blocking pre move and block again on past move. Easy to detect
+#and just like sneak :D
+NoSlowBlock:
+
+  #The time between to sneak actions to get detected as legit.
+  Use-Release-Threshold: 50
+
+  #Actions, the vl equals the count of detected packets
+  Actions:
+    1: 'cancel'
+    5:
+      - 'ntac notify %PLAYER% is suspected for NoSlow (FastToggling) VL %VL%'
+      - 'cancel'
+    10:
+      - 'ntac kick %PLAYER% %nn&cNTAC &7> &c&lNoSlowdown%n%n&c                Hacken ist auf newtownia.net verboten.%n%n'
+      - 'ntac notify %PLAYER% got kicked for NoSlow (FastToggling) VL %VL%'
+
+  #The time until the VL get's invalidated (in ms)
+  #NOTE: The VL only get's invalidated when there are no new VLs.
+  Invalidate-Threshold: 1000
+
+  #The frequencie (in ticks) for the invalidate-cycle
+  Invalidate-Freq: 5
