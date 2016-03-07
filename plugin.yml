@@ -1,0 +1,35 @@
+name: NTAC
+main: net.newtownia.NTAC.NTAC
+version: '1.5'
+depend: [NTApi, ProtocolLib]
+author: Vinc0682
+
+commands:
+  ntac:
+    description: 'General NTAC-handling'
+    usage: '/ntac'
+    permission: ntac.command
+  ntacreload:
+    description: 'Laedt das Plugin neu.'
+    usuage: '/ntacreload'
+    permission: ntac.reload
+
+permissions:
+  ntac.bypass.killaura.npc:
+    default: OP
+  ntac.bypass.antiknockback:
+    default: OP
+  ntac.bypass.autoclicker:
+    default: OP
+  ntac.bypass.swingderp:
+    default: OP
+  ntac.bypass.headless:
+      default: OP
+  ntac.bypass.antiafk:
+    default: OP
+  ntac.bypass.sneak:
+    default: OP
+  ntac.bypass.noslowblock:
+    default: OP
+  ntac.notify:
+    default: OP

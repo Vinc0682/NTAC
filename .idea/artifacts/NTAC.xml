@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="NTAC">
+    <output-path>D:/UserData/Vincent/Server/NTAC Debug/plugins</output-path>
+    <root id="archive" name="NTAC.jar">
+      <element id="file-copy" path="$PROJECT_DIR$/plugin.yml" />
+      <element id="module-output" name="NTAC" />
+    </root>
+  </artifact>
+</component>
