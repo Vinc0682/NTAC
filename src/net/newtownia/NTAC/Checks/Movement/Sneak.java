@@ -14,6 +14,7 @@ import net.newtownia.NTAC.Utils.PunishUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerMoveEvent;
 
 import java.util.HashMap;
 import java.util.List;
@@ -105,5 +106,10 @@ public class Sneak extends AbstractMovementCheck
         invalidateFreq = Integer.parseInt(pl.getConfiguration().getString("Sneak.Invalidate-Freq"));
 
         actionData = new ActionData(pl.getConfiguration(), "Sneak.Actions");
+    }
+
+    @Override
+    public void onPlayerMove(PlayerMoveEvent event) {
+        //Do nothing
     }
 }

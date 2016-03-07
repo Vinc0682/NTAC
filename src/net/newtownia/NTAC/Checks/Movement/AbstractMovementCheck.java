@@ -3,6 +3,7 @@ package net.newtownia.NTAC.Checks.Movement;
 import net.newtownia.NTAC.Checks.AbstractCheck;
 import net.newtownia.NTAC.NTAC;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerMoveEvent;
 
 public abstract class AbstractMovementCheck extends AbstractCheck implements Listener
 {
@@ -13,10 +14,13 @@ public abstract class AbstractMovementCheck extends AbstractCheck implements Lis
         super(pl, name);
 
         this.movementBase = movementBase;
+        movementBase.registerMovementCheck(this);
     }
 
     @Override
     public boolean isEnabled() {
         return super.isEnabled() && (movementBase != null);
     }
+
+    public abstract void onPlayerMove(PlayerMoveEvent event);
 }

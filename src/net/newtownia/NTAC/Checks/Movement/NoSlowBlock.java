@@ -15,6 +15,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
@@ -118,5 +119,10 @@ public class NoSlowBlock extends AbstractMovementCheck
         invalidateFreq = Integer.parseInt(pl.getConfiguration().getString("NoSlowBlock.Invalidate-Freq"));
 
         actionData = new ActionData(pl.getConfiguration(), "NoSlowBlock.Actions");
+    }
+
+    @Override
+    public void onPlayerMove(PlayerMoveEvent event) {
+        //Do nothing
     }
 }

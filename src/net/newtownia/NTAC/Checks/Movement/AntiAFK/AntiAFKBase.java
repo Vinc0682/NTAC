@@ -61,34 +61,10 @@ public class AntiAFKBase extends AbstractMovementCheck implements Listener
     @EventHandler
     public void onJoin(PlayerJoinEvent event)
     {
-        if(!isEnabled())
+        if (!isEnabled())
             return;
 
         lastPlayerNonAFKMoveTimes.put(event.getPlayer().getUniqueId(), System.currentTimeMillis());
-    }
-
-    @EventHandler
-    public void onMove(PlayerMoveEvent e)
-    {
-        if(!isEnabled())
-            return;
-
-        Player p = e.getPlayer();
-        UUID pUUID = p.getUniqueId();
-
-        if(p.hasPermission("ntac.bypass.antiafk"))
-            return;
-
-        if(!lastPlayerNonAFKMoveTimes.containsKey(pUUID))
-            lastPlayerNonAFKMoveTimes.put(pUUID, System.currentTimeMillis());
-
-        boolean isValidMove = true;
-
-        for(AbstractAntiAFKCheck check : checks)
-            isValidMove &= check.isValidMovement(e);
-
-        if(isValidMove)
-            lastPlayerNonAFKMoveTimes.put(pUUID, System.currentTimeMillis());
     }
 
     @Override
@@ -110,5 +86,29 @@ public class AntiAFKBase extends AbstractMovementCheck implements Listener
 
         if(Boolean.valueOf(config.getString("Anti-AFK.Push-Device-Check.Enabled")))
             checks.add(new PushDeviceCheck(pl, movementBase));
+    }
+
+    @Override
+    public void onPlayerMove(PlayerMoveEvent event)
+    {
+        if(!isEnabled())
+            return;
+
+        Player p = event.getPlayer();
+        UUID pUUID = p.getUniqueId();
+
+        if(p.hasPermission("ntac.bypass.antiafk"))
+            return;
+
+        if(!lastPlayerNonAFKMoveTimes.containsKey(pUUID))
+            lastPlayerNonAFKMoveTimes.put(pUUID, System.currentTimeMillis());
+
+        boolean isValidMove = true;
+
+        for(AbstractAntiAFKCheck check : checks)
+            isValidMove &= check.isValidMovement(event);
+
+        if(isValidMove)
+            lastPlayerNonAFKMoveTimes.put(pUUID, System.currentTimeMillis());
     }
 }

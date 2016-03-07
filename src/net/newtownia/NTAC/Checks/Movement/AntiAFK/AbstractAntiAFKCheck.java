@@ -14,4 +14,9 @@ public abstract class AbstractAntiAFKCheck extends AbstractMovementCheck
     }
 
     public abstract boolean isValidMovement(PlayerMoveEvent e);
+
+    @Override
+    public void onPlayerMove(PlayerMoveEvent event) {
+        //Do nothing
+    }
 }

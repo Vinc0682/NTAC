@@ -23,7 +23,6 @@ public class FastLadder extends AbstractMovementCheck implements Listener
         loadConfig();
     }
 
-    @EventHandler
     public void onPlayerMove(PlayerMoveEvent event)
     {
         if (!isEnabled())
@@ -34,8 +33,6 @@ public class FastLadder extends AbstractMovementCheck implements Listener
         if (m == Material.LADDER || m == Material.VINE)
         {
             //TODO: Make a fastladder check
-            String doSomething = "Work in progress...";
-            doSomething += "b";
         }
     }
 

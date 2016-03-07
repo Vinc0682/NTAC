@@ -6,6 +6,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -15,12 +16,15 @@ public class MovementBase implements Listener
     private Map<UUID, Long> playerStartMoveTimes;
     private Map<UUID, Location> playerStartMoveLocations;
 
+    private ArrayList<AbstractMovementCheck> movementChecks;
+
     int newMoveTimeThreshold = 500;
 
     public MovementBase()
     {
         playerStartMoveLocations = new HashMap<>();
         playerStartMoveTimes = new HashMap<>();
+        movementChecks = new ArrayList<>();
     }
 
     @EventHandler
@@ -42,6 +46,9 @@ public class MovementBase implements Listener
                 playerStartMoveLocations.put(pUUID, e.getFrom());
             }
         }
+
+        for (AbstractMovementCheck check : movementChecks)
+            check.onPlayerMove(e);
     }
 
     public boolean hasPlayerMoveTimePassed(Player p, int milliseconds)
@@ -60,5 +67,15 @@ public class MovementBase implements Listener
             return null;
 
         return playerStartMoveLocations.get(p.getUniqueId());
+    }
+
+    public void registerMovementCheck(AbstractMovementCheck movementCheck)
+    {
+        movementChecks.add(movementCheck);
+    }
+
+    public void unregisterMovementCheck(AbstractMovementCheck movementCheck)
+    {
+        movementChecks.remove(movementCheck);
     }
 }
