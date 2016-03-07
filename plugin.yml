@@ -31,5 +31,7 @@ permissions:
     default: OP
   ntac.bypass.noslowblock:
     default: OP
+  ntac.bypass.fastladder:
+    default: OP
   ntac.notify:
     default: OP

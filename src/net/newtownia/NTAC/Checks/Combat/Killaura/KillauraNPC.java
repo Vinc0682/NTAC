@@ -160,19 +160,8 @@ public class KillauraNPC extends AbstractCheck
         playerLastHitTime.put(pUUID, System.currentTimeMillis());
     }
 
-    @EventHandler
-    public void onPlayerKick(PlayerKickEvent event)
-    {
-        removeAllData(event.getPlayer());
-    }
-
-    @EventHandler
-    public void onPlayerQuit(PlayerQuitEvent event)
-    {
-        removeAllData(event.getPlayer());
-    }
-
-    private void removeAllData(Player p)
+    @Override
+    protected void onPlayerDisconnect(Player p)
     {
         if(!isEnabled())
             return;

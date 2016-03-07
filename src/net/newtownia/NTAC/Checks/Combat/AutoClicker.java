@@ -33,6 +33,7 @@ public class AutoClicker extends AbstractCheck implements Listener
 
     int delayCount = 5;
     int timePuffer = 5;
+    int combatTime = 5000;
     int invalidateThreshold = 5000;
 
     public AutoClicker(NTAC pl)
@@ -90,8 +91,13 @@ public class AutoClicker extends AbstractCheck implements Listener
 
         int currentDelay = (int)(System.currentTimeMillis() - playerLastAttackTimes.get(pUUID));
         List<Integer> delays = playerDelays.get(pUUID);
-        if (delays.size() == 0 || currentDelay < getAverage(delays) + timePuffer * 10)
+
+        playerLastAttackTimes.put(pUUID, System.currentTimeMillis());
+
+        if (delays.size() == 0 || currentDelay < 5000)
             delays.add(0, currentDelay);
+        else
+            return;
 
         //Limit count of delays saved
         while (delays.size() > delayCount)
@@ -118,8 +124,6 @@ public class AutoClicker extends AbstractCheck implements Listener
                 PunishUtils.runViolationAction(p, vl, vl, actionData);
             }
         }
-
-        playerLastAttackTimes.put(pUUID, System.currentTimeMillis());
         playerDelays.put(pUUID, delays);
     }
 
@@ -131,20 +135,8 @@ public class AutoClicker extends AbstractCheck implements Listener
         return result / numbers.size();
     }
 
-    @EventHandler
-    public void onPlayerKick(PlayerKickEvent event)
-    {
-        resetPlayerData(event.getPlayer());
-    }
-
-    @EventHandler
-    public void onPlayerQuit(PlayerQuitEvent event)
-    {
-        resetPlayerData(event.getPlayer());
-    }
-
-    private void resetPlayerData(Player p)
-    {
+    @Override
+    protected void onPlayerDisconnect(Player p) {
         UUID pUUID = p.getUniqueId();
         vlManager.resetPlayerViolation(pUUID);
         playerLastAttackTimes.remove(pUUID);
@@ -157,6 +149,7 @@ public class AutoClicker extends AbstractCheck implements Listener
         YamlConfiguration config = pl.getConfiguration();
         timePuffer = Integer.parseInt(config.getString("Auto-Clicker.Timer-Puffer"));
         delayCount = Integer.parseInt(config.getString("Auto-Clicker.Delay-Count"));
+        combatTime = Integer.parseInt(config.getString("Auto-Clicker.Delay-Count"));
         invalidateThreshold = Integer.parseInt(config.getString("Auto-Clicker.Invalidate-Threshold"));
         actionData = new ActionData(config, "Auto-Clicker.Actions");
     }

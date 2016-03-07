@@ -38,7 +38,6 @@ public class PunishUtils
 
     public static void runViolationAction(Player p, int violation, int realVL, ActionData data)
     {
-        UUID pUUID = p.getUniqueId();
         List<String> violationCommands = data.getViolationCommands(violation);
 
         if(violationCommands == null)

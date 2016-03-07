@@ -3,6 +3,7 @@ package net.newtownia.NTAC.Checks.Combat;
 import net.newtownia.NTAC.Checks.AbstractCheck;
 import net.newtownia.NTAC.NTAC;
 import net.newtownia.NTAC.Utils.MessageUtils;
+import net.newtownia.NTAC.Utils.PlayerUtils;
 import net.newtownia.NTAC.Utils.PunishUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -122,33 +123,6 @@ public class AntiKnockback extends AbstractCheck implements Listener
 
     public int getTicksToWait(Player p)
     {
-        return  getPingOfPlayer(p) / 50;
-    }
-
-    public static int getPingOfPlayer(Player p)
-    {
-        //Get version number
-        String bpName = Bukkit.getServer().getClass().getPackage().getName();
-        String version = bpName.substring(bpName.lastIndexOf(".") + 1, bpName.length());
-
-        try
-        {
-            //Get craft player
-            Class<?> CPClass = Class.forName("org.bukkit.craftbukkit." + version + ".entity.CraftPlayer");
-            Object craftPlayer = CPClass.cast(p);
-
-            //Get EntityPlayer
-            Method getHandle = craftPlayer.getClass().getMethod("getHandle", new Class[0]);
-            Object EntityPlayer = getHandle.invoke(craftPlayer, new Object[0]);
-
-            //Get Ping-Field
-            Field ping = EntityPlayer.getClass().getDeclaredField("ping");
-
-            //Return value of the Ping-Field
-            return ping.getInt(EntityPlayer);
-        }
-        catch (Exception e) { }
-
-        return 100;
+        return  PlayerUtils.getPing(p) / 50;
     }
 }

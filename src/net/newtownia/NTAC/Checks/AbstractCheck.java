@@ -1,7 +1,11 @@
 package net.newtownia.NTAC.Checks;
 
 import net.newtownia.NTAC.NTAC;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerKickEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 public abstract class AbstractCheck implements Listener
 {
@@ -28,5 +32,19 @@ public abstract class AbstractCheck implements Listener
 
     public String getName() {
         return name;
+    }
+
+    protected void onPlayerDisconnect(Player p) {}
+
+    @EventHandler
+    public void onPlayerKick(PlayerKickEvent event)
+    {
+        onPlayerDisconnect(event.getPlayer());
+    }
+
+    @EventHandler
+    public void onPlayerQuit(PlayerQuitEvent event)
+    {
+        onPlayerDisconnect(event.getPlayer());
     }
 }

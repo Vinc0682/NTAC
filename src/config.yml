@@ -95,6 +95,9 @@ Auto-Clicker:
   #How many milliseconds should be used as puffer to make the check usefull
   Timer-Puffer: 12
 
+  #The time between two hits to ignore that delay to make autoclicker more precise
+  Combat-Time: 5000
+
   #The vl is equal to the amount of detected attacs
   Actions:
     5: "ntac notify %PLAYER% is suspected for autoclicker. VL %VL%"
@@ -192,11 +195,11 @@ Sneak:
   Actions:
     3: 'cancel'
     20:
-      - 'ntac notify %PLAYER% is suspected for sneak VL %VL%'
+      - 'ntac notify %PLAYER% is suspected for sneak. VL %VL%'
       - 'cancel'
     100:
       - 'ntac kick %PLAYER% %nn&cNTAC &7> &c&lSneak%n%n&c                Hacken ist auf newtownia.net verboten.%n%n'
-      - 'ntac notify %PLAYER% got kicked for sneak VL %VL%'
+      - 'ntac notify %PLAYER% got kicked for sneak. VL %VL%'
 
   #The time until the VL get's invalidated (in ms)
   #NOTE: The VL only get's invalidated when there are no new VLs.
@@ -218,11 +221,11 @@ NoSlowBlock:
   Actions:
     1: 'cancel'
     5:
-      - 'ntac notify %PLAYER% is suspected for NoSlow (FastToggling) VL %VL%'
+      - 'ntac notify %PLAYER% is suspected for NoSlow (FastToggling). VL %VL%'
       - 'cancel'
     10:
       - 'ntac kick %PLAYER% %nn&cNTAC &7> &c&lNoSlowdown%n%n&c                Hacken ist auf newtownia.net verboten.%n%n'
-      - 'ntac notify %PLAYER% got kicked for NoSlow (FastToggling) VL %VL%'
+      - 'ntac notify %PLAYER% got kicked for NoSlow (FastToggling). VL %VL%'
 
   #The time until the VL get's invalidated (in ms)
   #NOTE: The VL only get's invalidated when there are no new VLs.
@@ -230,3 +233,18 @@ NoSlowBlock:
 
   #The frequencie (in ticks) for the invalidate-cycle
   Invalidate-Freq: 5
+
+Fast-Ladder:
+
+  #The normal climbing speed
+  Climbing-Speed: 0.15
+
+  #The speed allowed when you start to climb a ladder
+  Start-Speed: 1.5
+
+  #The time between two hits to ignore that delay to make autoclicker more precise
+  Combat-Time: 5000
+
+  #The actions, the vl equals the count of suspicious movements
+  Actions:
+    3: 'cancel'
