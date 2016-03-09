@@ -19,7 +19,7 @@ import java.util.UUID;
 
 public class FastLadder extends AbstractMovementCheck implements Listener
 {
-    private double climbingSpeed = 0.15;
+    private double climbingSpeed = 0.13;
     private Double startSpeed = 1.5;
 
     private ViolationManager vlManager;

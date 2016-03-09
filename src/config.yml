@@ -237,7 +237,7 @@ NoSlowBlock:
 Fast-Ladder:
 
   #The normal climbing speed
-  Climbing-Speed: 0.15
+  Climbing-Speed: 0.13
 
   #The speed allowed when you start to climb a ladder
   Start-Speed: 1.5
