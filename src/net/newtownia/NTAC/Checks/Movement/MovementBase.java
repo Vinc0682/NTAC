@@ -1,5 +1,6 @@
 package net.newtownia.NTAC.Checks.Movement;
 
+import net.newtownia.NTAC.Utils.PlayerUtils;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,41 +16,57 @@ public class MovementBase implements Listener
 {
     private Map<UUID, Long> playerStartMoveTimes;
     private Map<UUID, Location> playerStartMoveLocations;
-
-    private ArrayList<AbstractMovementCheck> movementChecks;
+    private Map<UUID, Boolean> playerOnGround;
 
     int newMoveTimeThreshold = 500;
+
+    private ArrayList<AbstractMovementCheck> movementChecks;
 
     public MovementBase()
     {
         playerStartMoveLocations = new HashMap<>();
         playerStartMoveTimes = new HashMap<>();
+        playerOnGround = new HashMap<>();
+
         movementChecks = new ArrayList<>();
     }
 
     @EventHandler
-    public void onMove(PlayerMoveEvent e)
+    public void onMove(PlayerMoveEvent event)
     {
-        Player p = e.getPlayer();
+        updateCache(event);
+        raiseChecks(event);
+    }
+
+    public void updateCache(PlayerMoveEvent event)
+    {
+        Player p = event.getPlayer();
         UUID pUUID = p.getUniqueId();
 
         if(!playerStartMoveTimes.containsKey(pUUID))
         {
             playerStartMoveTimes.put(pUUID, System.currentTimeMillis());
-            playerStartMoveLocations.put(pUUID, e.getFrom());
+            playerStartMoveLocations.put(pUUID, event.getFrom());
         }
         else
         {
             if(hasPlayerMoveTimePassed(pUUID, newMoveTimeThreshold))
             {
                 playerStartMoveTimes.put(pUUID, System.currentTimeMillis());
-                playerStartMoveLocations.put(pUUID, e.getFrom());
+                playerStartMoveLocations.put(pUUID, event.getFrom());
             }
         }
 
-        for (AbstractMovementCheck check : movementChecks)
-            check.onPlayerMove(e);
+        playerOnGround.put(pUUID, PlayerUtils.isPlayerOnGround(p));
     }
+
+    public void raiseChecks(PlayerMoveEvent event)
+    {
+        for (AbstractMovementCheck check : movementChecks)
+            check.onPlayerMove(event);
+    }
+
+    //region Getters for the caching
 
     public boolean hasPlayerMoveTimePassed(Player p, int milliseconds)
     {
@@ -69,6 +86,18 @@ public class MovementBase implements Listener
         return playerStartMoveLocations.get(p.getUniqueId());
     }
 
+    public boolean isPlayerOnGround(Player p)
+    {
+        UUID pUUID = p.getUniqueId();
+        if (!playerOnGround.containsKey(pUUID))
+        {
+            playerOnGround.put(pUUID, PlayerUtils.isPlayerOnGround(p));
+        }
+        return playerOnGround.get(pUUID);
+    }
+    //endregion
+
+    //region Observator functions
     public void registerMovementCheck(AbstractMovementCheck movementCheck)
     {
         movementChecks.add(movementCheck);
@@ -78,4 +107,5 @@ public class MovementBase implements Listener
     {
         movementChecks.remove(movementCheck);
     }
+    //endregion
 }
