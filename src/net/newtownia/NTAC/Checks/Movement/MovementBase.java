@@ -1,7 +1,19 @@
 package net.newtownia.NTAC.Checks.Movement;
 
+import com.comphenix.packetwrapper.WrapperPlayClientBlockDig;
+import com.comphenix.packetwrapper.WrapperPlayClientBlockPlace;
+import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
+import com.comphenix.protocol.events.ListenerPriority;
+import com.comphenix.protocol.events.PacketAdapter;
+import com.comphenix.protocol.events.PacketEvent;
+import com.comphenix.protocol.wrappers.EnumWrappers;
+import net.newtownia.NTAC.NTAC;
+import net.newtownia.NTAC.Utils.ItemUtils;
 import net.newtownia.NTAC.Utils.PlayerUtils;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -17,18 +29,32 @@ public class MovementBase implements Listener
     private Map<UUID, Long> playerStartMoveTimes;
     private Map<UUID, Location> playerStartMoveLocations;
     private Map<UUID, Boolean> playerOnGround;
+    private Map<UUID, Boolean> playerUsingItem;
 
     int newMoveTimeThreshold = 500;
 
     private ArrayList<AbstractMovementCheck> movementChecks;
+
+    PacketAdapter useItemAdapter;
 
     public MovementBase()
     {
         playerStartMoveLocations = new HashMap<>();
         playerStartMoveTimes = new HashMap<>();
         playerOnGround = new HashMap<>();
+        playerUsingItem = new HashMap<>();
 
         movementChecks = new ArrayList<>();
+
+        //Disabled since it's buggy as hell
+        /*useItemAdapter = new PacketAdapter(NTAC.getInstance(), ListenerPriority.HIGH, PacketType.Play.Client.BLOCK_DIG,
+                PacketType.Play.Client.BLOCK_PLACE) {
+            @Override
+            public void onPacketReceiving(PacketEvent event) {
+                handleItemUsePacket(event);
+            }
+        };
+        ProtocolLibrary.getProtocolManager().addPacketListener(useItemAdapter);*/
     }
 
     @EventHandler
@@ -66,6 +92,29 @@ public class MovementBase implements Listener
             check.onPlayerMove(event);
     }
 
+    //Useless
+    private void handleItemUsePacket(PacketEvent event)
+    {
+        Player p = event.getPlayer();
+        UUID pUUID = p.getUniqueId();
+
+        if (event.getPacketType() == PacketType.Play.Client.BLOCK_DIG)
+        {
+            p.sendMessage("Gotta dig packet");
+            WrapperPlayClientBlockDig packet = new WrapperPlayClientBlockDig(event.getPacket());
+
+            if (packet.getStatus() == EnumWrappers.PlayerDigType.RELEASE_USE_ITEM)
+                playerUsingItem.put(pUUID, false);
+        }
+        else if (event.getPacketType() == PacketType.Play.Client.BLOCK_PLACE)
+        {
+            p.sendMessage("Gotta place packet");
+            WrapperPlayClientBlockPlace packet = new WrapperPlayClientBlockPlace(event.getPacket());
+            if (packet.getFace() == 255)
+                playerUsingItem.put(pUUID, true);
+        }
+    }
+
     //region Getters for the caching
 
     public boolean hasPlayerMoveTimePassed(Player p, int milliseconds)
@@ -94,6 +143,13 @@ public class MovementBase implements Listener
             playerOnGround.put(pUUID, PlayerUtils.isPlayerOnGround(p));
         }
         return playerOnGround.get(pUUID);
+    }
+
+    public boolean isPlayerUsingItem(UUID pUUID)
+    {
+        if (!playerUsingItem.containsKey(pUUID))
+            return false;
+        return playerUsingItem.get(pUUID);
     }
     //endregion
 

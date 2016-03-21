@@ -10,6 +10,7 @@ import com.comphenix.protocol.wrappers.EnumWrappers;
 import net.newtownia.NTAC.Action.ActionData;
 import net.newtownia.NTAC.Action.ViolationManager;
 import net.newtownia.NTAC.NTAC;
+import net.newtownia.NTAC.Utils.ItemUtils;
 import net.newtownia.NTAC.Utils.PunishUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -69,7 +70,7 @@ public class NoSlowBlock extends AbstractMovementCheck
             return;
         if(event.getPlayer().hasPermission("ntac.bypass.noslowblock"))
             return;
-        if (!isSword(event.getPlayer().getItemInHand()))
+        if (!ItemUtils.isSword(event.getPlayer().getItemInHand()))
             return;
 
         Player p = event.getPlayer();
@@ -100,15 +101,6 @@ public class NoSlowBlock extends AbstractMovementCheck
 
             lastBlockToggleTime.put(pUUID, System.currentTimeMillis());
         }
-    }
-
-    private boolean isSword(ItemStack stack)
-    {
-        if (stack == null)
-            return false;
-
-        Material m = stack.getType();
-        return m == Material.WOOD_SWORD || m == Material.STONE_SWORD || m == Material.IRON_SWORD || m == Material.DIAMOND_SWORD;
     }
 
     @Override
