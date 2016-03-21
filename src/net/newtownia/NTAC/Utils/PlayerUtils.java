@@ -8,20 +8,29 @@ import org.bukkit.entity.Player;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 
 public class PlayerUtils
 {
     public static boolean isPlayerOnGround(Player p)
     {
         Block blockDown = p.getLocation().getBlock().getRelative(BlockFace.DOWN);
-        Block blockNorth = blockDown.getRelative(BlockFace.NORTH);
-        Block blockEast = blockDown.getRelative(BlockFace.EAST);
-        Block blockSouth = blockDown.getRelative(BlockFace.SOUTH);
-        Block blockWest = blockDown.getRelative(BlockFace.WEST);
 
-        return blockDown.getType() != Material.AIR || blockNorth.getType() != Material.AIR ||
-                blockEast.getType() != Material.AIR || blockSouth.getType() != Material.AIR ||
-                blockWest.getType() != Material.AIR;
+        ArrayList<Material> materials = new ArrayList<>();
+        materials.add(blockDown.getType());
+        materials.add(blockDown.getRelative(BlockFace.NORTH).getType());
+        materials.add(blockDown.getRelative(BlockFace.NORTH_EAST).getType());
+        materials.add(blockDown.getRelative(BlockFace.EAST).getType());
+        materials.add(blockDown.getRelative(BlockFace.SOUTH_EAST).getType());
+        materials.add(blockDown.getRelative(BlockFace.SOUTH).getType());
+        materials.add(blockDown.getRelative(BlockFace.SOUTH_WEST).getType());
+        materials.add(blockDown.getRelative(BlockFace.WEST).getType());
+        materials.add(blockDown.getRelative(BlockFace.NORTH_WEST).getType());
+
+        for (Material m : materials)
+            if (m != Material.AIR)
+                return true;
+        return false;
     }
 
     public static int getPing(Player p)
