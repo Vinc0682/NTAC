@@ -10,10 +10,10 @@ import com.comphenix.protocol.wrappers.EnumWrappers;
 import net.newtownia.NTAC.Action.ActionData;
 import net.newtownia.NTAC.Action.ViolationManager;
 import net.newtownia.NTAC.NTAC;
-import net.newtownia.NTAC.Utils.ItemUtils;
 import net.newtownia.NTAC.Utils.PunishUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerMoveEvent;
 
@@ -21,7 +21,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-//TODO: Update for 1.9
 public class NoSlowBlock extends AbstractMovementCheck
 {
     int useReleaseThreshold = 40;
@@ -66,12 +65,16 @@ public class NoSlowBlock extends AbstractMovementCheck
             return;
         if(event.getPacketType() != PacketType.Play.Client.BLOCK_DIG)
             return;
-        if(event.getPlayer().hasPermission("ntac.bypass.noslowblock"))
-            return;
-        if (!ItemUtils.isSword(event.getPlayer().getItemInHand()))
-            return;
 
         Player p = event.getPlayer();
+
+        if(p.hasPermission("ntac.bypass.noslowblock"))
+            return;
+        if (p.getInventory().getItemInMainHand().getType() == Material.SHIELD &&
+                p.getInventory().getItemInOffHand().getType() == Material.SHIELD)
+            return;
+
+
         UUID pUUID = p.getUniqueId();
         WrapperPlayClientBlockDig packet = new WrapperPlayClientBlockDig(event.getPacket());
 
