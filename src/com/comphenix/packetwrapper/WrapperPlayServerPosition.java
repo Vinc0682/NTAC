@@ -18,14 +18,14 @@
  */
 package com.comphenix.packetwrapper;
 
-import java.util.Set;
-
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.reflect.StructureModifier;
 import com.comphenix.protocol.utility.MinecraftReflection;
 import com.comphenix.protocol.wrappers.BukkitConverters;
 import com.comphenix.protocol.wrappers.EnumWrappers;
+
+import java.util.Set;
 
 public class WrapperPlayServerPosition extends AbstractPacket {
     public static final PacketType TYPE = PacketType.Play.Server.POSITION;
@@ -132,12 +132,12 @@ public class WrapperPlayServerPosition extends AbstractPacket {
     private static final Class<?> FLAGS_CLASS = MinecraftReflection.getMinecraftClass("EnumPlayerTeleportFlags",
             "PacketPlayOutPosition$EnumPlayerTeleportFlags");
 
-    public enum PlayerTeleportFlag {
+    public static enum PlayerTeleportFlag {
         X,
         Y,
         Z,
         Y_ROT,
-        X_ROT
+        X_ROT;
     }
 
     private StructureModifier<Set<PlayerTeleportFlag>> getFlagsModifier() {

@@ -20,6 +20,8 @@ package com.comphenix.packetwrapper;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
+import com.comphenix.protocol.wrappers.EnumWrappers.SoundCategory;
+import org.bukkit.Sound;
 
 public class WrapperPlayServerNamedSoundEffect extends AbstractPacket {
     public static final PacketType TYPE = PacketType.Play.Server.NAMED_SOUND_EFFECT;
@@ -33,20 +35,20 @@ public class WrapperPlayServerNamedSoundEffect extends AbstractPacket {
         super(packet, TYPE);
     }
     
-    /**
-     * Retrieve Sound name.
-     * @return The current Sound name
-     */
-    public String getSoundName() {
-        return handle.getStrings().read(0);
+    public Sound getSoundEffect() {
+    	return handle.getSoundEffects().read(0);
     }
-    
-    /**
-     * Set Sound name.
-     * @param value - new value.
-     */
-    public void setSoundName(String value) {
-        handle.getStrings().write(0, value);
+
+    public void setSoundEffect(Sound value) {
+    	handle.getSoundEffects().write(0, value);
+    }
+
+    public SoundCategory getSoundCategory() {
+    	return handle.getSoundCategories().read(0);
+    }
+
+    public void setSoundCategory(SoundCategory value) {
+    	handle.getSoundCategories().write(0, value);
     }
     
     /**

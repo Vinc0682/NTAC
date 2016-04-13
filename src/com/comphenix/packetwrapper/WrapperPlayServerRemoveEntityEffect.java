@@ -18,12 +18,12 @@
  */
 package com.comphenix.packetwrapper;
 
-import org.bukkit.World;
-import org.bukkit.entity.Entity;
-
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
+import org.bukkit.World;
+import org.bukkit.entity.Entity;
+import org.bukkit.potion.PotionEffectType;
 
 public class WrapperPlayServerRemoveEntityEffect extends AbstractPacket {
     public static final PacketType TYPE = PacketType.Play.Server.REMOVE_ENTITY_EFFECT;
@@ -73,19 +73,11 @@ public class WrapperPlayServerRemoveEntityEffect extends AbstractPacket {
         return getEntity(event.getPlayer().getWorld());
     }
 
-    /**
-     * Retrieve Effect ID.
-     * @return The current Effect ID
-     */
-    public int getEffectId() {
-        return handle.getIntegers().read(1);
+    public PotionEffectType getEffect() {
+    	return handle.getEffectTypes().read(0);
     }
 
-    /**
-     * Set Effect ID.
-     * @param value - new value.
-     */
-    public void setEffectId(int value) {
-        handle.getIntegers().write(1, value);
+    public void setEffect(PotionEffectType value) {
+    	handle.getEffectTypes().write(0, value);
     }
 }

@@ -18,12 +18,12 @@
  */
 package com.comphenix.packetwrapper;
 
-import java.util.Collection;
-import java.util.List;
-
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.reflect.IntEnum;
+
+import java.util.Collection;
+import java.util.List;
 
 public class WrapperPlayServerScoreboardTeam extends AbstractPacket {
     public static final PacketType TYPE = PacketType.Play.Server.SCOREBOARD_TEAM;

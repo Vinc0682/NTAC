@@ -3,17 +3,12 @@ package net.newtownia.NTAC.Checks.Movement;
 import com.comphenix.packetwrapper.WrapperPlayClientBlockDig;
 import com.comphenix.packetwrapper.WrapperPlayClientBlockPlace;
 import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.ProtocolManager;
-import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.EnumWrappers;
-import net.newtownia.NTAC.NTAC;
 import net.newtownia.NTAC.Utils.ItemUtils;
 import net.newtownia.NTAC.Utils.PlayerUtils;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -110,7 +105,7 @@ public class MovementBase implements Listener
         {
             p.sendMessage("Gotta place packet");
             WrapperPlayClientBlockPlace packet = new WrapperPlayClientBlockPlace(event.getPacket());
-            if (packet.getFace() == 255)
+            if (ItemUtils.isUsable(p.getItemInHand()))
                 playerUsingItem.put(pUUID, true);
         }
     }

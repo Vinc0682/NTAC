@@ -18,11 +18,10 @@
  */
 package com.comphenix.packetwrapper;
 
-import org.bukkit.Material;
-
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.BlockPosition;
+import org.bukkit.Material;
 
 public class WrapperPlayServerBlockAction extends AbstractPacket {
     public static final PacketType TYPE = PacketType.Play.Server.BLOCK_ACTION;

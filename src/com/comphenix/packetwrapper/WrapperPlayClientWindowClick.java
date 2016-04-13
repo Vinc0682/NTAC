@@ -18,10 +18,9 @@
  */
 package com.comphenix.packetwrapper;
 
-import org.bukkit.inventory.ItemStack;
-
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
+import org.bukkit.inventory.ItemStack;
 
 public class WrapperPlayClientWindowClick extends AbstractPacket {
     public static final PacketType TYPE = PacketType.Play.Client.WINDOW_CLICK;
@@ -106,25 +105,7 @@ public class WrapperPlayClientWindowClick extends AbstractPacket {
     public void setActionNumber(short value) {
         handle.getShorts().write(0, value);
     }
-    
-    /**
-     * Retrieve Mode.
-     * <p>
-     * Notes: inventory operation mode. See below.
-     * @return The current Mode
-     */
-    public int getMode() {
-        return handle.getIntegers().read(3);
-    }
-    
-    /**
-     * Set Mode.
-     * @param value - new value.
-     */
-    public void setMode(int value) {
-        handle.getIntegers().write(3,  value);
-    }
-    
+
     /**
      * Retrieve Clicked item.
      * @return The current Clicked item
@@ -140,6 +121,22 @@ public class WrapperPlayClientWindowClick extends AbstractPacket {
     public void setClickedItem(ItemStack value) {
         handle.getItemModifier().write(0, value);
     }
-    
-}
 
+    public InventoryClickType getShift() {
+    	return handle.getEnumModifier(InventoryClickType.class, 6).read(0);
+    }
+
+    public void setShift(InventoryClickType value) {
+    	handle.getEnumModifier(InventoryClickType.class, 6).write(0, value);
+    }
+
+	public enum InventoryClickType {
+		PICKUP,
+		QUICK_MOVE,
+		SWAP,
+		CLONE,
+		THROW,
+		QUICK_CRAFT,
+		PICKUP_ALL;
+	}
+}

@@ -80,7 +80,7 @@ public class PacketGenerator
 		packet.setZ(loc.getZ());
 		packet.setPitch(loc.getPitch());
 		packet.setYaw(loc.getYaw());
-		
+
 		return packet;
 	}
 	

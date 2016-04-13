@@ -18,12 +18,11 @@
  */
 package com.comphenix.packetwrapper;
 
-import org.bukkit.World;
-import org.bukkit.entity.Entity;
-
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
+import org.bukkit.World;
+import org.bukkit.entity.Entity;
 
 public class WrapperPlayServerSpawnEntityExperienceOrb extends AbstractPacket {
     public static final PacketType TYPE = PacketType.Play.Server.SPAWN_ENTITY_EXPERIENCE_ORB;
@@ -74,57 +73,57 @@ public class WrapperPlayServerSpawnEntityExperienceOrb extends AbstractPacket {
     }
 
     /**
-     * Retrieve X.
+     * Retrieve the x position of the object.
      * <p>
-     * Notes: x position as a Fixed-Point number
+     * Note that the coordinate is rounded off to the nearest 1/32 of a meter.
      * @return The current X
-     */
-    public int getX() {
-        return handle.getIntegers().read(1);
+    */
+    public double getX() {
+        return handle.getDoubles().read(0);
     }
 
     /**
-     * Set X.
+     * Set the x position of the object.
      * @param value - new value.
-     */
-    public void setX(int value) {
-        handle.getIntegers().write(1, value);
+    */
+    public void setX(double value) {
+        handle.getDoubles().write(0, value);
     }
 
     /**
-     * Retrieve Y.
+     * Retrieve the y position of the object.
      * <p>
-     * Notes: y position as a Fixed-Point number
-     * @return The current Y
-     */
-    public int getY() {
-        return handle.getIntegers().read(2);
+     * Note that the coordinate is rounded off to the nearest 1/32 of a meter.
+     * @return The current y
+    */
+    public double getY() {
+        return handle.getDoubles().read(1);
     }
 
     /**
-     * Set Y.
+     * Set the y position of the object.
      * @param value - new value.
-     */
-    public void setY(int value) {
-        handle.getIntegers().write(2, value);
+    */
+    public void setY(double value) {
+    	handle.getDoubles().write(1, value);
     }
 
     /**
-     * Retrieve Z.
+     * Retrieve the z position of the object.
      * <p>
-     * Notes: z position as a Fixed-Point number
-     * @return The current Z
-     */
-    public int getZ() {
-        return handle.getIntegers().read(3);
+     * Note that the coordinate is rounded off to the nearest 1/32 of a meter.
+     * @return The current z
+    */
+    public double getZ() {
+        return handle.getDoubles().read(2);
     }
 
     /**
-     * Set Z.
+     * Set the z position of the object.
      * @param value - new value.
-     */
-    public void setZ(int value) {
-        handle.getIntegers().write(3, value);
+    */
+    public void setZ(double value) {
+    	handle.getDoubles().write(2, value);
     }
 
     /**
@@ -134,7 +133,7 @@ public class WrapperPlayServerSpawnEntityExperienceOrb extends AbstractPacket {
      * @return The current Count
      */
     public int getCount() {
-        return handle.getIntegers().read(4);
+        return handle.getIntegers().read(1);
     }
 
     /**
@@ -142,6 +141,6 @@ public class WrapperPlayServerSpawnEntityExperienceOrb extends AbstractPacket {
      * @param value - new value.
      */
     public void setCount(int value) {
-        handle.getIntegers().write(4, value);
+        handle.getIntegers().write(1, value);
     }
 }

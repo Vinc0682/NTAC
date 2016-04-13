@@ -18,13 +18,12 @@
  */
 package com.comphenix.packetwrapper;
 
-import org.bukkit.World;
-import org.bukkit.entity.Entity;
-
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.EnumWrappers.PlayerAction;
+import org.bukkit.World;
+import org.bukkit.entity.Entity;
 
 public class WrapperPlayClientEntityAction extends AbstractPacket {
     public static final PacketType TYPE = PacketType.Play.Client.ENTITY_ACTION;

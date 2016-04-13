@@ -18,15 +18,14 @@
  */
 package com.comphenix.packetwrapper;
 
-import java.util.List;
-
-import org.bukkit.World;
-import org.bukkit.entity.Entity;
-
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.WrappedAttribute;
+import org.bukkit.World;
+import org.bukkit.entity.Entity;
+
+import java.util.List;
 
 public class WrapperPlayServerUpdateAttributes extends AbstractPacket {
     public static final PacketType TYPE = PacketType.Play.Server.UPDATE_ATTRIBUTES;

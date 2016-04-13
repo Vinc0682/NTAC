@@ -18,10 +18,10 @@
  */
 package com.comphenix.packetwrapper;
 
-import java.security.PublicKey;
-
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
+
+import java.security.PublicKey;
 
 public class WrapperLoginServerEncryptionBegin extends AbstractPacket {
     public static final PacketType TYPE = PacketType.Login.Server.ENCRYPTION_BEGIN;

@@ -65,7 +65,7 @@ public class CheckManager
 
         allChecks.add(new AntiAFKBase(pl, movementBase));
         allChecks.add(new Sneak(pl, movementBase));
-        allChecks.add(new NoSlowBlock(pl, movementBase));
+        //allChecks.add(new NoSlowBlock(pl, movementBase)); Can't block anymore
         allChecks.add(new FastLadder(pl, movementBase));
     }
 

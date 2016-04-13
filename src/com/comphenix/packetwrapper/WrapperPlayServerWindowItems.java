@@ -18,10 +18,9 @@
  */
 package com.comphenix.packetwrapper;
 
-import org.bukkit.inventory.ItemStack;
-
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
+import org.bukkit.inventory.ItemStack;
 
 public class WrapperPlayServerWindowItems extends AbstractPacket {
     public static final PacketType TYPE = PacketType.Play.Server.WINDOW_ITEMS;

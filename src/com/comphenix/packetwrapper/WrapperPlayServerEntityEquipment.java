@@ -18,13 +18,13 @@
  */
 package com.comphenix.packetwrapper;
 
-import org.bukkit.World;
-import org.bukkit.entity.Entity;
-import org.bukkit.inventory.ItemStack;
-
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
+import com.comphenix.protocol.wrappers.EnumWrappers.ItemSlot;
+import org.bukkit.World;
+import org.bukkit.entity.Entity;
+import org.bukkit.inventory.ItemStack;
 
 public class WrapperPlayServerEntityEquipment extends AbstractPacket {
     public static final PacketType TYPE = PacketType.Play.Server.ENTITY_EQUIPMENT;
@@ -74,22 +74,12 @@ public class WrapperPlayServerEntityEquipment extends AbstractPacket {
         return getEntity(event.getPlayer().getWorld());
     }
     
-    /**
-     * Retrieve Slot.
-     * <p>
-     * Notes: equipment slot: 0=held, 1-4=armor slot (1 - boots, 2 - leggings, 3 - chestplate, 4 - helmet)
-     * @return The current Slot
-     */
-    public int getSlot() {
-        return handle.getIntegers().read(1);
+    public ItemSlot getSlot() {
+    	return handle.getItemSlots().read(0);
     }
-    
-    /**
-     * Set Slot.
-     * @param value - new value.
-     */
-    public void setSlot(int value) {
-        handle.getIntegers().write(1, value);
+
+    public void setSlot(ItemSlot value) {
+    	handle.getItemSlots().write(0, value);
     }
     
     /**

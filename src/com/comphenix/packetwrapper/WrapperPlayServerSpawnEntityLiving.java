@@ -18,16 +18,17 @@
  */
 package com.comphenix.packetwrapper;
 
-import org.bukkit.World;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.injector.PacketConstructor;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher;
+import org.bukkit.World;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+
+import java.util.UUID;
 
 public class WrapperPlayServerSpawnEntityLiving extends AbstractPacket {
     public static final PacketType TYPE = PacketType.Play.Server.SPAWN_ENTITY_LIVING;
@@ -80,6 +81,14 @@ public class WrapperPlayServerSpawnEntityLiving extends AbstractPacket {
         return getEntity(event.getPlayer().getWorld());
     }
 
+    public UUID getUniqueId() {
+    	return handle.getSpecificModifier(UUID.class).read(0);
+    }
+
+    public void setUniqueId(UUID value) {
+    	handle.getSpecificModifier(UUID.class).write(0, value);
+    }
+
     /**
      * Set entity ID.
      * @param value - new value.
@@ -113,7 +122,7 @@ public class WrapperPlayServerSpawnEntityLiving extends AbstractPacket {
      * @return The current X
     */
     public double getX() {
-        return handle.getIntegers().read(2) / 32.0D;
+        return handle.getDoubles().read(0);
     }
 
     /**
@@ -121,7 +130,7 @@ public class WrapperPlayServerSpawnEntityLiving extends AbstractPacket {
      * @param value - new value.
     */
     public void setX(double value) {
-        handle.getIntegers().write(2, (int) Math.floor(value * 32.0D));
+        handle.getDoubles().write(0, value);
     }
 
     /**
@@ -131,7 +140,7 @@ public class WrapperPlayServerSpawnEntityLiving extends AbstractPacket {
      * @return The current y
     */
     public double getY() {
-        return handle.getIntegers().read(3) / 32.0D;
+        return handle.getDoubles().read(1);
     }
 
     /**
@@ -139,7 +148,7 @@ public class WrapperPlayServerSpawnEntityLiving extends AbstractPacket {
      * @param value - new value.
     */
     public void setY(double value) {
-        handle.getIntegers().write(3, (int) Math.floor(value * 32.0D));
+    	handle.getDoubles().write(1, value);
     }
 
     /**
@@ -149,7 +158,7 @@ public class WrapperPlayServerSpawnEntityLiving extends AbstractPacket {
      * @return The current z
     */
     public double getZ() {
-        return handle.getIntegers().read(4) / 32.0D;
+        return handle.getDoubles().read(2);
     }
 
     /**
@@ -157,7 +166,7 @@ public class WrapperPlayServerSpawnEntityLiving extends AbstractPacket {
      * @param value - new value.
     */
     public void setZ(double value) {
-        handle.getIntegers().write(4, (int) Math.floor(value * 32.0D));
+    	handle.getDoubles().write(2, value);
     }
 
     /**
@@ -180,7 +189,7 @@ public class WrapperPlayServerSpawnEntityLiving extends AbstractPacket {
      * Retrieve the pitch.
      * @return The current pitch
     */
-    public float getHeadPitch() {
+    public float getPitch() {
         return (handle.getBytes().read(1) * 360.F) / 256.0F;
     }
 
@@ -188,7 +197,7 @@ public class WrapperPlayServerSpawnEntityLiving extends AbstractPacket {
      * Set the pitch of the spawned mob.
      * @param value - new pitch.
     */
-    public void setHeadPitch(float value) {
+    public void setPitch(float value) {
         handle.getBytes().write(1, (byte) (value * 256.0F / 360.0F));
     }
 
@@ -196,7 +205,7 @@ public class WrapperPlayServerSpawnEntityLiving extends AbstractPacket {
      * Retrieve the yaw of the mob's head.
      * @return The current yaw.
     */
-    public float getHeadYaw() {
+    public float getHeadPitch() {
         return (handle.getBytes().read(2) * 360.F) / 256.0F;
     }
 
@@ -204,7 +213,7 @@ public class WrapperPlayServerSpawnEntityLiving extends AbstractPacket {
      * Set the yaw of the mob's head.
      * @param value - new yaw.
     */
-    public void setHeadYaw(float value) {
+    public void setHeadPitch(float value) {
         handle.getBytes().write(2, (byte) (value * 256.0F / 360.0F));
     }
 
@@ -213,7 +222,7 @@ public class WrapperPlayServerSpawnEntityLiving extends AbstractPacket {
      * @return The current velocity X
     */
     public double getVelocityX() {
-        return handle.getIntegers().read(5) / 8000.0D;
+        return handle.getIntegers().read(2) / 8000.0D;
     }
 
     /**
@@ -221,7 +230,7 @@ public class WrapperPlayServerSpawnEntityLiving extends AbstractPacket {
      * @param value - new value.
     */
     public void setVelocityX(double value) {
-        handle.getIntegers().write(5, (int) (value * 8000.0D));
+        handle.getIntegers().write(2, (int) (value * 8000.0D));
     }
 
     /**
@@ -229,7 +238,7 @@ public class WrapperPlayServerSpawnEntityLiving extends AbstractPacket {
      * @return The current velocity y
     */
     public double getVelocityY() {
-        return handle.getIntegers().read(6) / 8000.0D;
+        return handle.getIntegers().read(3) / 8000.0D;
     }
 
     /**
@@ -237,7 +246,7 @@ public class WrapperPlayServerSpawnEntityLiving extends AbstractPacket {
      * @param value - new value.
     */
     public void setVelocityY(double value) {
-        handle.getIntegers().write(6, (int) (value * 8000.0D));
+        handle.getIntegers().write(3, (int) (value * 8000.0D));
     }
 
     /**
@@ -245,7 +254,7 @@ public class WrapperPlayServerSpawnEntityLiving extends AbstractPacket {
      * @return The current velocity z
     */
     public double getVelocityZ() {
-        return handle.getIntegers().read(7) / 8000.0D;
+        return handle.getIntegers().read(4) / 8000.0D;
     }
 
     /**
@@ -253,7 +262,7 @@ public class WrapperPlayServerSpawnEntityLiving extends AbstractPacket {
      * @param value - new value.
     */
     public void setVelocityZ(double value) {
-        handle.getIntegers().write(7, (int) (value * 8000.0D));
+        handle.getIntegers().write(4, (int) (value * 8000.0D));
     }
 
     /**

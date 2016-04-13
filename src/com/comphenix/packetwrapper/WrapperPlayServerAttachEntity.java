@@ -18,12 +18,11 @@
  */
 package com.comphenix.packetwrapper;
 
-import org.bukkit.World;
-import org.bukkit.entity.Entity;
-
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
+import org.bukkit.World;
+import org.bukkit.entity.Entity;
 
 public class WrapperPlayServerAttachEntity extends AbstractPacket {
     public static final PacketType TYPE = PacketType.Play.Server.ATTACH_ENTITY;
@@ -80,7 +79,7 @@ public class WrapperPlayServerAttachEntity extends AbstractPacket {
      * @return The current Vehicle ID
      */
     public int getVehicleId() {
-        return handle.getIntegers().read(2);
+        return handle.getIntegers().read(1);
     }
     
     /**
@@ -88,22 +87,6 @@ public class WrapperPlayServerAttachEntity extends AbstractPacket {
      * @param value - new value.
      */
     public void setVehicleId(int value) {
-        handle.getIntegers().write(2, value);
-    }
-    
-    /**
-     * Retrieve Leash.
-     * @return The current Leash
-     */
-    public boolean getLeash() {
-        return handle.getIntegers().read(0) != 0;
-    }
-    
-    /**
-     * Set Leash.
-     * @param value - new value.
-     */
-    public void setLeash(boolean value) {
-        handle.getIntegers().write(0, value ? 1 : 0);
+        handle.getIntegers().write(1, value);
     }
 }

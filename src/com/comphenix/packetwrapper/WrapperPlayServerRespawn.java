@@ -18,12 +18,11 @@
  */
 package com.comphenix.packetwrapper;
 
-import org.bukkit.WorldType;
-
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.EnumWrappers.Difficulty;
 import com.comphenix.protocol.wrappers.EnumWrappers.NativeGameMode;
+import org.bukkit.WorldType;
 
 public class WrapperPlayServerRespawn extends AbstractPacket {
     public static final PacketType TYPE = PacketType.Play.Server.RESPAWN;

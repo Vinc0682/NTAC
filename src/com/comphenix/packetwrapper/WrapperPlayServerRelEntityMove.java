@@ -18,12 +18,11 @@
  */
 package com.comphenix.packetwrapper;
 
-import org.bukkit.World;
-import org.bukkit.entity.Entity;
-
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
+import org.bukkit.World;
+import org.bukkit.entity.Entity;
 
 public class WrapperPlayServerRelEntityMove extends AbstractPacket {
     public static final PacketType TYPE = PacketType.Play.Server.REL_ENTITY_MOVE;
@@ -73,52 +72,28 @@ public class WrapperPlayServerRelEntityMove extends AbstractPacket {
         return getEntity(event.getPlayer().getWorld());
     }
 
-    /**
-     * Retrieve DX.
-     * @return The current DX
-     */
-    public double getDx() {
-        return handle.getBytes().read(0) / 32D;
+    public int getDx() {
+    	return handle.getIntegers().read(1);
+    }
+ 
+    public void setDx(int value) {
+    	handle.getIntegers().write(1, value);
     }
 
-    /**
-     * Set DX.
-     * @param value - new value.
-     */
-    public void setDx(double value) {
-        handle.getBytes().write(0, (byte) (value * 32));
+    public int getDy() {
+    	return handle.getIntegers().read(2);
+    }
+ 
+    public void setDy(int value) {
+    	handle.getIntegers().write(2, value);
     }
 
-    /**
-     * Retrieve DY.
-     * @return The current DY
-     */
-    public double getDy() {
-        return handle.getBytes().read(1) / 32D;
+    public int getDz() {
+    	return handle.getIntegers().read(3);
     }
-
-    /**
-     * Set DY.
-     * @param value - new value.
-     */
-    public void setDy(double value) {
-        handle.getBytes().write(1, (byte) (value * 32));
-    }
-
-    /**
-     * Retrieve DZ.
-     * @return The current DZ
-     */
-    public double getDz() {
-        return handle.getBytes().read(2) / 32D;
-    }
-
-    /**
-     * Set DZ.
-     * @param value - new value.
-     */
-    public void setDz(double value) {
-        handle.getBytes().write(2, (byte) (value * 32));
+ 
+    public void setDz(int value) {
+    	handle.getIntegers().write(3, value);
     }
 
     /**

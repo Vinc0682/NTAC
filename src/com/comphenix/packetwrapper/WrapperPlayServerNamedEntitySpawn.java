@@ -18,16 +18,15 @@
  */
 package com.comphenix.packetwrapper;
 
-import java.util.UUID;
-
-import org.bukkit.World;
-import org.bukkit.entity.Entity;
-import org.bukkit.util.Vector;
-
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher;
+import org.bukkit.World;
+import org.bukkit.entity.Entity;
+import org.bukkit.util.Vector;
+
+import java.util.UUID;
 
 public class WrapperPlayServerNamedEntitySpawn extends AbstractPacket {
     public static final PacketType TYPE = PacketType.Play.Server.NAMED_ENTITY_SPAWN;
@@ -113,58 +112,28 @@ public class WrapperPlayServerNamedEntitySpawn extends AbstractPacket {
         setZ(position.getZ());
     }
 
-    /**
-     * Retrieve the x axis of the position.
-     * <p>
-     * Note that the coordinate is rounded off to the nearest 1/32 of a meter.
-     * @return The current X
-    */
     public double getX() {
-        return handle.getIntegers().read(1) / 32.0D;
+    	return handle.getDoubles().read(0);
     }
 
-    /**
-     * Set the x axis of the position.
-     * @param value - new value.
-    */
     public void setX(double value) {
-        handle.getIntegers().write(1, (int) Math.floor(value * 32.0D));
+    	handle.getDoubles().write(0, value);
     }
 
-    /**
-     * Retrieve the y axis of the position.
-     * <p>
-     * Note that the coordinate is rounded off to the nearest 1/32 of a meter.
-     * @return The current y
-    */
     public double getY() {
-        return handle.getIntegers().read(2) / 32.0D;
+    	return handle.getDoubles().read(1);
     }
 
-    /**
-     * Set the y axis of the position.
-     * @param value - new value.
-    */
     public void setY(double value) {
-        handle.getIntegers().write(2, (int) Math.floor(value * 32.0D));
+    	handle.getDoubles().write(1, value);
     }
 
-    /**
-     * Retrieve the z axis of the new position.
-     * <p>
-     * Note that the coordinate is rounded off to the nearest 1/32 of a meter.
-     * @return The current z
-    */
     public double getZ() {
-        return handle.getIntegers().read(3) / 32.0D;
+    	return handle.getDoubles().read(2);
     }
 
-    /**
-     * Set the z axis of the new position.
-     * @param value - new value.
-    */
     public void setZ(double value) {
-        handle.getIntegers().write(3, (int) Math.floor(value * 32.0D));
+    	handle.getDoubles().write(2, value);
     }
 
     /**
@@ -197,24 +166,6 @@ public class WrapperPlayServerNamedEntitySpawn extends AbstractPacket {
     */
     public void setPitch(float value) {
         handle.getBytes().write(1, (byte) (value * 256.0F / 360.0F));
-    }
-
-    /**
-     * Retrieve Current Item.
-     * <p>
-     * Notes: the item the player is currently holding. Note that this should be 0 for "no item", unlike -1 used in other packets. A negative value crashes clients.
-     * @return The current Current Item
-     */
-    public int getCurrentItem() {
-        return handle.getIntegers().read(4);
-    }
-
-    /**
-     * Set Current Item.
-     * @param value - new value.
-     */
-    public void setCurrentItem(int value) {
-        handle.getIntegers().write(4, value);
     }
 
     /**

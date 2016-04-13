@@ -151,7 +151,7 @@ public class KillauraNPC extends AbstractCheck
             playerFirstHitTime.put(pUUID, System.currentTimeMillis());
         }
 
-        if(packet.getTarget() == bot.getEntityID())
+        if(packet.getTargetID() == bot.getEntityID())
         {
             vlManager.addViolation(p, 1);
             PunishUtils.runViolationAction(p, vlManager, actionData);

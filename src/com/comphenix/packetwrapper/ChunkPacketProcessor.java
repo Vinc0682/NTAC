@@ -18,13 +18,12 @@
  */
 package com.comphenix.packetwrapper;
 
-import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.World.Environment;
-
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.reflect.StructureModifier;
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.World.Environment;
 
 /**
  * Used to process a chunk.
@@ -101,7 +100,7 @@ public class ChunkPacketProcessor {
 		 * Retrieve the starting index of the skylight data (4 bit per block).
 		 * <p>
 		 * This will be 2048 bytes in lenght if the skylight data exists (see {@link #hasSkylightOffset()}),
-		 * no bytes if not. 
+		 * no bytes if not.
 		 * @return The starting location of the skylight data.
 		 */
 		public int getSkylightOffset() {
@@ -109,7 +108,7 @@ public class ChunkPacketProcessor {
 		}
 		
 		/**
-		 * Determine if the current chunklet contains skylight data. 
+		 * Determine if the current chunklet contains skylight data.
 		 * @return TRUE if it does, FALSE otherwise.
 		 */
 		public boolean hasSkylightOffset() {
@@ -117,7 +116,7 @@ public class ChunkPacketProcessor {
 		}
 		
 		/**
-		 * Retrieve the extra 4 bits in each block ID, if necessary. 
+		 * Retrieve the extra 4 bits in each block ID, if necessary.
 		 * <p>
 		 * This will be 2048 bytes in lenght if the extra data exists, no bytes if not.
 		 * @return The starting location of the extra data.
@@ -149,7 +148,7 @@ public class ChunkPacketProcessor {
 		public void processChunklet(Location origin, byte[] data, ChunkOffsets offsets);
 		
 		/**
-		 * Process the biome array for a chunk (16x256x16). 
+		 * Process the biome array for a chunk (16x256x16).
 		 * <p>
 		 * This method will not be called if the chunk is missing biome information.
 		 * @param origin - the block with the lowest x, y and z coordinate in the chunk.
@@ -219,7 +218,8 @@ public class ChunkPacketProcessor {
      * @param packet - the map chunk bulk packet.
      * @return The chunk packet processors.
      */
-    public static ChunkPacketProcessor[] fromMapBulkPacket(PacketContainer packet, World world) {
+    // The MAP_CHUNK_BULK packet no longer exists
+    /*public static ChunkPacketProcessor[] fromMapBulkPacket(PacketContainer packet, World world) {
     	if (!packet.getType().equals(PacketType.Play.Server.MAP_CHUNK_BULK))
     		throw new IllegalArgumentException(packet + " must be a MAP_CHUNK_BULK packet.");
     	
@@ -256,7 +256,7 @@ public class ChunkPacketProcessor {
             dataStartIndex += processor.size;
         }
         return processors;
-    }
+    }*/
     
     /**
      * Begin processing the current chunk with the provided processor.
@@ -275,7 +275,7 @@ public class ChunkPacketProcessor {
         
         int skylightCount = getSkylightCount();
         
-        // The total size of a chunk is the number of blocks sent (depends on the number of sections) multiplied by the 
+        // The total size of a chunk is the number of blocks sent (depends on the number of sections) multiplied by the
         // amount of bytes per block. This last figure can be calculated by adding together all the data parts:
         //   For any block:
         //    * Block ID          -   8 bits per block (byte)
@@ -287,18 +287,18 @@ public class ChunkPacketProcessor {
         //    * Add array         -   4 bits per block
         //   Biome array - only if the entire chunk (has continous) is sent:
         //    * Biome array       -   256 bytes
-        // 
-        // A section has 16 * 16 * 16 = 4096 blocks. 
+        //
+        // A section has 16 * 16 * 16 = 4096 blocks.
         size = BYTES_PER_NIBBLE_PART * (
-        					(NIBBLES_REQUIRED + skylightCount) * chunkSectionNumber + 
-        					extraSectionNumber) + 
+        					(NIBBLES_REQUIRED + skylightCount) * chunkSectionNumber +
+        					extraSectionNumber) +
         			(hasContinous ? BIOME_ARRAY_LENGTH : 0);
         
         if ((getOffset(2) - startIndex) > data.length) {
             return;
         }
 
-        // Make sure the chunk is loaded 
+        // Make sure the chunk is loaded
         if (isChunkLoaded(world, chunkX, chunkZ)) {
             translate(processor);
         }
@@ -346,7 +346,7 @@ public class ChunkPacketProcessor {
         }
         
         if (hasContinous) {
-        	processor.processBiomeArray(new Location(world, chunkX << 4, 0, chunkZ << 4), 
+        	processor.processBiomeArray(new Location(world, chunkX << 4, 0, chunkZ << 4),
         			data, startIndex + size - BIOME_ARRAY_LENGTH);
         }
     }

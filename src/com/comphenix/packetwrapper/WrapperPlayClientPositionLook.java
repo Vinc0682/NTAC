@@ -52,21 +52,21 @@ public class WrapperPlayClientPositionLook extends AbstractPacket {
     }
     
     /**
-     * Retrieve FeetY.
+     * Retrieve Feet Y.
      * <p>
      * Notes: absolute feet position. Is normally HeadY - 1.62. Used to modify the players bounding box when going up stairs, crouching, etc…
      * @return The current FeetY
      */
-    public double getFeety() {
-        return handle.getDoubles().read(0);
+    public double getY() {
+        return handle.getDoubles().read(1);
     }
     
     /**
-     * Set FeetY.
+     * Set Feet Y.
      * @param value - new value.
      */
-    public void setFeety(double value) {
-        handle.getDoubles().write(0, value);
+    public void setY(double value) {
+        handle.getDoubles().write(1, value);
     }
     
     /**
@@ -76,7 +76,7 @@ public class WrapperPlayClientPositionLook extends AbstractPacket {
      * @return The current Z
      */
     public double getZ() {
-        return handle.getDoubles().read(0);
+        return handle.getDoubles().read(2);
     }
     
     /**
@@ -84,7 +84,7 @@ public class WrapperPlayClientPositionLook extends AbstractPacket {
      * @param value - new value.
      */
     public void setZ(double value) {
-        handle.getDoubles().write(0, value);
+        handle.getDoubles().write(2, value);
     }
     
     /**
@@ -112,7 +112,7 @@ public class WrapperPlayClientPositionLook extends AbstractPacket {
      * @return The current Pitch
      */
     public float getPitch() {
-        return handle.getFloat().read(0);
+        return handle.getFloat().read(1);
     }
     
     /**
@@ -120,7 +120,7 @@ public class WrapperPlayClientPositionLook extends AbstractPacket {
      * @param value - new value.
      */
     public void setPitch(float value) {
-        handle.getFloat().write(0, value);
+        handle.getFloat().write(1, value);
     }
     
     /**
@@ -130,7 +130,7 @@ public class WrapperPlayClientPositionLook extends AbstractPacket {
      * @return The current On Ground
      */
     public boolean getOnGround() {
-        return handle.getSpecificModifier(boolean.class).read(0);
+        return handle.getBooleans().read(0);
     }
     
     /**
@@ -138,8 +138,7 @@ public class WrapperPlayClientPositionLook extends AbstractPacket {
      * @param value - new value.
      */
     public void setOnGround(boolean value) {
-        handle.getSpecificModifier(boolean.class).write(0, value);
+        handle.getBooleans().write(0, value);
     }
     
 }
-

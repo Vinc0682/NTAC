@@ -21,16 +21,7 @@
     <orderEntry type="module-library">
       <library name="ProtocolLib.jar">
         <CLASSES>
-          <root url="jar://$USER_HOME$/Documents/Minecraft-Development/ProtocolLib.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="spigot-api-1.8.8-R0.1-SNAPSHOT-latest-shaded.jar">
-        <CLASSES>
-          <root url="jar://$USER_HOME$/Documents/Minecraft-Development/spigot-api-1.8.8-R0.1-SNAPSHOT-latest-shaded.jar!/" />
+          <root url="jar://D:/UserData/Vincent/Server/NTAC Debug/plugins/ProtocolLib(1).jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -40,6 +31,24 @@
       <library name="NTApi.jar">
         <CLASSES>
           <root url="jar://D:/UserData/Vincent/Server/Debug-Server/plugins/NTApi.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$USER_HOME$/Documents/Minecraft-Development/netty-all-4.0.35.Final.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$USER_HOME$/Documents/Minecraft-Development/spigot-api-1.9.2-R0.1-SNAPSHOT-shaded.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

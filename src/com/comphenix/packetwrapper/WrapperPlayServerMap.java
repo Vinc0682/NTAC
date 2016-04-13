@@ -67,12 +67,20 @@ public class WrapperPlayServerMap extends AbstractPacket {
         handle.getBytes().write(0, value);
     }
 
+    public boolean getTrackingPosition() {
+    	return handle.getBooleans().read(0);
+    }
+
+    public void setTrackingPosition(boolean value) {
+    	handle.getBooleans().write(0, value);
+    }
+
     public Object[] getMapIcons() {
-        return (Object[]) handle.getModifier().read(2);
+        return (Object[]) handle.getModifier().read(3);
     }
 
     public void setMapIcons(Object[] value) {
-        handle.getModifier().write(2, value);
+        handle.getModifier().write(3, value);
     }
 
     public int getColumns() {

@@ -14,16 +14,14 @@ import net.newtownia.NTAC.Utils.ItemUtils;
 import net.newtownia.NTAC.Utils.PunishUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+//TODO: Update for 1.9
 public class NoSlowBlock extends AbstractMovementCheck
 {
     int useReleaseThreshold = 40;

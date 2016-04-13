@@ -21,7 +21,6 @@ package com.comphenix.packetwrapper;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.BlockPosition;
-import com.comphenix.protocol.wrappers.WrappedChatComponent;
 
 public class WrapperPlayClientUpdateSign extends AbstractPacket {
     public static final PacketType TYPE = PacketType.Play.Client.UPDATE_SIGN;
@@ -54,23 +53,23 @@ public class WrapperPlayClientUpdateSign extends AbstractPacket {
     }
     
     /**
-     * Retrieve this sign's lines of text represented by a chat component array.
+     * Retrieve this sign's lines of text.
      * @return The current lines
      */
-    public WrappedChatComponent[] getLines() {
-        return handle.getChatComponentArrays().read(0);
+    public String[] getLines() {
+        return handle.getStringArrays().read(0);
     }
     
     /**
      * Set this sign's lines of text.
      * @param value - Lines, must be 4 elements long
      */
-    public void setLines(WrappedChatComponent[] value) {
+    public void setLines(String[] value) {
         if (value == null)
             throw new IllegalArgumentException("value cannot be null!");
         if (value.length != 4)
             throw new IllegalArgumentException("value must have 4 elements!");
 
-        handle.getChatComponentArrays().write(0, value);
+        handle.getStringArrays().write(0, value);
     }
 }
