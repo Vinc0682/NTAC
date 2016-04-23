@@ -52,7 +52,7 @@ public class PacketGenerator
 
 	public static WrapperPlayServerNamedEntitySpawn getIdentitySpawnPacket(Identity id, int entityId, Location loc)
     {
-        WrapperPlayServerNamedEntitySpawn spawnPacket = new WrapperPlayServerNamedEntitySpawn();
+		WrapperPlayServerNamedEntitySpawn spawnPacket = new WrapperPlayServerNamedEntitySpawn();
 
         spawnPacket.setEntityID(entityId);
         spawnPacket.setPlayerUUID(id.uuid);
