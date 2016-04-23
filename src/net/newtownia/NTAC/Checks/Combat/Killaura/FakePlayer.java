@@ -1,17 +1,14 @@
 package net.newtownia.NTAC.Checks.Combat.Killaura;
 
-import com.comphenix.protocol.wrappers.EnumWrappers;
-import net.newtownia.NTAC.NTAC;
 import net.newtownia.NTAC.Utils.Identity;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-
-import java.util.UUID;
 
 public class FakePlayer
 {
     private int entityID;
+    private EntityType type = EntityType.PLAYER;
 
     private boolean visible = true;
 
@@ -46,7 +43,7 @@ public class FakePlayer
     {
         if(!identity.isAlreadyOnline)
             sendBotInfo(p, identity);
-        PacketGenerator.getIdentitySpawnPacket(identity, entityID, location).sendPacket(p);
+        PacketGenerator.getIdentityPlayerSpawnPacket(identity, entityID, location).sendPacket(p);
     }
 
     public void sendBotInfo(Player p, Identity id)

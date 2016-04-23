@@ -1,6 +1,8 @@
 package net.newtownia.NTAC.Utils;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -12,6 +14,7 @@ public class Identity
 {
     public UUID uuid;
     public String name;
+    public EntityType type = EntityType.PLAYER;
 
     public boolean isAlreadyOnline;
     public boolean visible;
@@ -73,6 +76,19 @@ public class Identity
             }
 
             id.visible = true;
+
+            return id;
+        }
+
+        public static Identity generateIdentityForPlayer(Player p, Entity attacked)
+        {
+            Identity id = generateRandomIdentity();
+            if (attacked.getType() == EntityType.PLAYER)
+             id = generateIdentityForPlayer(p);
+            else
+            {
+                id.type = attacked.getType();
+            }
 
             return id;
         }

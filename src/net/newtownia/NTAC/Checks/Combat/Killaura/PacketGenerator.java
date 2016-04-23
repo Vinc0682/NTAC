@@ -1,12 +1,11 @@
 package net.newtownia.NTAC.Checks.Combat.Killaura;
 
-import com.comphenix.packetwrapper.WrapperPlayServerEntityDestroy;
-import com.comphenix.packetwrapper.WrapperPlayServerEntityTeleport;
-import com.comphenix.packetwrapper.WrapperPlayServerNamedEntitySpawn;
-import com.comphenix.packetwrapper.WrapperPlayServerPlayerInfo;
+import com.comphenix.packetwrapper.*;
 import com.comphenix.protocol.wrappers.*;
 import net.newtownia.NTAC.Utils.Identity;
 import org.bukkit.Location;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -15,24 +14,6 @@ import java.util.UUID;
 
 public class PacketGenerator 
 {
-	public static WrapperPlayServerNamedEntitySpawn getInvisiblePlayerSpawnPacket(UUID playerUUID, int entityId, Location loc)
-	{
-		WrapperPlayServerNamedEntitySpawn spawnPacket = new WrapperPlayServerNamedEntitySpawn();
-		
-		spawnPacket.setEntityID(entityId);
-		spawnPacket.setPlayerUUID(playerUUID);
-		
-		spawnPacket.setPosition(new Vector(loc.getX(), loc.getY(), loc.getZ()));
-        spawnPacket.setYaw(loc.getYaw());
-        spawnPacket.setPitch(loc.getPitch());
-		
-		WrappedDataWatcher meta = new WrappedDataWatcher();
-		meta.setObject(0, (byte) 0x20);
-		spawnPacket.setMetadata(meta);
-		
-		return spawnPacket;
-	}
-	
 	public static WrapperPlayServerNamedEntitySpawn getVisiblePlayerSpawnPacket(UUID playerUUID, int entityId, Location loc)
 	{
 		WrapperPlayServerNamedEntitySpawn spawnPacket = new WrapperPlayServerNamedEntitySpawn();
@@ -50,7 +31,7 @@ public class PacketGenerator
 		return spawnPacket;
 	}
 
-	public static WrapperPlayServerNamedEntitySpawn getIdentitySpawnPacket(Identity id, int entityId, Location loc)
+	public static WrapperPlayServerNamedEntitySpawn getIdentityPlayerSpawnPacket(Identity id, int entityId, Location loc)
     {
 		WrapperPlayServerNamedEntitySpawn spawnPacket = new WrapperPlayServerNamedEntitySpawn();
 
@@ -62,14 +43,47 @@ public class PacketGenerator
         spawnPacket.setPitch(loc.getPitch());
 
         WrappedDataWatcher meta = new WrappedDataWatcher();
-
         if(!id.visible)
             meta.setObject(0, (byte) 0x20);
-
         spawnPacket.setMetadata(meta);
 
         return spawnPacket;
     }
+
+    public static WrapperPlayServerSpawnEntityLiving getIdentityNotPlayerSpawnPacket(Identity id, int entityId, Location loc)
+    {
+        WrapperPlayServerSpawnEntityLiving spawnPacket = new WrapperPlayServerSpawnEntityLiving();
+
+        spawnPacket.setEntityID(entityId);
+        spawnPacket.setUniqueId(id.uuid);
+        spawnPacket.setType(id.type);
+
+        spawnPacket.setX(loc.getX());
+        spawnPacket.setY(loc.getY());
+        spawnPacket.setZ(loc.getZ());
+        spawnPacket.setYaw(loc.getYaw());
+        spawnPacket.setPitch(loc.getPitch());
+        spawnPacket.setHeadPitch(loc.getPitch());
+
+        WrappedDataWatcher meta = new WrappedDataWatcher();
+        if(!id.visible)
+            meta.setObject(0, (byte) 0x20);
+        spawnPacket.setMetadata(meta);
+
+        return spawnPacket;
+    }
+
+	public static void sendSpawnPacket(Player p, Identity id, int entityId, Location loc)
+	{
+		if (id.type == EntityType.PLAYER)
+        {
+            getIdentityPlayerSpawnPacket(id, entityId, loc).sendPacket(p);
+        }
+        else
+        {
+            getIdentityNotPlayerSpawnPacket(id, entityId, loc).sendPacket(p);
+        }
+	}
 	
 	public static WrapperPlayServerEntityTeleport getTeleportPacket(int entityId, Location loc)
 	{
