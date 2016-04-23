@@ -43,7 +43,8 @@ public class FakePlayer
     {
         if(!identity.isAlreadyOnline)
             sendBotInfo(p, identity);
-        PacketGenerator.getIdentityPlayerSpawnPacket(identity, entityID, location).sendPacket(p);
+        //PacketGenerator.getIdentityPlayerSpawnPacket(identity, entityID, location).sendPacket(p);
+        PacketGenerator.sendSpawnPacket(p, identity, entityID, location);
     }
 
     public void sendBotInfo(Player p, Identity id)

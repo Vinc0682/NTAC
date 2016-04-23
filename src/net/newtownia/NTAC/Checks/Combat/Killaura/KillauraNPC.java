@@ -16,6 +16,7 @@ import net.newtownia.NTAC.Utils.PunishUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -26,25 +27,26 @@ import java.util.UUID;
 public class KillauraNPC extends AbstractCheck
 {
     //int threshold = 5;
-    int combatTime = 5000;
-    int clearFrequency = 60;
-    int changeBotFrequency = 200;
+    private int combatTime = 5000;
+    private int clearFrequency = 60;
+    private int changeBotFrequency = 200;
+    private boolean copyAttackedType = true;
 
-    double distanceMin = 2;
-    double distanceMax = 4;
-    int angleMin = 100;
-    int angleMax = 120;
-    int switchTime = 1000;
+    private double distanceMin = 2;
+    private double distanceMax = 4;
+    private int angleMin = 100;
+    private int angleMax = 120;
+    private int switchTime = 1000;
 
-    Map<UUID, Long> playerLastHitTime;
-    Map<UUID, Long> playerFirstHitTime;
-    Map<UUID, Identity> playerBotIdentitys;
+    private Map<UUID, Long> playerLastHitTime;
+    private Map<UUID, Long> playerFirstHitTime;
+    private Map<UUID, Identity> playerBotIdentitys;
 
-    PacketAdapter usePacketEvent;
-    PacketAdapter moveLookPacketEvent;
-    FakePlayer bot;
+    private PacketAdapter usePacketEvent;
+    private PacketAdapter moveLookPacketEvent;
+    private FakePlayer bot;
 
-    Random rnd = new Random(System.currentTimeMillis());
+    private Random rnd = new Random(System.currentTimeMillis());
 
     ActionData actionData;
     ViolationManager vlManager;
@@ -59,7 +61,7 @@ public class KillauraNPC extends AbstractCheck
 
         vlManager = new ViolationManager();
 
-        bot = new FakePlayer(9910);
+        bot = new FakePlayer(9910 + rnd.nextInt(90));
 
         usePacketEvent = new PacketAdapter(pl, ListenerPriority.HIGH, PacketType.Play.Client.USE_ENTITY) {
         @Override
@@ -141,7 +143,24 @@ public class KillauraNPC extends AbstractCheck
 
         if(!playerLastHitTime.containsKey(pUUID) && !p.hasPermission("ntac.bypass.killaura.npc"))
         {
-            Identity botId = Identity.Generator.generateIdentityForPlayer(p);
+            Identity botId = null;
+            if (copyAttackedType)
+            {
+                Entity attacked = null;
+                for (Entity en : p.getWorld().getEntities())
+                    if (en.getEntityId() == packet.getTargetID())
+                        attacked = en;
+
+                if (attacked == null)
+                {
+                    Bukkit.getLogger().info("Unable to find attacked entity");
+                    return;
+                }
+
+                botId = Identity.Generator.generateIdentityForPlayer(p, attacked);
+            }
+            else
+                botId = Identity.Generator.generateIdentityForPlayer(p);
             botId.visible = true;
             bot.spawnForPlayerWithIdentity(p, getBotLoc(p), botId);
             playerBotIdentitys.put(pUUID, botId);
@@ -222,6 +241,7 @@ public class KillauraNPC extends AbstractCheck
         clearFrequency = Integer.parseInt(config.getString("Killaura-NPC.Clear-Frequency"));
         changeBotFrequency = Integer.parseInt(config.getString("Killaura-NPC.Change-Bot-Frequency"));
         combatTime = Integer.parseInt(config.getString("Killaura-NPC.Combat-Time"));
+        copyAttackedType = Boolean.valueOf(config.getString("Killaura-NPC.Copy-Attacked-Type"));
         angleMin = Integer.parseInt(config.getString("Killaura-NPC.Angle-Min"));
         angleMax = Integer.parseInt(config.getString("Killaura-NPC.Angle-Max"));
         distanceMin = Double.parseDouble(config.getString("Killaura-NPC.Distance-Min"));

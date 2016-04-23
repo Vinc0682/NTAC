@@ -60,7 +60,12 @@ Killaura-NPC:
   Combat-Time: 5000
 
   #Frequency till the bot changes his name
-  Change-Bot-Frequency: 200
+  Change-Bot-Frequency: 360
+
+  #Should the bot be of the same type as the attacked entity?
+  #Used to patch mobaura which ignores players.
+  #If false, the bot will always be a player
+  Copy-Attacked-Type: true
 
   #The minimum and maximum angle the bot will have (in relation to the player)
   #DEFAULT MIN: 100 (To adjust since these values were generic)
