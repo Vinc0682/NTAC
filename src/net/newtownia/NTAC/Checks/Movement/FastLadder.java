@@ -104,7 +104,7 @@ public class FastLadder extends AbstractMovementCheck implements Listener
         YamlConfiguration config = pl.getConfiguration();
         climbingSpeed = Double.parseDouble(config.getString("Fast-Ladder.Climbing-Speed"));
         startSpeed = Double.parseDouble(config.getString("Fast-Ladder.Start-Speed"));
-        invalidateThreshold = Integer.parseInt(config.getString("Auto-Clicker.Invalidate-Threshold"));
+        invalidateThreshold = Integer.parseInt(config.getString("Fast-Ladder.Invalidate-Threshold"));
 
         actionData = new ActionData(config, "Fast-Ladder.Actions");
     }

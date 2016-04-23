@@ -31,7 +31,8 @@ Enabled:
   Anti-AFK: true #Beta, testing on newtownia.net + more subchecks'll be added soon! DEFAULT: true
   Sneak: true #Stable, patches a NC+ Bypass DEFAULT: true
   NoSlowBlock: true #Stable, patches a NC+ Bypass DEFAULT: true
-  Fast-Ladder: true # In development, NC+ is unable to fix it :(
+  Fast-Ladder: true # Stable, NC+ is unable to fix it :(
+  Boat-Fly: true # In development, fixes the most common 1.9 fly bypass. DEFAULT: true
 
 #Some options for the bases of NTAC
 Bases:
@@ -247,9 +248,27 @@ Fast-Ladder:
   #The speed allowed when you start to climb a ladder
   Start-Speed: 1.5
 
-  #The time between two hits to ignore that delay to make autoclicker more precise
-  Combat-Time: 5000
+  #The time until the VL get's invalidated (in ms)
+  #NOTE: The VL only get's invalidated when there are no new VLs.
+  Invalidate-Threshold: 250
 
   #The actions, the vl equals the count of suspicious movements
   Actions:
     3: 'cancel'
+
+Boat-Fly:
+
+  #The time until the VL get's invalidated (in ms)
+  #NOTE: The VL only get's invalidated when there are no new VLs.
+  Invalidate-Threshold: 250
+
+  # How fast do someone have to fall to get ignored by the check
+  # This reenables the ability to glide legit with a boat. If you higher the value,
+  # you'll have to higher the VL's to prevent false positives.
+  # Set to Ignore-Threshold to 0 and the actions to 0: 'cancel' to completly disable falling
+  # with boats (no more MLG-Legit-Boatgliding)
+  Ignore-Threshold: 0.12
+
+  #Actions, the VL is equal to the count of suspicious movements
+  Actions:
+    5: 'cancel'

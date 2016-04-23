@@ -17,7 +17,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -27,7 +26,7 @@ public class Sneak extends AbstractMovementCheck
     int invalidateThreshold = 1000;
     int invalidateFreq = 5;
 
-    ViolationManager vlManger;
+    ViolationManager vlManager;
     ActionData actionData;
 
     PacketAdapter sneakPacketEvent;
@@ -37,7 +36,7 @@ public class Sneak extends AbstractMovementCheck
     {
         super(pl, movementBase, "Sneak");
 
-        vlManger = new ViolationManager();
+        vlManager = new ViolationManager();
         lastSneakToggleTime = new HashMap<>();
 
         sneakPacketEvent = new PacketAdapter(pl, ListenerPriority.HIGH, PacketType.Play.Client.ENTITY_ACTION) {
@@ -51,7 +50,7 @@ public class Sneak extends AbstractMovementCheck
         Bukkit.getScheduler().runTaskTimer(pl, new Runnable() {
             @Override
             public void run() {
-                vlManger.resetAllOldViolation(invalidateThreshold);
+                vlManager.resetAllOldViolation(invalidateThreshold);
             }
         }, invalidateFreq, invalidateFreq);
 
@@ -82,12 +81,12 @@ public class Sneak extends AbstractMovementCheck
 
             if(lastSneakToggleTime.get(pUUID) + sneakThreshold > System.currentTimeMillis())
             {
-                vlManger.addViolation(p, 1);
+                vlManager.addViolation(p, 1);
 
-                int vl = vlManger.getViolation(p);
+                int vl = vlManager.getViolation(p);
                 if(actionData.doesLastViolationCommandsContains(vl, "cancel"))
                 {
-                    Location resetLoc = vlManger.getFirstViolationLocation(p);
+                    Location resetLoc = vlManager.getFirstViolationLocation(p);
                     if(resetLoc != null)
                         p.teleport(resetLoc);
                 }

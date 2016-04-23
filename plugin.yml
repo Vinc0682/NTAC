@@ -33,5 +33,7 @@ permissions:
     default: OP
   ntac.bypass.fastladder:
     default: OP
+  ntac.bypass.boatfly:
+    default: OP
   ntac.notify:
     default: OP

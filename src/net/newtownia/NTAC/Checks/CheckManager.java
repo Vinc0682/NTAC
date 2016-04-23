@@ -3,11 +3,8 @@ package net.newtownia.NTAC.Checks;
 import net.newtownia.NTAC.Checks.Combat.AntiKnockback;
 import net.newtownia.NTAC.Checks.Combat.AutoClicker;
 import net.newtownia.NTAC.Checks.Combat.Killaura.KillauraNPC;
+import net.newtownia.NTAC.Checks.Movement.*;
 import net.newtownia.NTAC.Checks.Movement.AntiAFK.AntiAFKBase;
-import net.newtownia.NTAC.Checks.Movement.FastLadder;
-import net.newtownia.NTAC.Checks.Movement.MovementBase;
-import net.newtownia.NTAC.Checks.Movement.NoSlowBlock;
-import net.newtownia.NTAC.Checks.Movement.Sneak;
 import net.newtownia.NTAC.Checks.Player.Headless;
 import net.newtownia.NTAC.Checks.Player.SkinDerp;
 import net.newtownia.NTAC.NTAC;
@@ -67,6 +64,7 @@ public class CheckManager
         allChecks.add(new Sneak(pl, movementBase));
         //allChecks.add(new NoSlowBlock(pl, movementBase)); Can't block anymore
         allChecks.add(new FastLadder(pl, movementBase));
+        allChecks.add(new BoatFly(pl, movementBase));
     }
 
     private void registerCheckListeners()
