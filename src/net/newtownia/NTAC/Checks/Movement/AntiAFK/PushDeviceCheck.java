@@ -4,6 +4,7 @@ import net.newtownia.NTAC.Checks.Movement.MovementBase;
 import net.newtownia.NTAC.NTAC;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerMoveEvent;
 
@@ -44,7 +45,7 @@ public class PushDeviceCheck extends AbstractAntiAFKCheck
         inLava &= posBlockMaterial == Material.LAVA || posBlockMaterial == Material.STATIONARY_LAVA;
 
         boolean isInVehicle = markInVehicle;
-        markInVehicle &= p.isInsideVehicle();
+        markInVehicle &= p.isInsideVehicle() && p.getVehicle() instanceof Minecart;
 
         boolean marked = inWater || inLava || isInVehicle;
         boolean hasMarkDelayPassed = System.currentTimeMillis() >= lastPlayerMarkedTime.get(pUUID) + unmarkDelay;
