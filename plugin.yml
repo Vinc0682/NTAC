@@ -1,6 +1,6 @@
 name: NTAC
 main: net.newtownia.NTAC.NTAC
-version: '1.5'
+version: '1.8'
 depend: [NTApi, ProtocolLib]
 author: Vinc0682
 

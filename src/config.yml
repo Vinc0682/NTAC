@@ -32,7 +32,10 @@ Enabled:
   Sneak: true #Stable, patches a NC+ Bypass DEFAULT: true
   NoSlowBlock: true #Stable, patches a NC+ Bypass DEFAULT: true
   Fast-Ladder: true # Stable, NC+ is unable to fix it :(
-  Boat-Fly: true # In development, fixes the most common 1.9 fly bypass. DEFAULT: true
+  Boat-Fly: true # Stable, fixes the most common 1.9 fly bypass using boats. DEFAULT: true
+
+  #Miscellanious
+  Anti-Chorus-Fruit: true # Block teleportation caused by chorus fruit to prevent people to teleport trough walls
 
 #Some options for the bases of NTAC
 Bases:
@@ -261,6 +264,10 @@ Boat-Fly:
   #The time until the VL get's invalidated (in ms)
   #NOTE: The VL only get's invalidated when there are no new VLs.
   Invalidate-Threshold: 250
+
+  # Should all movements upwards be cancelled? Suggested if the first VL with 'cancel' is above 1
+  # to prevent some bypasses and eventually exploits
+  Cancel-All-Up-Movements: true
 
   # How fast do someone have to fall to get ignored by the check
   # This reenables the ability to glide legit with a boat. If you higher the value,

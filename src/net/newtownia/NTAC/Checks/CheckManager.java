@@ -3,6 +3,7 @@ package net.newtownia.NTAC.Checks;
 import net.newtownia.NTAC.Checks.Combat.AntiKnockback;
 import net.newtownia.NTAC.Checks.Combat.AutoClicker;
 import net.newtownia.NTAC.Checks.Combat.Killaura.KillauraNPC;
+import net.newtownia.NTAC.Checks.Misc.AntiChorus;
 import net.newtownia.NTAC.Checks.Movement.*;
 import net.newtownia.NTAC.Checks.Movement.AntiAFK.AntiAFKBase;
 import net.newtownia.NTAC.Checks.Player.Headless;
@@ -65,6 +66,8 @@ public class CheckManager
         //allChecks.add(new NoSlowBlock(pl, movementBase)); Can't block anymore
         allChecks.add(new FastLadder(pl, movementBase));
         allChecks.add(new BoatFly(pl, movementBase));
+
+        allChecks.add(new AntiChorus(pl));
     }
 
     private void registerCheckListeners()
