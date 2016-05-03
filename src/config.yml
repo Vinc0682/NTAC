@@ -269,13 +269,16 @@ Boat-Fly:
   # to prevent some bypasses and eventually exploits
   Cancel-All-Up-Movements: true
 
+  # How long should boats be off ground untill they get checked? (Moves)
+  Min-Offground-Moves: 3
+
   # How fast do someone have to fall to get ignored by the check
   # This reenables the ability to glide legit with a boat. If you higher the value,
-  # you'll have to higher the VL's to prevent false positives.
+  # you'll have to higher the Friction-Min-Time to prevent false positives.
   # Set to Ignore-Threshold to 0 and the actions to 0: 'cancel' to completly disable falling
   # with boats (no more MLG-Legit-Boatgliding)
-  Ignore-Threshold: 0.12
+  Min-Down-Speed: 0.12
 
   #Actions, the VL is equal to the count of suspicious movements
   Actions:
-    5: 'cancel'
+    2: 'cancel'
