@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.List;
 
 public class PlayerUtils
 {
@@ -31,6 +32,33 @@ public class PlayerUtils
 
         for (Material m : materials)
             if (m != Material.AIR)
+                return true;
+        return false;
+    }
+
+    public static List<Material> getMaterialsBelow(Player p)
+    {
+        Block blockDown = p.getLocation().getBlock().getRelative(BlockFace.DOWN);
+
+        ArrayList<Material> materials = new ArrayList<>();
+        materials.add(blockDown.getType());
+        materials.add(blockDown.getRelative(BlockFace.NORTH).getType());
+        materials.add(blockDown.getRelative(BlockFace.NORTH_EAST).getType());
+        materials.add(blockDown.getRelative(BlockFace.EAST).getType());
+        materials.add(blockDown.getRelative(BlockFace.SOUTH_EAST).getType());
+        materials.add(blockDown.getRelative(BlockFace.SOUTH).getType());
+        materials.add(blockDown.getRelative(BlockFace.SOUTH_WEST).getType());
+        materials.add(blockDown.getRelative(BlockFace.WEST).getType());
+        materials.add(blockDown.getRelative(BlockFace.NORTH_WEST).getType());
+
+        return materials;
+    }
+
+    public static boolean materialsBelowContains(Player p, Material m)
+    {
+        List<Material> materials = getMaterialsBelow(p);
+        for (Material mB : materials)
+            if (mB == m)
                 return true;
         return false;
     }

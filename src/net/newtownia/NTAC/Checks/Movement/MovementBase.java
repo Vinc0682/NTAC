@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,6 +24,10 @@ public class MovementBase implements Listener
 {
     private Map<UUID, Long> playerStartMoveTimes;
     private Map<UUID, Location> playerStartMoveLocations;
+
+    private Map<UUID, Long> playerLastTPTimes;
+    private Map<UUID, Location> playerLastTPLocations;
+
     private Map<UUID, Boolean> playerOnGround;
     private Map<UUID, Boolean> playerUsingItem;
 
@@ -36,6 +41,10 @@ public class MovementBase implements Listener
     {
         playerStartMoveLocations = new HashMap<>();
         playerStartMoveTimes = new HashMap<>();
+
+        playerLastTPTimes = new HashMap<>();
+        playerLastTPLocations = new HashMap<>();
+
         playerOnGround = new HashMap<>();
         playerUsingItem = new HashMap<>();
 
@@ -57,6 +66,13 @@ public class MovementBase implements Listener
     {
         updateCache(event);
         raiseChecks(event);
+    }
+
+    @EventHandler
+    public void onTeleport(PlayerTeleportEvent event)
+    {
+        playerLastTPTimes.put(event.getPlayer().getUniqueId(), System.currentTimeMillis());
+        playerLastTPLocations.put(event.getPlayer().getUniqueId(), event.getTo());
     }
 
     public void updateCache(PlayerMoveEvent event)
@@ -105,7 +121,7 @@ public class MovementBase implements Listener
         {
             p.sendMessage("Gotta place packet");
             WrapperPlayClientBlockPlace packet = new WrapperPlayClientBlockPlace(event.getPacket());
-            if (ItemUtils.isUsable(p.getItemInHand()))
+            if (ItemUtils.isUsable(p.getInventory().getItemInMainHand()))
                 playerUsingItem.put(pUUID, true);
         }
     }
@@ -128,6 +144,20 @@ public class MovementBase implements Listener
             return null;
 
         return playerStartMoveLocations.get(p.getUniqueId());
+    }
+
+    public long getPlayerLastTPTime(Player p)
+    {
+        if (!playerLastTPTimes.containsKey(p.getUniqueId()))
+            return -1;
+        return playerLastTPTimes.get(p.getUniqueId());
+    }
+
+    public Location getPlayerLastTPLocation(Player p)
+    {
+        if (!playerLastTPLocations.containsKey(p.getUniqueId()))
+            return null;
+        return playerLastTPLocations.get(p.getUniqueId());
     }
 
     public boolean isPlayerOnGround(Player p)

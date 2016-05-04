@@ -4,8 +4,11 @@ import net.newtownia.NTAC.Action.ActionData;
 import net.newtownia.NTAC.Action.ViolationManager;
 import net.newtownia.NTAC.NTAC;
 import net.newtownia.NTAC.Utils.PunishUtils;
+import org.bukkit.Achievement;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,13 +16,9 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
-import org.bukkit.event.player.PlayerVelocityEvent;
+import org.bukkit.event.player.*;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by Vinc0682 on 04.05.2016.
@@ -32,6 +31,7 @@ public class InventoryMove extends AbstractMovementCheck
     private ActionData actionData;
 
     private Map<UUID, Long> playerLastInvOpenTime;
+    private List<UUID> teleported;
     private ViolationManager vlManager;
 
     public InventoryMove(NTAC pl, MovementBase movementBase)
@@ -40,6 +40,9 @@ public class InventoryMove extends AbstractMovementCheck
 
         vlManager = new ViolationManager();
         playerLastInvOpenTime = new HashMap<>();
+        teleported = new ArrayList<>();
+
+        loadConfig();
 
         Bukkit.getScheduler().runTaskTimer(pl, new Runnable() {
             @Override
@@ -75,18 +78,27 @@ public class InventoryMove extends AbstractMovementCheck
     public void onPlayerMove(PlayerMoveEvent event)
     {
         Player p = event.getPlayer();
+        UUID pUUID = p.getUniqueId();
 
-        //p.sendMessage("Ya inväntöry: " + playerLastInvOpenTime.containsKey(p.getUniqueId()));
-
-        if (hasInventoryOpenWithGrace(p))
+        if (hasInventoryOpenWithGrace(p) &&
+                p.getFallDistance() == 0 &&
+                p.getVehicle() == null &&
+                p.getLocation().getBlock().getRelative(BlockFace.DOWN).getType() != Material.ICE &&
+                !p.isLeashed())
         {
+            if (teleported.contains(pUUID))
+            {
+                teleported.remove(pUUID);
+                return;
+            }
+
             vlManager.addViolation(p, 1);
             int vl = vlManager.getViolation(p);
             if (actionData.doesLastViolationCommandsContains(vl, "cancel"))
             {
                 Location resetLoc = vlManager.getFirstViolationLocation(p);
                 if(resetLoc != null)
-                    p.teleport(resetLoc.add(0, 1, 0));
+                    p.teleport(resetLoc);
             }
             PunishUtils.runViolationAction(p, vl, vl, actionData);
         }
@@ -94,7 +106,7 @@ public class InventoryMove extends AbstractMovementCheck
 
     private boolean hasInventoryOpenWithGrace(Player p)
     {
-        if (!playerLastInvOpenTime.containsKey(p))
+        if (!playerLastInvOpenTime.containsKey(p.getUniqueId()))
             return false;
         else
         {
@@ -104,12 +116,26 @@ public class InventoryMove extends AbstractMovementCheck
     }
 
     @EventHandler
+    public void onJoin(PlayerJoinEvent event){
+        event.getPlayer().removeAchievement(Achievement.OPEN_INVENTORY);
+    }
+
+    @EventHandler
+    public void onInventoryOpenEvent(PlayerAchievementAwardedEvent event)
+    {
+        if (event.getAchievement().getClass() == Achievement.OPEN_INVENTORY.getClass())
+        {
+            playerLastInvOpenTime.put(event.getPlayer().getUniqueId(), System.currentTimeMillis());
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
     public void onPlayerOpensInv(InventoryOpenEvent event)
     {
         if (event.getPlayer() instanceof Player)
         {
             playerLastInvOpenTime.put(event.getPlayer().getUniqueId(), System.currentTimeMillis());
-            event.getPlayer().sendMessage("Öpening");
         }
     }
 
@@ -129,7 +155,7 @@ public class InventoryMove extends AbstractMovementCheck
     @EventHandler
     public void onPlayerTeleport(PlayerTeleportEvent event)
     {
-        closeInv(event.getPlayer());
+        teleported.add(event.getPlayer().getUniqueId());
     }
 
     private void closeInv(HumanEntity p)
@@ -137,7 +163,6 @@ public class InventoryMove extends AbstractMovementCheck
         if (p instanceof Player && playerLastInvOpenTime.containsKey(p.getUniqueId()))
         {
             playerLastInvOpenTime.remove(p.getUniqueId());
-            p.sendMessage("Clösäng");
         }
     }
 
