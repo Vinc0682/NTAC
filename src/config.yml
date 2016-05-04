@@ -25,14 +25,15 @@ Enabled:
 
   #Player
   SkinDerp: true #Stable, even in AAC --> Hive! DEFAULT: true
-  Headless: true #To test :D
+  Headless: true #Stable :D
 
   #Movement (all require movement base enabled)
-  Anti-AFK: true #Beta, testing on newtownia.net + more subchecks'll be added soon! DEFAULT: true
-  Sneak: true #Stable, patches a NC+ Bypass DEFAULT: true
-  NoSlowBlock: true #Stable, patches a NC+ Bypass DEFAULT: true
+  Anti-AFK: true # Beta, testing on newtownia.net + more subchecks'll be added soon! DEFAULT: true
+  Sneak: true # Stable, patches a NC+ Bypass DEFAULT: true
+  NoSlowBlock: true # Stable, patches a NC+ Bypass DEFAULT: true
   Fast-Ladder: true # Stable, NC+ is unable to fix it :(
-  Boat-Fly: true # Stable, fixes the most common 1.9 fly bypass using boats. DEFAULT: true
+  Boat-Fly: true # Stable, fixes the most common 1.9 fly bypass using boats. :D DEFAULT: true
+  Inventory-Move: true # Blocks all moves when inventory is open / item-actions if inv is not open
 
   #Miscellanious
   Anti-Chorus-Fruit: true # Block teleportation caused by chorus fruit to prevent people to teleport trough walls
@@ -280,5 +281,20 @@ Boat-Fly:
   Min-Down-Speed: 0.12
 
   #Actions, the VL is equal to the count of suspicious movements
+  Actions:
+    2: 'cancel'
+
+Inventory-Move:
+
+  # Should all item-actions be blocked when the invenotry is closed? This fixes
+  # AutoArmor. Note that actions with items in the hotbar wont be blocked since
+  # you are able right click them to put armor on...
+  Cancel-Item-Actions: true
+
+  #The time until the VL get's invalidated (in ms)
+  #NOTE: The VL only get's invalidated when there are no new VLs.
+  Invalidate-Threshold: 250
+
+  # Actions performed when player moves while the inv is opened, VL equals the count of moves
   Actions:
     2: 'cancel'

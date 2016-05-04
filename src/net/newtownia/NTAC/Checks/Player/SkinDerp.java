@@ -60,7 +60,7 @@ public class SkinDerp extends AbstractCheck implements Listener
         Player p = e.getPlayer();
         UUID pUUID = p.getUniqueId();
 
-        if(p.hasPermission("ntac.bypass.swingderp"))
+        if(p.hasPermission("ntac.bypass.skinderp"))
             return;
 
         WrapperPlayClientSettings settingsPacket = new WrapperPlayClientSettings(e.getPacket());

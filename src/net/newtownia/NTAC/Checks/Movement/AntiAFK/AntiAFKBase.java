@@ -98,7 +98,10 @@ public class AntiAFKBase extends AbstractMovementCheck implements Listener
         UUID pUUID = p.getUniqueId();
 
         if(p.hasPermission("ntac.bypass.antiafk"))
+        {
+            lastPlayerNonAFKMoveTimes.put(pUUID, System.currentTimeMillis());
             return;
+        }
 
         if(!lastPlayerNonAFKMoveTimes.containsKey(pUUID))
             lastPlayerNonAFKMoveTimes.put(pUUID, System.currentTimeMillis());

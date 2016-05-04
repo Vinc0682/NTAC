@@ -66,6 +66,7 @@ public class CheckManager
         //allChecks.add(new NoSlowBlock(pl, movementBase)); Can't block anymore
         allChecks.add(new FastLadder(pl, movementBase));
         allChecks.add(new BoatFly(pl, movementBase));
+        allChecks.add(new InventoryMove(pl, movementBase));
 
         allChecks.add(new AntiChorus(pl));
     }

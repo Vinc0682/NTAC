@@ -21,7 +21,7 @@ permissions:
     default: OP
   ntac.bypass.autoclicker:
     default: OP
-  ntac.bypass.swingderp:
+  ntac.bypass.skinderp:
     default: OP
   ntac.bypass.headless:
       default: OP
