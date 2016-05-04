@@ -17,6 +17,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerVelocityEvent;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -26,6 +27,7 @@ import java.util.UUID;
 public class InventoryMove extends AbstractMovementCheck
 {
     private boolean cancelInventoryAction = true;
+    private int graceTime = 1000;
     private int invalidateThreshold = 1000;
     private ActionData actionData;
 
@@ -37,6 +39,7 @@ public class InventoryMove extends AbstractMovementCheck
         super(pl, movementBase, "Inventory-Move");
 
         vlManager = new ViolationManager();
+        playerLastInvOpenTime = new HashMap<>();
 
         Bukkit.getScheduler().runTaskTimer(pl, new Runnable() {
             @Override
@@ -71,10 +74,9 @@ public class InventoryMove extends AbstractMovementCheck
     @Override
     public void onPlayerMove(PlayerMoveEvent event)
     {
-        if (!isEnabled())
-            return;
-
         Player p = event.getPlayer();
+
+        //p.sendMessage("Ya inväntöry: " + playerLastInvOpenTime.containsKey(p.getUniqueId()));
 
         if (hasInventoryOpenWithGrace(p))
         {
@@ -97,7 +99,7 @@ public class InventoryMove extends AbstractMovementCheck
         else
         {
             int deltaTime = (int) (System.currentTimeMillis() - playerLastInvOpenTime.get(p.getUniqueId()));
-            return deltaTime < 1000;
+            return deltaTime > graceTime;
         }
     }
 
@@ -105,7 +107,10 @@ public class InventoryMove extends AbstractMovementCheck
     public void onPlayerOpensInv(InventoryOpenEvent event)
     {
         if (event.getPlayer() instanceof Player)
+        {
             playerLastInvOpenTime.put(event.getPlayer().getUniqueId(), System.currentTimeMillis());
+            event.getPlayer().sendMessage("Öpening");
+        }
     }
 
     @EventHandler
@@ -130,7 +135,10 @@ public class InventoryMove extends AbstractMovementCheck
     private void closeInv(HumanEntity p)
     {
         if (p instanceof Player && playerLastInvOpenTime.containsKey(p.getUniqueId()))
+        {
             playerLastInvOpenTime.remove(p.getUniqueId());
+            p.sendMessage("Clösäng");
+        }
     }
 
     @Override
@@ -138,6 +146,7 @@ public class InventoryMove extends AbstractMovementCheck
     {
         actionData = new ActionData(pl.getConfiguration(), "Inventory-Move.Actions");
         cancelInventoryAction = Boolean.valueOf(pl.getConfiguration().getString("Inventory-Move.Cancel-Item-Actions"));
+        graceTime = Integer.valueOf(pl.getConfiguration().getString("Inventory-Move.Grace-Time"));
         invalidateThreshold = Integer.valueOf(pl.getConfiguration().getString("Inventory-Move.Invalidate-Threshold"));
     }
 }

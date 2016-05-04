@@ -291,6 +291,9 @@ Inventory-Move:
   # you are able right click them to put armor on...
   Cancel-Item-Actions: true
 
+  # How long after opening the inventory / getting damage should players be ignored
+  Grace-Time: 1000
+
   #The time until the VL get's invalidated (in ms)
   #NOTE: The VL only get's invalidated when there are no new VLs.
   Invalidate-Threshold: 250
