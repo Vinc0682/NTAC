@@ -1,7 +1,6 @@
 package net.newtownia.NTAC.Commands;
 
 import net.newtownia.NTAC.NTAC;
-import net.newtownia.NTAC.Utils.MessageUtils;
 import net.newtownia.NTAC.Utils.PunishUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -58,8 +57,7 @@ public class NTACCommand implements CommandExecutor
                                 for (int i = 2; i < args.length; i += 1)
                                     message += args[i] + " ";
                             }
-                            message = MessageUtils.formatMessage(message);
-
+                            message = pl.getMessageUtils().formatMessage(message);
                             PunishUtils.kickPlayer(p, message);
                         }
                     }

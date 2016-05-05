@@ -26,7 +26,7 @@ public class MessageUtils
 
         for(Map.Entry<String, Object> entry : config.getValues(false).entrySet())
         {
-            messages.put(entry.getKey(), formatMessage(config.getString(entry.getKey())));
+            messages.put(entry.getKey(), config.getString(entry.getKey()));
         }
     }
 
@@ -44,17 +44,25 @@ public class MessageUtils
             sb.append(" ");
         }
         String msg = messages.get("Notify-Prefix") + sb.toString();
+        msg = formatMessage(msg);
         Bukkit.getLogger().info(ChatColor.stripColor(msg));
         for(Player p : Bukkit.getOnlinePlayers())
             if(p.hasPermission("ntac.notify"))
                 p.sendMessage(msg);
     }
 
-    public static String formatMessage(String s)
+    public String formatMessage(String s)
     {
         String result = ChatColor.translateAlternateColorCodes('&', s);
         result = result.replace("%nn", "\n\n\n\n\n");
         result = result.replace("%n", "\n");
+
+        for (Map.Entry<String, String> message: messages.entrySet())
+        {
+            String keyWord = "%%" + message.getKey() + "%%";
+            if (result.contains(keyWord))
+                result = result.replaceAll(keyWord, formatMessage(message.getValue()));
+        }
 
         return result;
     }

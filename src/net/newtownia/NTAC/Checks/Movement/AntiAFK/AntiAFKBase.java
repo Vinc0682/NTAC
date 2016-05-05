@@ -3,7 +3,6 @@ package net.newtownia.NTAC.Checks.Movement.AntiAFK;
 import net.newtownia.NTAC.Checks.Movement.AbstractMovementCheck;
 import net.newtownia.NTAC.Checks.Movement.MovementBase;
 import net.newtownia.NTAC.NTAC;
-import net.newtownia.NTAC.Utils.MessageUtils;
 import net.newtownia.NTAC.Utils.PunishUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -78,7 +77,7 @@ public class AntiAFKBase extends AbstractMovementCheck implements Listener
         kickCheckFreq = Integer.parseInt(config.getString("Anti-AFK.Kick-Check-Frequency"));
 
         kickMessage = config.getString("Anti-AFK.Kick-Message");
-        kickMessage = MessageUtils.formatMessage(kickMessage);
+        kickMessage = pl.getMessageUtils().formatMessage(kickMessage);
 
         checks = new ArrayList<>();
         if(Boolean.valueOf(config.getString("Anti-AFK.Move-In-Range.Enabled")))

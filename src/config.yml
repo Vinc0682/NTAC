@@ -53,8 +53,9 @@ Killaura-NPC:
   #Each violation is equal to a hit
   Actions:
     5:
-      - 'ntac kick %PLAYER% %nn&cNTAC &7> &c&lKillaura%n%n&c                Hacken ist auf newtownia.net verboten.%n%n'
-      - 'ntac notify %PLAYER% got kicked for killaura. VL %VL%'
+      #- 'ntac kick %PLAYER% %nn&cNTAC &7> &c&lKillaura%n%n&c                Hacken ist auf newtownia.net verboten.%n%n'
+      - 'ntac kick %PLAYER% %%Kick-Killaura%%'
+      - 'ntac notify %%Notify-Killaura-Kick%%'
 
   #Frequency to reset the violations's in TICKS DEFAULT: 20
   Clear-Frequency: 20
@@ -64,9 +65,6 @@ Killaura-NPC:
   #hitting an entity
   #DEFAULT: 5000  (equals 5 seconds)
   Combat-Time: 5000
-
-  #Frequency till the bot changes his name
-  Change-Bot-Frequency: 360
 
   #Should the bot be of the same type as the attacked entity?
   #Used to patch mobaura which ignores players.
@@ -111,10 +109,10 @@ Auto-Clicker:
 
   #The vl is equal to the amount of detected attacs
   Actions:
-    5: "ntac notify %PLAYER% is suspected for autoclicker. VL %VL%"
+    5: "ntac notify %%Notify-Autoclicker-Suspect%%"
     10:
-      - "ntac kick %PLAYER% %nn&cNTAC &7> &c&lAutoClicker%n%n&c                Hacken ist auf newtownia.net verboten.%n%n"
-      - "ntac notify %PLAYER% got kicked for autoclicker. VL %VL%"
+      - "ntac kick %PLAYER% %%Kick-Autoclicker%%"
+      - "ntac notify %%Notify-Autoclicker-Kick%%"
 
   #The time until the VL get's invalidated (in ms)
   #NOTE: The VL only get's invalidated when there are no new VLs.
@@ -137,8 +135,8 @@ SkinDerp:
   #Each violation is equal to a hit
   Actions:
     10:
-      - 'ntac kick %PLAYER% %nn&cNTAC &7> &c&lSkinderp%n%n&c                Hacken ist auf newtownia.net verboten.%n%n'
-      - 'ntac notify %PLAYER% got kicked for skinderp. VL %VL%'
+      - 'ntac kick %PLAYER% %%Kick-Derp%%'
+      - 'ntac notify %%Notify-Derp-Kick%%'
 
 #Headless
 Headless:
@@ -146,8 +144,8 @@ Headless:
   #The commands run when someone get suspected for headless, the vl is equal to the count of suspicious movements
   Actions:
     1:
-      - 'ntac kick %PLAYER% %nn&cNTAC &7> &c&lHeadless%n%n&c                Hacken ist auf newtownia.net verboten.%n%n'
-      - 'ntac notify %PLAYER% got kicked for headless. VL %VL%'
+      - 'ntac kick %PLAYER% %%Kick-Derp%%'
+      - 'ntac notify %%Notify-Derp-Kick%%'
 
 #Anti-AFK
 Anti-AFK:
@@ -158,7 +156,7 @@ Anti-AFK:
   Kick-Check-Frequency: 100
 
   #The message shown when a player is kicked cause AFK. DEFAULT: AFK
-  Kick-Message: '%nn&cNTAC &7> &c&lAFK%n%n&c            Du wurdest gekickt, weil du 3 Minuten AFK warst!%n%n'
+  Kick-Message: '%%Kick-AFK%%'
 
   #Subcheck-Properties
 
@@ -206,11 +204,11 @@ Sneak:
   Actions:
     3: 'cancel'
     20:
-      - 'ntac notify %PLAYER% is suspected for sneak. VL %VL%'
+      - 'ntac notify %%Notify-Sneak-Suspect%%'
       - 'cancel'
     100:
-      - 'ntac kick %PLAYER% %nn&cNTAC &7> &c&lSneak%n%n&c                Hacken ist auf newtownia.net verboten.%n%n'
-      - 'ntac notify %PLAYER% got kicked for sneak. VL %VL%'
+      - 'ntac kick %PLAYER% %%Kick-Movement%%'
+      - 'ntac notify %%Notify-Sneak-Kick%%'
 
   #The time until the VL get's invalidated (in ms)
   #NOTE: The VL only get's invalidated when there are no new VLs.
@@ -232,11 +230,11 @@ NoSlowBlock:
   Actions:
     1: 'cancel'
     5:
-      - 'ntac notify %PLAYER% is suspected for NoSlow (FastToggling). VL %VL%'
+      - 'ntac notify %%Notify-NoSlow-Suspect%%'
       - 'cancel'
     10:
-      - 'ntac kick %PLAYER% %nn&cNTAC &7> &c&lNoSlowdown%n%n&c                Hacken ist auf newtownia.net verboten.%n%n'
-      - 'ntac notify %PLAYER% got kicked for NoSlow (FastToggling). VL %VL%'
+      - 'ntac kick %PLAYER% %%Kick-Movement%%'
+      - 'ntac notify %%Notify-Sneak-Kick%%'
 
   #The time until the VL get's invalidated (in ms)
   #NOTE: The VL only get's invalidated when there are no new VLs.
@@ -260,6 +258,7 @@ Fast-Ladder:
   #The actions, the vl equals the count of suspicious movements
   Actions:
     3: 'cancel'
+    25: 'ntac kick %PLAYER% %%Kick-Movement%%'
 
 Boat-Fly:
 
@@ -284,6 +283,7 @@ Boat-Fly:
   #Actions, the VL is equal to the count of suspicious movements
   Actions:
     2: 'cancel'
+    10: 'ntac kick %PLAYER% %%Kick-Movement%%'
 
 Inventory-Move:
 
@@ -302,3 +302,4 @@ Inventory-Move:
   # Actions performed when player moves while the inv is opened, VL equals the count of moves
   Actions:
     2: 'cancel'
+    10: 'ntac kick %PLAYER% %%Kick-Movement%%'

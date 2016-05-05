@@ -4,3 +4,39 @@ Notify-Prefix: '&cNTAC&7: '
 NoPermission: '&cYou dont have the permission to do this!'
 Version: '&cNewtownia Anti-Cheat by VincBreaker; Patching NC+ as good as possible!'
 Reload: '&aConfig reloaded.'
+
+# You can define custom messages here, you can acces then later on by {{<MessageName>}}
+# Example:
+
+# Kick-Dumbness: '&c&lNTAC &7> &cDumbness %n%nYou are to dump to hack!'
+# Usage: ntac kick <Player> %%Kick-Dumbness%%
+
+# You can even access custem messages in custom messages, expample:
+# Kick-Prefix: '&c&lNTAC &7> &c'
+# Bottom-Message: '%n%n&7Hacking is forbidden!'
+# Kick-Dumbness: '%%Kick-Prefix%%Dumbness%%Bottom-Message%%'
+
+# You are not limited to entrys below, custom messages are loaded dynamicly!
+
+Kick-Prefix: '%nn&cNTAC &7>&c&l'
+Kick-Subtitle: '%n%n&c                Hacken ist auf newtownia.net verboten.%n%n'
+
+Kick-Killaura: '%%Kick-Prefix%% Killaura %%Kick-Subtitle%%'
+Kick-Autoclicker: '%%Kick-Prefix%% AutoClicker %%Kick-Subtitle%%'
+Kick-Derp: '%%Kick-Prefix%% Derp %%Kick-Subtitle%%'
+Kick-AFK: '%%Kick-Prefix%% AFK%n%n&c            Du wurdest gekickt, weil du 3 Minuten AFK warst!%n%n'
+Kick-Movement: '%%Kick-Prefix%% Suspicious Movement %%Kick-Subtitle%%'
+
+Notify-Player-Suspected: '%PLAYER% is suspected for'
+Notify-Kicked-For: '%PLAYER% got kicked for'
+Notify-VL: 'VL %VL%'
+
+Notify-Killaura-Kick: '%%Notify-Kicked-For%% killaura %%Notify-VL%%'
+Notify-Autoclicker-Suspect: '%%Notify-Player-Suspected%% autoclicker %%Notify-VL%%'
+Notify-Autoclicker-Kick: '%%Notify-Kicked-For%% autoclicker %%Notify-VL%%'
+Notify-Derp-Kick: '%%Notify-Kicked-For%% derp %%Notify-VL%%'
+Notify-Sneak-Suspect: '%%Notify-Player-Suspected%% sneak %%Notify-VL%%'
+Notify-Sneak-Kick: '%%Notify-Kicked-For%% sneak %%Notify-VL%%'
+Notify-NoSlow-Suspect: '%%Notify-Player-Suspected%% noslow %%Notify-VL%%'
+Notify-NoSlow-Kick: '%%Notify-Kicked-For%% noslow %%Notify-VL%%'
+

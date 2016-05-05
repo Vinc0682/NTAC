@@ -2,7 +2,6 @@ package net.newtownia.NTAC.Checks.Combat;
 
 import net.newtownia.NTAC.Checks.AbstractCheck;
 import net.newtownia.NTAC.NTAC;
-import net.newtownia.NTAC.Utils.MessageUtils;
 import net.newtownia.NTAC.Utils.PlayerUtils;
 import net.newtownia.NTAC.Utils.PunishUtils;
 import org.bukkit.Bukkit;
@@ -17,8 +16,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 public class AntiKnockback extends AbstractCheck implements Listener
@@ -50,7 +47,7 @@ public class AntiKnockback extends AbstractCheck implements Listener
         adjust = Integer.valueOf(config.getString("Anti-Knockback.Adjustment"));
 
         kickMsg = config.getString("Anti-Knockback.Kick-Message");
-        kickMsg = MessageUtils.formatMessage(kickMsg);
+        kickMsg = pl.getMessageUtils().formatMessage(kickMsg);
     }
 
     @EventHandler

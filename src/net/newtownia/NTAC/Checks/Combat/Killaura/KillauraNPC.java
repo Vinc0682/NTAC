@@ -17,19 +17,16 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 public class KillauraNPC extends AbstractCheck
 {
     //int threshold = 5;
     private int combatTime = 5000;
     private int clearFrequency = 60;
-    private int changeBotFrequency = 200;
     private boolean copyAttackedType = true;
 
     private double distanceMin = 2;
@@ -48,8 +45,13 @@ public class KillauraNPC extends AbstractCheck
 
     private Random rnd = new Random(System.currentTimeMillis());
 
-    ActionData actionData;
-    ViolationManager vlManager;
+    private ActionData actionData;
+    private ViolationManager vlManager;
+
+    private List<EntityType> ignoredEntityType = Arrays.asList(EntityType.BOAT, EntityType.MINECART,
+            EntityType.ITEM_FRAME, EntityType.ARMOR_STAND, EntityType.MINECART_CHEST, EntityType.MINECART_COMMAND,
+            EntityType.MINECART_FURNACE, EntityType.MINECART_HOPPER, EntityType.MINECART_MOB_SPAWNER,
+            EntityType.MINECART_TNT);
 
     public KillauraNPC(NTAC pl)
     {
@@ -157,6 +159,9 @@ public class KillauraNPC extends AbstractCheck
                     return;
                 }
 
+                if (ignoredEntityType.contains(attacked.getType()))
+                    return;
+
                 botId = Identity.Generator.generateIdentityForPlayer(p, attacked);
             }
             else
@@ -239,7 +244,6 @@ public class KillauraNPC extends AbstractCheck
         YamlConfiguration config = pl.getConfiguration();
 
         clearFrequency = Integer.parseInt(config.getString("Killaura-NPC.Clear-Frequency"));
-        changeBotFrequency = Integer.parseInt(config.getString("Killaura-NPC.Change-Bot-Frequency"));
         combatTime = Integer.parseInt(config.getString("Killaura-NPC.Combat-Time"));
         copyAttackedType = Boolean.valueOf(config.getString("Killaura-NPC.Copy-Attacked-Type"));
         angleMin = Integer.parseInt(config.getString("Killaura-NPC.Angle-Min"));

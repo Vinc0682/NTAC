@@ -7,7 +7,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.Callable;
 
 public class PunishUtils
@@ -45,7 +44,8 @@ public class PunishUtils
 
         for (String command : violationCommands)
         {
-            String realCommand = command.replaceAll("%PLAYER%", p.getName());
+            String realCommand = NTAC.getInstance().getMessageUtils().formatMessage(command);
+            realCommand = realCommand.replaceAll("%PLAYER%", p.getName());
             realCommand = realCommand.replaceAll("%VL%", String.valueOf(realVL));
             dispatchCommandSynced(realCommand);
         }
