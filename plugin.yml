@@ -1,8 +1,8 @@
 name: NTAC
 main: net.newtownia.NTAC.NTAC
-version: '1.8 b2'
+version: '1.9-b1'
 depend: [NTApi, ProtocolLib]
-author: Vinc0682
+author: VincBreaker
 
 commands:
   ntac:
@@ -34,6 +34,14 @@ permissions:
   ntac.bypass.fastladder:
     default: OP
   ntac.bypass.boatfly:
+    default: OP
+  ntac.bypass.inventory-move:
+    default: OP
+  ntac.command.notify:
+    default: OP
+  ntac.command.kick:
+    default: OP
+  ntac.command.reload:
     default: OP
   ntac.notify:
     default: OP

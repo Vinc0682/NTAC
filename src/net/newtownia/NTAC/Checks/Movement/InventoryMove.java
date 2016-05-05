@@ -77,7 +77,14 @@ public class InventoryMove extends AbstractMovementCheck
     @Override
     public void onPlayerMove(PlayerMoveEvent event)
     {
+        if (!isEnabled())
+            return;
+
         Player p = event.getPlayer();
+
+        if (p.hasPermission("ntac.bypass.inventory-move"))
+            return;
+
         UUID pUUID = p.getUniqueId();
 
         if (hasInventoryOpenWithGrace(p) &&

@@ -33,7 +33,8 @@ Enabled:
   NoSlowBlock: true # Stable, patches a NC+ Bypass DEFAULT: true
   Fast-Ladder: true # Stable, NC+ is unable to fix it :(
   Boat-Fly: true # Stable, fixes the most common 1.9 fly bypass using boats. :D DEFAULT: true
-  Inventory-Move: true # Blocks all moves when inventory is open / item-actions if inv is not open
+  Inventory-Move: true # Blocks all moves when inventory is open / item-actions if inv is not open,
+                       # may fuck up archivements, may have false positives DEFAULT: true
 
   #Miscellanious
   Anti-Chorus-Fruit: true # Block teleportation caused by chorus fruit to prevent people to teleport trough walls

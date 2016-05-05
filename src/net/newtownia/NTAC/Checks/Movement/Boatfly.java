@@ -60,6 +60,7 @@ public class BoatFly extends AbstractMovementCheck
             {
                 if (cancelAllUpMotions && yDiff > 0)
                 {
+                    vlManager.addViolation(p, 1);
                     Location resetLoc = vlManager.getFirstViolationLocation(p);
                     if(resetLoc != null)
                         p.teleport(resetLoc.add(0, 1, 0));

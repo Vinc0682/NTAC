@@ -32,10 +32,22 @@ public class NTACCommand implements CommandExecutor
             switch (args[0])
             {
                 case "reload":
+                    if (!cs.hasPermission("ntac.command.reload"))
+                    {
+                        pl.getMessageUtils().printMessage(cs, "NoPermission");
+                        break;
+                    }
+
                     pl.reload();
                     pl.getMessageUtils().printMessage(cs, "Reload");
                     break;
                 case "kick":
+                    if (!cs.hasPermission("ntac.command.kick"))
+                    {
+                        pl.getMessageUtils().printMessage(cs, "NoPermission");
+                        break;
+                    }
+
                     if(args.length > 1)
                     {
                         Player p = Bukkit.getPlayer(args[1]);
@@ -53,6 +65,12 @@ public class NTACCommand implements CommandExecutor
                     }
                     break;
                 case "notify":
+                    if (!cs.hasPermission("ntac.command.notify"))
+                    {
+                        pl.getMessageUtils().printMessage(cs, "NoPermission");
+                        break;
+                    }
+
                     if(args.length > 1)
                         pl.getMessageUtils().printNotify(args);
                     break;
