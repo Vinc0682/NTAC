@@ -14,23 +14,6 @@ import java.util.UUID;
 
 public class PacketGenerator 
 {
-	public static WrapperPlayServerNamedEntitySpawn getVisiblePlayerSpawnPacket(UUID playerUUID, int entityId, Location loc)
-	{
-		WrapperPlayServerNamedEntitySpawn spawnPacket = new WrapperPlayServerNamedEntitySpawn();
-		
-		spawnPacket.setEntityID(entityId);
-		spawnPacket.setPlayerUUID(playerUUID);
-		
-		spawnPacket.setPosition(new Vector(loc.getX(), loc.getY(), loc.getZ()));
-        spawnPacket.setYaw(loc.getYaw());
-        spawnPacket.setPitch(loc.getPitch());
-		
-		WrappedDataWatcher meta = new WrappedDataWatcher();
-		spawnPacket.setMetadata(meta);
-		
-		return spawnPacket;
-	}
-
 	public static WrapperPlayServerNamedEntitySpawn getIdentityPlayerSpawnPacket(Identity id, int entityId, Location loc)
     {
 		WrapperPlayServerNamedEntitySpawn spawnPacket = new WrapperPlayServerNamedEntitySpawn();
@@ -97,6 +80,19 @@ public class PacketGenerator
 
 		return packet;
 	}
+
+	public static WrapperPlayServerRelEntityMoveLook getRelativeMovementPacket(int entityId, Vector movement)
+    {
+        WrapperPlayServerRelEntityMoveLook packet = new WrapperPlayServerRelEntityMoveLook();
+        packet.setEntityID(entityId);
+        packet.setDx(movement.getX());
+        packet.setDy(movement.getY());
+        packet.setDz(movement.getZ() * 32);
+        packet.setOnGround(true);
+        packet.setYaw(0);
+        packet.setPitch(0);
+        return packet;
+    }
 	
 	public static WrapperPlayServerPlayerInfo getInfoAddPacket(UUID playerUUID, String playerName)
 	{
@@ -119,20 +115,6 @@ public class PacketGenerator
 
 		WrappedGameProfile profile = new WrappedGameProfile(playerUUID, playerName);
 		PlayerInfoData data = new PlayerInfoData(profile, 23, EnumWrappers.NativeGameMode.SURVIVAL, WrappedChatComponent.fromText(playerName));
-		List<PlayerInfoData> dataList = new ArrayList<>();
-		dataList.add(data);
-
-		infoPacket.setData(dataList);
-		return infoPacket;
-	}
-
-	public static WrapperPlayServerPlayerInfo getInfoAddPacket(UUID playerUUID, String playerName, String displayName, EnumWrappers.PlayerInfoAction action)
-	{
-		WrapperPlayServerPlayerInfo infoPacket = new WrapperPlayServerPlayerInfo();
-		infoPacket.setAction(action);
-
-		WrappedGameProfile profile = new WrappedGameProfile(playerUUID, playerName);
-		PlayerInfoData data = new PlayerInfoData(profile, 23, EnumWrappers.NativeGameMode.SURVIVAL, WrappedChatComponent.fromText(displayName));
 		List<PlayerInfoData> dataList = new ArrayList<>();
 		dataList.add(data);
 

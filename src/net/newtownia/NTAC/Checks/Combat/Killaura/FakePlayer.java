@@ -5,23 +5,19 @@ import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
 public class FakePlayer
 {
     private int entityID;
-    private EntityType type = EntityType.PLAYER;
-
-    private boolean visible = true;
+    private Map<UUID, Location> prevPlayerBotLocations;
 
     public FakePlayer(int entityID)
     {
         this.entityID = entityID;
-        this.visible = true;
-    }
-
-    public FakePlayer(int entityID, boolean visible)
-    {
-        this.entityID = entityID;
-        this.visible = visible;
+        prevPlayerBotLocations = new HashMap<>();
     }
 
     public void setEntityID(int entityID)
@@ -34,14 +30,10 @@ public class FakePlayer
         return entityID;
     }
 
-    public void setVisible(boolean visible)
-    {
-        this.visible = visible;
-    }
 
     public void spawnForPlayerWithIdentity(final Player p, final Location location, final Identity identity)
     {
-        if(!identity.isAlreadyOnline)
+        if(!identity.isAlreadyOnline && identity.type == EntityType.PLAYER)
             sendBotInfo(p, identity);
         //PacketGenerator.getIdentityPlayerSpawnPacket(identity, entityID, location).sendPacket(p);
         PacketGenerator.sendSpawnPacket(p, identity, entityID, location);
@@ -64,7 +56,26 @@ public class FakePlayer
 
     public void moveTo(Player p, Location loc)
     {
-        PacketGenerator.getTeleportPacket(entityID, loc).sendPacket(p);
+        UUID pUUID = p.getUniqueId();
+        if (prevPlayerBotLocations.containsKey(pUUID))
+        {
+            Location prevLoc = prevPlayerBotLocations.get(pUUID);
+
+            double deltaX = loc.getX() - prevLoc.getX();
+            double deltaY = loc.getY() - prevLoc.getY();
+            double deltaZ = loc.getZ() - prevLoc.getZ();
+            double dist = deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ;
+
+            if (dist > 4)
+                PacketGenerator.getTeleportPacket(entityID, loc).sendPacket(p);
+            else
+                PacketGenerator.getTeleportPacket(entityID, loc).sendPacket(p);
+        }
+        else
+            PacketGenerator.getTeleportPacket(entityID, loc).sendPacket(p);
+
+        prevPlayerBotLocations.put(p.getUniqueId(), loc);
+
     }
 
     public void moveAround(Player p, double angle, double distance)
