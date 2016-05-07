@@ -51,7 +51,8 @@ public class FakePlayer
 
     public void despawnTablistForPlayer(Player p, Identity identity)
     {
-        PacketGenerator.getInfoRemovePacket(identity.uuid, identity.name).sendPacket(p);
+        if (identity.type == EntityType.PLAYER)
+            PacketGenerator.getInfoRemovePacket(identity.uuid, identity.name).sendPacket(p);
     }
 
     public void moveTo(Player p, Location loc)

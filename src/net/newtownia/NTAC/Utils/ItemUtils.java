@@ -13,6 +13,7 @@ public class ItemUtils
 {
     private static List<Material> swords;
     private static List<Material> foods;
+    private static List<Material> slowWeapons;
 
     public static List<Material> getSwords()
     {
@@ -20,6 +21,7 @@ public class ItemUtils
         {
             swords = new ArrayList<>();
             swords.add(Material.WOOD_SWORD);
+            swords.add(Material.GOLD_SWORD);
             swords.add(Material.STONE_SWORD);
             swords.add(Material.IRON_SWORD);
             swords.add(Material.DIAMOND_SWORD);
@@ -95,5 +97,45 @@ public class ItemUtils
         if (stack == null)
             return false;
         return isUsable(stack.getType());
+    }
+
+    public static List<Material> getSlowWeapons()
+    {
+        if (slowWeapons == null)
+        {
+            slowWeapons = new ArrayList<>();
+            slowWeapons.add(Material.WOOD_AXE);
+            slowWeapons.add(Material.GOLD_AXE);
+            slowWeapons.add(Material.STONE_AXE);
+            slowWeapons.add(Material.IRON_AXE);
+            slowWeapons.add(Material.DIAMOND_AXE);
+
+            slowWeapons.add(Material.WOOD_SPADE);
+            slowWeapons.add(Material.GOLD_SPADE);
+            slowWeapons.add(Material.STONE_SPADE);
+            slowWeapons.add(Material.IRON_SPADE);
+            slowWeapons.add(Material.DIAMOND_SPADE);
+
+            slowWeapons.add(Material.WOOD_PICKAXE);
+            slowWeapons.add(Material.GOLD_PICKAXE);
+            slowWeapons.add(Material.STONE_PICKAXE);
+            slowWeapons.add(Material.IRON_PICKAXE);
+            slowWeapons.add(Material.DIAMOND_PICKAXE);
+
+            slowWeapons.add(Material.WOOD_HOE);
+            slowWeapons.add(Material.GOLD_HOE);
+            slowWeapons.add(Material.STONE_HOE);
+            slowWeapons.add(Material.IRON_HOE);
+            slowWeapons.add(Material.DIAMOND_HOE);
+        }
+        return slowWeapons;
+    }
+    public static boolean isSlowWeapon(Material m)
+    {
+        return getSlowWeapons().contains(m);
+    }
+    public static boolean isSlowWeapon(ItemStack stack)
+    {
+        return stack != null && isSlowWeapon(stack.getType());
     }
 }

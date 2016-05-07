@@ -12,6 +12,7 @@ import net.newtownia.NTAC.Action.ViolationManager;
 import net.newtownia.NTAC.Checks.AbstractCheck;
 import net.newtownia.NTAC.NTAC;
 import net.newtownia.NTAC.Utils.Identity;
+import net.newtownia.NTAC.Utils.ItemUtils;
 import net.newtownia.NTAC.Utils.PunishUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -28,6 +29,7 @@ public class KillauraNPC extends AbstractCheck
     private int combatTime = 5000;
     private int clearFrequency = 60;
     private boolean copyAttackedType = true;
+    private int slowWeaponVLIncrement = 2;
 
     private double distanceMin = 2;
     private double distanceMax = 4;
@@ -174,7 +176,10 @@ public class KillauraNPC extends AbstractCheck
 
         if(packet.getTargetID() == bot.getEntityID())
         {
-            vlManager.addViolation(p, 1);
+            if (ItemUtils.isSlowWeapon(p.getInventory().getItemInMainHand()))
+                vlManager.addViolation(p, slowWeaponVLIncrement);
+            else
+                vlManager.addViolation(p, 1);
             PunishUtils.runViolationAction(p, vlManager, actionData);
         }
 
@@ -251,6 +256,7 @@ public class KillauraNPC extends AbstractCheck
         distanceMin = Double.parseDouble(config.getString("Killaura-NPC.Distance-Min"));
         distanceMax = Double.parseDouble(config.getString("Killaura-NPC.Distance-Max"));
         switchTime = Integer.parseInt(config.getString("Killaura-NPC.Switch-Time"));
+        slowWeaponVLIncrement = Integer.parseInt(config.getString("Killaura-NPC.Slow-Weapon-Increment"));
 
         actionData = new ActionData(config, "Killaura-NPC.Actions");
     }

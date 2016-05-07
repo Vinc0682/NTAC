@@ -49,13 +49,6 @@ Bases:
 
 #Killaura NPC-Check settings
 Killaura-NPC:
-  #The commands run when a player is suspected for killaura
-  #Each violation is equal to a hit
-  Actions:
-    5:
-      #- 'ntac kick %PLAYER% %nn&cNTAC &7> &c&lKillaura%n%n&c                Hacken ist auf newtownia.net verboten.%n%n'
-      - 'ntac kick %PLAYER% %%Kick-Killaura%%'
-      - 'ntac notify %%Notify-Killaura-Kick%%'
 
   #Frequency to reset the violations's in TICKS DEFAULT: 20
   Clear-Frequency: 20
@@ -85,6 +78,17 @@ Killaura-NPC:
 
   #The frequecy (in ms) the bot switch the side
   Switch-Time: 1000
+
+  # Slow weapon vl increasement
+  # How much should the vl be increased when the player is using a slow weapon, e.g. an axe
+  Slow-Weapon-Increment: 2
+
+  #The commands run when a player is suspected for killaura
+  #Each violation is equal to a hit
+  Actions:
+    4:
+      - 'ntac kick %PLAYER% %%Kick-Killaura%%'
+      - 'ntac notify %%Notify-Killaura-Kick%%'
 
 #Anti-Knockback / NoVelocity-Check
 Anti-Knockback:
