@@ -1,6 +1,5 @@
-package net.newtownia.NTAC.Checks.Combat.Killaura;
+package net.newtownia.NTAC.Utils.FakePlayer;
 
-import net.newtownia.NTAC.Utils.Identity;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;

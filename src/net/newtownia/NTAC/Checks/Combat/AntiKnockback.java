@@ -4,6 +4,7 @@ import net.newtownia.NTAC.Checks.AbstractCheck;
 import net.newtownia.NTAC.NTAC;
 import net.newtownia.NTAC.Utils.PlayerUtils;
 import net.newtownia.NTAC.Utils.PunishUtils;
+import net.newtownia.NTAC.Utils.Strings;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -20,13 +21,13 @@ import java.util.ArrayList;
 
 public class AntiKnockback extends AbstractCheck implements Listener
 {
-    private String kickMsg = "No Knockback";
+    private String kickMsg = Strings.getString(1, 0xFF);
     private int adjust = 2;
     private ArrayList<Material> unsolidMaterials;
 
     public AntiKnockback(NTAC p)
     {
-        super(p, "AntiKnockback");
+        super(p, Strings.getString(2, 0xFF));
         loadConfig();
 
         unsolidMaterials = new ArrayList<>();

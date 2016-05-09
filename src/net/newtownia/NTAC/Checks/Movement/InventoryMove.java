@@ -12,6 +12,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
@@ -52,7 +53,7 @@ public class InventoryMove extends AbstractMovementCheck
         }, 20L, 20L);
     }
 
-    @EventHandler
+    @EventHandler (priority = EventPriority.LOW)
     public void onPlayerInventoryAction(InventoryClickEvent event)
     {
         if (!isEnabled())
@@ -61,6 +62,8 @@ public class InventoryMove extends AbstractMovementCheck
         if (event.getWhoClicked() instanceof Player)
         {
             Player p = (Player) event.getWhoClicked();
+            if (p.hasPermission("ntac.bypass.inventory-move"))
+                return;
 
             boolean isHotbar = false;
 

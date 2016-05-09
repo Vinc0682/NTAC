@@ -19,13 +19,10 @@
 Enabled:
 
   #Combat
-  Killaura-NPC: true #Stable DEFAULT: true
-  Anti-Knockback: false #Need PvPManager Support DEFAULT: false
-  Auto-Clicker: true #Code stable, customize dat settings DEFAULT: true
-
-  #Player
-  SkinDerp: true #Stable, even in AAC --> Hive! DEFAULT: true
-  Headless: true #Stable :D
+  Killaura-NPC: true # Stable DEFAULT: true
+  Anti-Knockback: false # Gotta recode dat shit when I'm bored DEFAULT: false
+  Auto-Clicker: true # Code stable, customize dat settings DEFAULT: true
+  Auto-Armor: true # Beta, take a look at InvMove too! DEFAULT: true
 
   #Movement (all require movement base enabled)
   Anti-AFK: true # Beta, testing on newtownia.net + more subchecks'll be added soon! DEFAULT: true
@@ -34,49 +31,56 @@ Enabled:
   Fast-Ladder: true # Stable, NC+ is unable to fix it :(
   Boat-Fly: true # Stable, fixes the most common 1.9 fly bypass using boats. :D DEFAULT: true
   Inventory-Move: true # Blocks all moves when inventory is open / item-actions if inv is not open,
-                       # may fuck up archivements, may have false positives DEFAULT: true
+    # may fuck up archivements, may have false positives DEFAULT: true
 
-  #Miscellanious
+  # Player
+  SkinDerp: true # Stable, even in AAC --> Hive! DEFAULT: true
+  Headless: true # Stable :D
+
+  # Render
+  #Tracers: true # In development, has no effect atm
+
+  # Miscellanious
   Anti-Chorus-Fruit: true # Block teleportation caused by chorus fruit to prevent people to teleport trough walls
 
-#Some options for the bases of NTAC
+# Some options for the bases of NTAC
 Bases:
-  #The movement base is a part of the integrated framework which keeps
-  #tracking the player movement and saves serveral position data
-  #Can be disabled if you don't use any of the movement checks
-  #If disabled the movement base, enabled movement checks will be buggy / not working
+  # The movement base is a part of the integrated framework which keeps
+  # tracking the player movement and saves serveral position data
+  # Can be disabled if you don't use any of the movement checks
+  # If disabled the movement base, enabled movement checks will be buggy / not working
   Enable-Movement-Base: true
 
-#Killaura NPC-Check settings
+# Killaura NPC-Check settings
 Killaura-NPC:
 
-  #Frequency to reset the violations's in TICKS DEFAULT: 20
+  # Frequency to reset the violations's in TICKS DEFAULT: 20
   Clear-Frequency: 20
 
-  #Combat time
-  #Time (in milliseconds (1000 ms equal 1 sec) the bot is visible after
-  #hitting an entity
-  #DEFAULT: 5000  (equals 5 seconds)
+  # Combat time
+  # Time (in milliseconds (1000 ms equal 1 sec) the bot is visible after
+  # hitting an entity
+  # DEFAULT: 5000  (equals 5 seconds)
   Combat-Time: 5000
 
-  #Should the bot be of the same type as the attacked entity?
-  #Used to patch mobaura which ignores players.
-  #If false, the bot will always be a player
+  # Should the bot be of the same type as the attacked entity?
+  # Used to patch mobaura which ignores players.
+  # If false, the bot will always be a player
   Copy-Attacked-Type: true
 
-  #The minimum and maximum angle the bot will have (in relation to the player)
-  #DEFAULT MIN: 100 (To adjust since these values were generic)
-  #DEFAULT MAX: 120
+  # The minimum and maximum angle the bot will have (in relation to the player)
+  # DEFAULT MIN: 100 (To adjust since these values were generic)
+  # DEFAULT MAX: 120
   Angle-Min: 100
   Angle-Max: 120
 
-  #The minimum and maximum distance between the bot and the player
-  #DEFAULT MIN: 2
-  #DEFAULT MAX: 4
+  # The minimum and maximum distance between the bot and the player
+  # DEFAULT MIN: 2
+  # DEFAULT MAX: 4
   Distance-Min: 2
   Distance-Max: 4
 
-  #The frequecy (in ms) the bot switch the side
+  # The frequecy (in ms) the bot switch the side
   Switch-Time: 1000
 
   # Slow weapon vl increasement
@@ -90,121 +94,138 @@ Killaura-NPC:
       - 'ntac kick %PLAYER% %%Kick-Killaura%%'
       - 'ntac notify %%Notify-Killaura-Kick%%'
 
-#Anti-Knockback / NoVelocity-Check
+# Anti-Knockback / NoVelocity-Check
 Anti-Knockback:
 
-  #Adjustment (Ticks) to prevent false positives DEFAULT: 2
+  # Adjustment (Ticks) to prevent false positives DEFAULT: 2
   Adjustment: 2
 
-  #The message shown when sb. gets kicked for NoVelocity DEFAULT: No Knockback
+  # The message shown when sb. gets kicked for NoVelocity DEFAULT: No Knockback
   Kick-Message: No Knockback
 
-#Auto-Clicker-Check, in development
+# Auto-Clicker-Check, in development
 Auto-Clicker:
 
-  #The count of stored delays, set higher to reduce false positives, will use more cpu and ram
+  # The count of stored delays, set higher to reduce false positives, will use more cpu and ram
   Delay-Count: 10
 
-  #How many milliseconds should be used as puffer to make the check usefull
+  # How many milliseconds should be used as puffer to make the check usefull
   Timer-Puffer: 12
 
-  #The time between two hits to ignore that delay to make autoclicker more precise
+  # The time between two hits to ignore that delay to make autoclicker more precise
   Combat-Time: 5000
 
-  #The vl is equal to the amount of detected attacs
+  # The vl is equal to the amount of detected attacs
   Actions:
     5: "ntac notify %%Notify-Autoclicker-Suspect%%"
     10:
       - "ntac kick %PLAYER% %%Kick-Autoclicker%%"
       - "ntac notify %%Notify-Autoclicker-Kick%%"
 
-  #The time until the VL get's invalidated (in ms)
-  #NOTE: The VL only get's invalidated when there are no new VLs.
+  # The time until the VL get's invalidated (in ms)
+  # NOTE: The VL only get's invalidated when there are no new VLs.
   Invalidate-Threshold: 5000
 
+# AutoArmor works by adding a special diamond chestplate to the inventory of the player looks up if the player
+# put it on in a certain time.
+Auto-Armor:
 
-#Skinderp-Properties:
+  # How often (time between checks in seconds) should NTAC run the check
+  Check-Frequency: 300
+
+  # How long (in ticks) should the check pass on
+  Check-Time: 20
+
+  # How should the chestplace be named. Use this to leave a message to legit player NOT put the chestplate on
+  # (SUPPORTS custom messages)
+  Item-Name: '&4&lNICHT ANZIEHEN'
+
+  # Commands run when the player is suspected for AutoArmor.
+  Actions:
+    8: 'ntac kick %%Kick-AutoArmor%%'
+
+# Skinderp-Properties:
 SkinDerp:
 
-  #Time between skin-changes to make a change legit (Milliseconds) DEFAULT: 100
+  # Time between skin-changes to make a change legit (Milliseconds) DEFAULT: 100
   Time-Threshold: 100
 
-  #Count of unlegit changes till the player get kicked DEFAULT: 10
+  # Count of unlegit changes till the player get kicked DEFAULT: 10
   Count-Threshold: 10
 
-  #Kick-message DEFAULT: Skinderp
+  # Kick-message DEFAULT: Skinderp
   Kick-Message: Skinderp
 
-  #The commands run when a player is suspected for killaura
-  #Each violation is equal to a hit
+  # The commands run when a player is suspected for killaura
+  # Each violation is equal to a hit
   Actions:
     10:
       - 'ntac kick %PLAYER% %%Kick-Derp%%'
       - 'ntac notify %%Notify-Derp-Kick%%'
 
-#Headless
+# Headless
 Headless:
 
-  #The commands run when someone get suspected for headless, the vl is equal to the count of suspicious movements
+  # The commands run when someone get suspected for headless, the vl is equal to the count of suspicious movements
   Actions:
     1:
       - 'ntac kick %PLAYER% %%Kick-Derp%%'
       - 'ntac notify %%Notify-Derp-Kick%%'
 
-#Anti-AFK
+# Anti-AFK
 Anti-AFK:
-  #Time (in seconds) of a player being afk until he get's kicked. DEFAULT: 300
+  # Time (in seconds) of a player being afk until he get's kicked. DEFAULT: 300
   Kick-Threshold: 180
 
-  #Frequency for the check weather a player should be kicked. DEFAULT: 100
+  # Frequency for the check weather a player should be kicked. DEFAULT: 100
   Kick-Check-Frequency: 100
 
-  #The message shown when a player is kicked cause AFK. DEFAULT: AFK
+  # The message shown when a player is kicked cause AFK. DEFAULT: AFK
   Kick-Message: '%%Kick-AFK%%'
 
-  #Subcheck-Properties
+  # Subcheck-Properties
 
-  #Move-In-Range-Check
-  #This check checks weather the player has moved a several distance
+  # Move-In-Range-Check
+  # This check checks weather the player has moved a several distance
   Move-In-Range:
 
-    #Should this subcheck be enabled DEFAULT: true
+    # Should this subcheck be enabled DEFAULT: true
     Enabled: false
 
-    #This is the distance a player have to walk until the movement is
-    #recognized as not-afk (bot) movement by the MoveInRange-Check
-    #This is limit to 2 for testings purposes and to limit false-positives at the
-    #beginning. DEFAULT: 2
+    # This is the distance a player have to walk until the movement is
+    # recognized as not-afk (bot) movement by the MoveInRange-Check
+    # This is limit to 2 for testings purposes and to limit false-positives at the
+    # beginning. DEFAULT: 2
     Range-Threshold: 2
 
-  #Push-Device-Check
-  #This check checks weather the player is in water, lava or riding to kill
-  #AFK-Maschines, experimental (and work in progress)
+  # Push-Device-Check
+  # This check checks weather the player is in water, lava or riding to kill
+  # AFK-Maschines, experimental (and work in progress)
   Push-Device-Check:
 
-    #Should this subcheck be enabled DEFAULT: true
+    # Should this subcheck be enabled DEFAULT: true
     Enabled: true
 
-    #Should movements in water be marked as AFK. DEFAULT: true
+    # Should movements in water be marked as AFK. DEFAULT: true
     Mark-In-Water: true
 
-    #Should movements in lava be marked as AFK. DEFAULT: true
+    # Should movements in lava be marked as AFK. DEFAULT: true
     Mark-In-Lava: true
 
-    #Should movements while the player is riding or using a minecart be marked as AFK. DEFAULT: true
+    # Should movements while the player is riding or using a minecart be marked as AFK. DEFAULT: true
     Mark-In-Vehicle: true
 
-    #The delay (ms) until a player is unmarked, required to ignore steps in afk-maschines (also fixes infinite jump-maschines) DEFAULT: 3000
+    # The delay (ms) until a player is unmarked, required to ignore steps in afk-maschines (also fixes infinite jump-maschines) DEFAULT: 3000
     Unmark-Delay: 3000
 
-#Sneak properties
-#NOTE: This check isn't ment to be a completly check for Sneak. It is a patch for NC+ fixes a bypass (for NC+)
+# Sneak properties
+# NOTE: This check isn't ment to be a completly check for Sneak. It is a patch for NC+ fixes a bypass (for NC+)
 Sneak:
 
-  #The time between to sneak actions to get detected as legit.
+  # The time between to sneak actions to get detected as legit.
   Sneak-Threshold: 40
 
-  #Actions, the vl equals the count of detected packets
+  # Actions, the vl equals the count of detected packets
   Actions:
     3: 'cancel'
     20:
@@ -214,23 +235,23 @@ Sneak:
       - 'ntac kick %PLAYER% %%Kick-Movement%%'
       - 'ntac notify %%Notify-Sneak-Kick%%'
 
-  #The time until the VL get's invalidated (in ms)
-  #NOTE: The VL only get's invalidated when there are no new VLs.
+  # The time until the VL get's invalidated (in ms)
+  # NOTE: The VL only get's invalidated when there are no new VLs.
   Invalidate-Threshold: 1000
 
-  #The frequencie (in ticks) for the invalidate-cycle
+  # The frequencie (in ticks) for the invalidate-cycle
   Invalidate-Freq: 5
 
-#NoSlowBlock properties
-#NOTE: This check isn't ment to be a completly check for NoSlow. This just fixes a bypass for NC+ allowing
-#to NoSlow while blocking releasing the blocking pre move and block again on past move. Easy to detect
-#and just like sneak :D
+# NoSlowBlock properties
+# NOTE: This check isn't ment to be a completly check for NoSlow. This just fixes a bypass for NC+ allowing
+# to NoSlow while blocking releasing the blocking pre move and block again on past move. Easy to detect
+# and just like sneak :D
 NoSlowBlock:
 
-  #The time between to sneak actions to get detected as legit.
+  # The time between to sneak actions to get detected as legit.
   Use-Release-Threshold: 50
 
-  #Actions, the vl equals the count of detected packets
+  # Actions, the vl equals the count of detected packets
   Actions:
     1: 'cancel'
     5:
@@ -240,34 +261,34 @@ NoSlowBlock:
       - 'ntac kick %PLAYER% %%Kick-Movement%%'
       - 'ntac notify %%Notify-Sneak-Kick%%'
 
-  #The time until the VL get's invalidated (in ms)
-  #NOTE: The VL only get's invalidated when there are no new VLs.
+  # The time until the VL get's invalidated (in ms)
+  # NOTE: The VL only get's invalidated when there are no new VLs.
   Invalidate-Threshold: 1000
 
-  #The frequencie (in ticks) for the invalidate-cycle
+  # The frequencie (in ticks) for the invalidate-cycle
   Invalidate-Freq: 5
 
 Fast-Ladder:
 
-  #The normal climbing speed
+  # The normal climbing speed
   Climbing-Speed: 0.13
 
-  #The speed allowed when you start to climb a ladder
+  # The speed allowed when you start to climb a ladder
   Start-Speed: 1.5
 
-  #The time until the VL get's invalidated (in ms)
-  #NOTE: The VL only get's invalidated when there are no new VLs.
+  # The time until the VL get's invalidated (in ms)
+  # NOTE: The VL only get's invalidated when there are no new VLs.
   Invalidate-Threshold: 250
 
-  #The actions, the vl equals the count of suspicious movements
+  # The actions, the vl equals the count of suspicious movements
   Actions:
     3: 'cancel'
     25: 'ntac kick %PLAYER% %%Kick-Movement%%'
 
 Boat-Fly:
 
-  #The time until the VL get's invalidated (in ms)
-  #NOTE: The VL only get's invalidated when there are no new VLs.
+  # The time until the VL get's invalidated (in ms)
+  # NOTE: The VL only get's invalidated when there are no new VLs.
   Invalidate-Threshold: 250
 
   # Should all movements upwards be cancelled? Suggested if the first VL with 'cancel' is above 1
@@ -284,7 +305,7 @@ Boat-Fly:
   # with boats (no more MLG-Legit-Boatgliding)
   Min-Down-Speed: 0.12
 
-  #Actions, the VL is equal to the count of suspicious movements
+  # Actions, the VL is equal to the count of suspicious movements
   Actions:
     2: 'cancel'
     10: 'ntac kick %PLAYER% %%Kick-Movement%%'

@@ -1,4 +1,4 @@
-package net.newtownia.NTAC.Checks.Combat.Killaura;
+package net.newtownia.NTAC.Checks.Combat;
 
 import com.comphenix.packetwrapper.WrapperPlayClientUseEntity;
 import com.comphenix.protocol.PacketType;
@@ -11,9 +11,11 @@ import net.newtownia.NTAC.Action.ActionData;
 import net.newtownia.NTAC.Action.ViolationManager;
 import net.newtownia.NTAC.Checks.AbstractCheck;
 import net.newtownia.NTAC.NTAC;
-import net.newtownia.NTAC.Utils.Identity;
+import net.newtownia.NTAC.Utils.FakePlayer.FakePlayer;
+import net.newtownia.NTAC.Utils.FakePlayer.Identity;
 import net.newtownia.NTAC.Utils.ItemUtils;
 import net.newtownia.NTAC.Utils.PunishUtils;
+import net.newtownia.NTAC.Utils.Strings;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -57,7 +59,7 @@ public class KillauraNPC extends AbstractCheck
 
     public KillauraNPC(NTAC pl)
     {
-        super(pl, "Killaura-NPC");
+        super(pl, Strings.getString(0, 0x01));
 
         playerLastHitTime = new HashMap<>();
         playerFirstHitTime = new HashMap<>();

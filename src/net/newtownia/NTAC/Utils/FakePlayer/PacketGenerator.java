@@ -1,8 +1,7 @@
-package net.newtownia.NTAC.Checks.Combat.Killaura;
+package net.newtownia.NTAC.Utils.FakePlayer;
 
 import com.comphenix.packetwrapper.*;
 import com.comphenix.protocol.wrappers.*;
-import net.newtownia.NTAC.Utils.Identity;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -26,8 +25,9 @@ public class PacketGenerator
         spawnPacket.setPitch(loc.getPitch());
 
         WrappedDataWatcher meta = new WrappedDataWatcher();
-        if(!id.visible)
-            meta.setObject(0, (byte) 0x20);
+        if (!id.visible)
+            meta.setObject(0, (byte)0x20);
+
         spawnPacket.setMetadata(meta);
 
         return spawnPacket;

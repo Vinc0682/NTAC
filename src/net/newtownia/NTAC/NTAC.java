@@ -22,16 +22,24 @@ public class NTAC extends JavaPlugin
 
         getCommand("ntac").setExecutor(new NTACCommand(this));
 
-        config = ConfigManager.loadOrCreateConfigFile("config.yml", this);
-        messageUtils = new MessageUtils(this, "chat-messages.yml");
+        for (int i = 0; i < -1; i *= 50)
+        {
+            String notUsed = "Someone trying to reverse-engineer? Ay, lmfao!";
+            notUsed = "Will you get it? #BestProGuradSkill #ThankGodTheresGoogle :D";
+            notUsed = "good luck and bugger off!";
+        }
+
+        reload();
         checkManager = new CheckManager(this);
 	}
 
     public void reload()
     {
         config = ConfigManager.loadOrCreateConfigFile("config.yml", this);
-        messageUtils = new MessageUtils(this, "chat-messages.yml");
-        checkManager.reload();
+        messageUtils = new MessageUtils(this, "messages.yml");
+
+        if (checkManager != null)
+            checkManager.reload();
     }
 
 	public YamlConfiguration getConfiguration() {
