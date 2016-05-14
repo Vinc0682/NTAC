@@ -15,7 +15,6 @@ import net.newtownia.NTAC.Utils.FakePlayer.FakePlayer;
 import net.newtownia.NTAC.Utils.FakePlayer.Identity;
 import net.newtownia.NTAC.Utils.ItemUtils;
 import net.newtownia.NTAC.Utils.PunishUtils;
-import net.newtownia.NTAC.Utils.Strings;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -59,7 +58,7 @@ public class KillauraNPC extends AbstractCheck
 
     public KillauraNPC(NTAC pl)
     {
-        super(pl, Strings.getString(0, 0x01));
+        super(pl, "Killaura-NPC");
 
         playerLastHitTime = new HashMap<>();
         playerFirstHitTime = new HashMap<>();

@@ -22,7 +22,7 @@ Enabled:
   Killaura-NPC: true # Stable DEFAULT: true
   Anti-Knockback: false # Gotta recode dat shit when I'm bored DEFAULT: false
   Auto-Clicker: true # Code stable, customize dat settings DEFAULT: true
-  Auto-Armor: true # Beta, take a look at InvMove too! DEFAULT: true
+  Auto-Armor: false # Beta, take a look at InvMove too! DEFAULT: true
 
   #Movement (all require movement base enabled)
   Anti-AFK: true # Beta, testing on newtownia.net + more subchecks'll be added soon! DEFAULT: true
@@ -32,6 +32,7 @@ Enabled:
   Boat-Fly: true # Stable, fixes the most common 1.9 fly bypass using boats. :D DEFAULT: true
   Inventory-Move: true # Blocks all moves when inventory is open / item-actions if inv is not open,
     # may fuck up archivements, may have false positives DEFAULT: true
+  NCP-Drag-Down: true # Drag players down if NoCheatPlus detects fly
 
   # Player
   SkinDerp: true # Stable, even in AAC --> Hive! DEFAULT: true
@@ -320,11 +321,22 @@ Inventory-Move:
   # How long after opening the inventory / getting damage should players be ignored
   Grace-Time: 1000
 
-  #The time until the VL get's invalidated (in ms)
-  #NOTE: The VL only get's invalidated when there are no new VLs.
+  # The time until the VL get's invalidated (in ms)
+  # NOTE: The VL only get's invalidated when there are no new VLs.
   Invalidate-Threshold: 250
 
   # Actions performed when player moves while the inv is opened, VL equals the count of moves
   Actions:
     2: 'cancel'
     10: 'ntac kick %PLAYER% %%Kick-Movement%%'
+
+NCP-Drag-Down:
+
+  # The time until the VL get's invalidated (in ms)
+  # This is required for the position on the x and z axis to be
+  # sure that no one flyes very fast while abusing going down slowly
+  # NOTE: The VL only get's invalidated when there are no new VLs.
+  Invalidate-Threshold: 250
+
+  # How fast should players be dragged down, be careful to not lead into bugs...
+  Down-Speed: 0.5

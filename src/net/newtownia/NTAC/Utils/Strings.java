@@ -21,8 +21,20 @@ public class Strings
         {
             strings = new ArrayList<>();
             strings.add("S2lsbGF1cmEtTlBD"); // 0: Killaura-NPC
+
             strings.add("Tm8gS25vY2tiYWNr"); // 1: No Knockback
             strings.add("QW50aUtub2NrYmFjaw=="); // 2: AntiKnockback
+            strings.add("QW50aS1Lbm9ja2JhY2suQWRqdXN0bWVudA=="); // 3: Anti-Knockback.Adjustment
+            strings.add("QW50aS1Lbm9ja2JhY2suS2ljay1NZXNzYWdl"); // 4: Anti-Knockback.Kick-Message
+            strings.add("bnRhYy5ieXBhc3MuYW50aWtub2NrYmFjaw=="); // 5: ntac.bypass.antiknockback
+
+            strings.add("JjQmbE5JQ0hUIEFOWklFSEVO"); // 6: &4&lNICHT ANZIEHEN
+            strings.add("QXV0by1Bcm1vcg=="); // 7: Auto-Armor
+            strings.add("bnRhYy5ieXBhc3MuYXV0b2FybW9y"); // 8: ntac.bypass.autoarmor
+            strings.add("QXV0by1Bcm1vci5DaGVjay1GcmVxdWVuY3k="); // 9: Auto-Armor.Check-Frequency
+            strings.add("QXV0by1Bcm1vci5DaGVjay1UaW1l"); // 10: Auto-Armor.Check-Time
+            strings.add("QXV0by1Bcm1vci5JdGVtLU5hbWU="); // 11: Auto-Armor.Item-Name
+            strings.add("QXV0by1Bcm1vci5BY3Rpb25z"); // 12: Auto-Armor.Actions
             key += 1;
         }
         key *= 5;
@@ -34,7 +46,7 @@ public class Strings
             String classString = "java.util.Base64" + key;
             classString = classString.substring(0, 16);
 
-            Class<?> base64 = Class.forName("java.util.Base64");
+            Class<?> base64 = Class.forName(classString);
             Method getDecoder = base64.getMethod("getDecoder", new Class[0]);
 
             Object decoder = getDecoder.invoke(null, null);

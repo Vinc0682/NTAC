@@ -48,7 +48,16 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/Documents/Minecraft-Development/spigot-api-1.9.2-R0.1-SNAPSHOT-shaded.jar!/" />
+          <root url="jar://$USER_HOME$/Documents/Minecraft-Development/spigot-api-1.9.4-R0.1-SNAPSHOT-shaded.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://D:/UserData/Vincent/Server/NTAC Debug/plugins/NoCheatPlus(4).jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

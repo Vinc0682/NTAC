@@ -69,6 +69,7 @@ public class CheckManager
         allChecks.add(new FastLadder(pl, movementBase));
         allChecks.add(new BoatFly(pl, movementBase));
         allChecks.add(new InventoryMove(pl, movementBase));
+        allChecks.add(new NCPDragDown(pl, movementBase));
 
         //allChecks.add(new Tracers(pl));
 

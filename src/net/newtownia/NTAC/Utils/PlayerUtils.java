@@ -1,6 +1,10 @@
 package net.newtownia.NTAC.Utils;
 
+import fr.neatmonster.nocheatplus.NCPAPIProvider;
+import fr.neatmonster.nocheatplus.checks.moving.model.MoveInfo;
+import fr.neatmonster.nocheatplus.checks.moving.util.AuxMoving;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -17,6 +21,15 @@ public class PlayerUtils
 
     public static boolean isPlayerOnGround(Player p)
     {
+        if (Bukkit.getPluginManager().getPlugin("NoCheatPlus") != null)
+            return isPlayerOnGroundNCP(p);
+        else
+            return isPlayerOnGroundNTAC(p);
+    }
+
+    public static boolean isPlayerOnGroundNTAC(Player p)
+    {
+
         Block blockDown = p.getLocation().getBlock().getRelative(BlockFace.DOWN);
 
         ArrayList<Material> materials = new ArrayList<>();
@@ -36,9 +49,22 @@ public class PlayerUtils
         return false;
     }
 
+    public static boolean isPlayerOnGroundNCP(Player p)
+    {
+        AuxMoving aux = NCPAPIProvider.getNoCheatPlusAPI().getGenericInstance(AuxMoving.class);
+        MoveInfo moveInfo = aux.useMoveInfo();
+        moveInfo.set(p, p.getLocation(), null, 0);
+        return moveInfo.from.isOnGround();
+    }
+
     public static List<Material> getMaterialsBelow(Player p)
     {
-        Block blockDown = p.getLocation().getBlock().getRelative(BlockFace.DOWN);
+        return getMaterialsBelow(p.getLocation());
+    }
+
+    public static List<Material> getMaterialsBelow(Location loc)
+    {
+        Block blockDown = loc.getBlock().getRelative(BlockFace.DOWN);
 
         ArrayList<Material> materials = new ArrayList<>();
         materials.add(blockDown.getType());
@@ -56,11 +82,7 @@ public class PlayerUtils
 
     public static boolean materialsBelowContains(Player p, Material m)
     {
-        List<Material> materials = getMaterialsBelow(p);
-        for (Material mB : materials)
-            if (mB == m)
-                return true;
-        return false;
+        return getMaterialsBelow(p).contains(m);
     }
 
     public static int getPing(Player p)

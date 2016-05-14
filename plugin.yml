@@ -1,7 +1,8 @@
 name: NTAC
 main: net.newtownia.NTAC.NTAC
-version: '1.9-b4'
+version: '1.9-b6'
 depend: [NTApi, ProtocolLib]
+softdepend: [NoCheatPlus]
 author: VincBreaker
 
 commands:
@@ -21,6 +22,8 @@ permissions:
     default: OP
   ntac.bypass.autoclicker:
     default: OP
+  ntac.bypass.autoarmor:
+    default: OP
   ntac.bypass.skinderp:
     default: OP
   ntac.bypass.headless:
@@ -36,6 +39,8 @@ permissions:
   ntac.bypass.boatfly:
     default: OP
   ntac.bypass.inventory-move:
+    default: OP
+  ntac.bypass.ncp-dragdown:
     default: OP
   ntac.command.notify:
     default: OP

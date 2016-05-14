@@ -54,7 +54,8 @@ public class AutoArmor extends AbstractCheck
 
             for (Player p : Bukkit.getOnlinePlayers())
             {
-                p.getInventory().addItem(item);
+                if (!p.hasPermission("ntac.bypass.autoarmor"))
+                    p.getInventory().addItem(item);
             }
 
             Bukkit.getScheduler().runTaskLater(pl, new Runnable() {
@@ -63,7 +64,7 @@ public class AutoArmor extends AbstractCheck
                 {
                     for (Player p : Bukkit.getOnlinePlayers())
                     {
-                        if (p.getInventory().contains(item))
+                        if (!p.hasPermission("ntac.bypass.autoarmor") && p.getInventory().contains(item))
                             p.getInventory().remove(item);
                     }
                 }
@@ -75,9 +76,13 @@ public class AutoArmor extends AbstractCheck
     public void onInventoryClick(InventoryClickEvent event)
     {
         if (event.getWhoClicked() instanceof Player &&
+                event.getCurrentItem() != null &&
                 event.getCurrentItem().equals(item))
         {
             Player p = (Player)event.getWhoClicked();
+
+            if (p.hasPermission("ntac.bypass.autoarmor"))
+                return;
 
             event.setCancelled(true);
             event.getWhoClicked().getInventory().remove(item);
