@@ -32,7 +32,11 @@ public class MessageUtils
 
     public void printMessage(CommandSender cs, String message, Object... args)
     {
-        cs.sendMessage(messages.get("Prefix") + String.format(messages.get(message), args));
+        String msg = messages.get("Prefix") + String.format(messages.get(message), args);
+        msg = formatMessage(msg);
+        if (!(cs instanceof Player))
+            msg = ChatColor.stripColor(msg);
+        cs.sendMessage(msg);
     }
 
     public void printNotify(String[] args)
