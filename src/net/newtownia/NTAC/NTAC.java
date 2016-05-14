@@ -1,5 +1,6 @@
 package net.newtownia.NTAC;
 
+import net.newtownia.NTAC.Action.BanManger;
 import net.newtownia.NTAC.Checks.CheckManager;
 import net.newtownia.NTAC.Commands.NTACCommand;
 import net.newtownia.NTAC.Utils.MessageUtils;
@@ -15,6 +16,7 @@ public class NTAC extends JavaPlugin
 
     private MessageUtils messageUtils;
     private CheckManager checkManager;
+    private BanManger banManger;
 
 	@Override
 	public void onEnable() {
@@ -37,6 +39,7 @@ public class NTAC extends JavaPlugin
     {
         config = ConfigManager.loadOrCreateConfigFile("config.yml", this);
         messageUtils = new MessageUtils(this, "messages.yml");
+        banManger = new BanManger(this, "bans.yml");
 
         if (checkManager != null)
             checkManager.reload();
@@ -52,5 +55,9 @@ public class NTAC extends JavaPlugin
 
     public MessageUtils getMessageUtils() {
         return messageUtils;
+    }
+
+    public BanManger getBanManger() {
+        return banManger;
     }
 }

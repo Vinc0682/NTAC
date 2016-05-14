@@ -26,6 +26,11 @@ public class ViolationManager {
         return playerViolations.get(pUUID);
     }
 
+    public int getViolation(UUID pUUID)
+    {
+        return playerViolations.getOrDefault(pUUID, 0);
+    }
+
     public void setViolation(Player p, int newViolation)
     {
         UUID pUUID = p.getUniqueId();
@@ -37,6 +42,16 @@ public class ViolationManager {
         else if(!playerFirstViolationLocations.containsKey(pUUID))
             playerFirstViolationLocations.put(pUUID, p.getLocation());
 
+        setViolationWithoutSetbackPos(p, newViolation);
+    }
+
+    public void setViolationWithoutSetbackPos(Player p, int newViolation)
+    {
+        setViolationWithoutSetbackPos(p.getUniqueId(), newViolation);
+    }
+
+    public void setViolationWithoutSetbackPos(UUID pUUID, int newViolation)
+    {
         playerViolations.put(pUUID, newViolation);
         playerLastViolationTimes.put(pUUID, System.currentTimeMillis());
     }
@@ -112,5 +127,10 @@ public class ViolationManager {
         }
         for(UUID pUUID : toReset)
             resetPlayerViolation(pUUID);
+    }
+
+    public Map<UUID, Integer> getAllViolations()
+    {
+        return playerViolations;
     }
 }

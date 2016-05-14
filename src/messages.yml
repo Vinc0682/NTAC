@@ -40,3 +40,4 @@ Notify-Sneak-Kick: '%%Notify-Kicked-For%% sneak %%Notify-VL%%'
 Notify-NoSlow-Suspect: '%%Notify-Player-Suspected%% noslow %%Notify-VL%%'
 Notify-NoSlow-Kick: '%%Notify-Kicked-For%% noslow %%Notify-VL%%'
 
+Ban-Default-Reason: '%%Kick-Prefix%% Banned%n%n%n%n'

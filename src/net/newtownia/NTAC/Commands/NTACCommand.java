@@ -21,6 +21,10 @@ public class NTACCommand implements CommandExecutor
         add(new Reload());
         add(new Notify());
         add(new Kick());
+        add(new Ban());
+        add(new Banlist());
+        add(new Unban());
+        add(new AddBanPoint());
     }
 
     @Override
@@ -31,8 +35,9 @@ public class NTACCommand implements CommandExecutor
             commandName = args[0];
         commandName = commandName.toLowerCase();
         SubCommand command = commands.getOrDefault(commandName, null);
-        if (command != null)
-            command.execute(pl, cs, cmd, label, args);
+        if (command == null)
+            command = commands.get("version");
+        command.execute(pl, cs, cmd, label, args);
         return true;
     }
 

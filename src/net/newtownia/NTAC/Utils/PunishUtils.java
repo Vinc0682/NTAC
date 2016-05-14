@@ -23,6 +23,12 @@ public class PunishUtils
         });
     }
 
+    public static void banPlayer(final Player p, final String reason, final long until)
+    {
+        NTAC.getInstance().getBanManger().addBan(p.getUniqueId(), until, reason);
+        kickPlayer(p, NTAC.getInstance().getMessageUtils().formatMessage(reason));
+    }
+
     public static void runViolationAction(Player p, ViolationManager manager, ActionData data)
     {
         int vl = manager.getViolation(p);

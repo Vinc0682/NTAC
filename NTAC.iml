@@ -19,25 +19,25 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="module-library">
-      <library name="ProtocolLib.jar">
+      <library name="ProtocolLib">
         <CLASSES>
-          <root url="jar://D:/UserData/Vincent/Server/NTAC Debug/plugins/ProtocolLib(4).jar!/" />
+          <root url="jar://D:/UserData/Vincent/Server/NTAC Debug/Dependencies/ProtocolLib(4).jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
       </library>
     </orderEntry>
     <orderEntry type="module-library">
-      <library name="NTApi.jar">
+      <library name="NTApi">
         <CLASSES>
-          <root url="jar://D:/UserData/Vincent/Server/Debug-Server/plugins/NTApi.jar!/" />
+          <root url="jar://D:/UserData/Vincent/Server/NTAC Debug/Dependencies/NTApi.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
       </library>
     </orderEntry>
     <orderEntry type="module-library">
-      <library>
+      <library name="Netty">
         <CLASSES>
           <root url="jar://$USER_HOME$/Documents/Minecraft-Development/netty-all-4.0.35.Final.jar!/" />
         </CLASSES>
@@ -46,7 +46,7 @@
       </library>
     </orderEntry>
     <orderEntry type="module-library">
-      <library>
+      <library name="SpigotAPI">
         <CLASSES>
           <root url="jar://$USER_HOME$/Documents/Minecraft-Development/spigot-api-1.9.4-R0.1-SNAPSHOT-shaded.jar!/" />
         </CLASSES>
@@ -55,9 +55,9 @@
       </library>
     </orderEntry>
     <orderEntry type="module-library">
-      <library>
+      <library name="NoCheatPlus">
         <CLASSES>
-          <root url="jar://D:/UserData/Vincent/Server/NTAC Debug/plugins/NoCheatPlus(4).jar!/" />
+          <root url="jar://D:/UserData/Vincent/Server/NTAC Debug/Dependencies/NoCheatPlus(4).jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

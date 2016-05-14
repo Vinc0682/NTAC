@@ -1,6 +1,6 @@
 name: NTAC
 main: net.newtownia.NTAC.NTAC
-version: '1.9-b6'
+version: '1.9-b7'
 depend: [NTApi, ProtocolLib]
 softdepend: [NoCheatPlus]
 author: VincBreaker
@@ -45,6 +45,14 @@ permissions:
   ntac.command.notify:
     default: OP
   ntac.command.kick:
+    default: OP
+  ntac.command.punish.ban:
+    default: OP
+  ntac.command.punish.unban:
+    default: OP
+  ntac.command.punish.banlist:
+    default: OP
+  ntac.command.punish.addbanpoint:
     default: OP
   ntac.command.reload:
     default: OP

@@ -1,4 +1,4 @@
-package net.newtownia.NTAC.Checks.Movement;
+package net.newtownia.NTAC.Checks.Movement.NCPDragDown;
 
 import fr.neatmonster.nocheatplus.checks.CheckType;
 import fr.neatmonster.nocheatplus.checks.access.IViolationInfo;
@@ -14,27 +14,29 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 /**
- * Created by Vinc0682 on 13.05.2016.
+ * Created by Vinc0682 on 14.05.2016.
  */
-public class NCPDragDown extends AbstractMovementCheck implements NCPHook
+public class NCPDragDownHook implements NCPHook
 {
+    private NTAC pl;
+    private NCPDragDown ncpDragDown;
     private int invalidateThreshold = 250;
     private double downSpeed = 0.5;
 
     private ViolationManager vlManager;
     private boolean hooked = false;
 
-    public NCPDragDown(NTAC pl, MovementBase movementBase)
+    public NCPDragDownHook(NTAC pl, NCPDragDown ncpDragDown)
     {
-        super(pl, movementBase, "NCP-Drag-Down");
+        this.pl = pl;
+        this.ncpDragDown = ncpDragDown;
+
         vlManager = new ViolationManager();
 
         loadConfig();
-
         Bukkit.getScheduler().runTaskTimer(pl, new Runnable() {
             @Override
             public void run() {
@@ -46,7 +48,7 @@ public class NCPDragDown extends AbstractMovementCheck implements NCPHook
     @Override
     public boolean onCheckFailure(CheckType checkType, Player p, IViolationInfo vlInfo)
     {
-        if (!isEnabled())
+        if (!ncpDragDown.isEnabled())
             return true;
         if (checkType != CheckType.MOVING_SURVIVALFLY)
             return true;
@@ -74,17 +76,14 @@ public class NCPDragDown extends AbstractMovementCheck implements NCPHook
         return true;
     }
 
-    @Override
     public void loadConfig()
     {
         invalidateThreshold = Integer.parseInt(pl.getConfiguration().getString("NCP-Drag-Down.Invalidate-Threshold"));
         downSpeed = Double.parseDouble(pl.getConfiguration().getString("NCP-Drag-Down.Down-Speed"));
-
-        hook();
     }
 
 
-    private void hook()
+    public void hook()
     {
         if (!hooked && NCPUtils.hasNoCheatPlus())
         {
@@ -95,13 +94,6 @@ public class NCPDragDown extends AbstractMovementCheck implements NCPHook
         {
             Bukkit.getLogger().info("NoCheatPlus is required for NCP-Drag-Down.");
         }
-    }
-
-
-    @Override
-    public void onPlayerMove(PlayerMoveEvent event)
-    {
-
     }
 
     @Override

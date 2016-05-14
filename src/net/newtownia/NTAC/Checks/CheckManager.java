@@ -7,6 +7,7 @@ import net.newtownia.NTAC.Checks.Combat.KillauraNPC;
 import net.newtownia.NTAC.Checks.Misc.AntiChorus;
 import net.newtownia.NTAC.Checks.Movement.AntiAFK.AntiAFKBase;
 import net.newtownia.NTAC.Checks.Movement.*;
+import net.newtownia.NTAC.Checks.Movement.NCPDragDown.NCPDragDown;
 import net.newtownia.NTAC.Checks.Player.Headless;
 import net.newtownia.NTAC.Checks.Player.SkinDerp;
 import net.newtownia.NTAC.NTAC;
