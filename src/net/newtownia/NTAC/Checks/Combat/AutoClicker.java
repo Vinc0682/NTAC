@@ -1,59 +1,37 @@
 package net.newtownia.NTAC.Checks.Combat;
 
 import com.comphenix.packetwrapper.WrapperPlayClientUseEntity;
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.events.ListenerPriority;
-import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
-import com.comphenix.protocol.wrappers.EnumWrappers;
 import net.newtownia.NTAC.Action.ActionData;
 import net.newtownia.NTAC.Action.ViolationManager;
-import net.newtownia.NTAC.Checks.AbstractCheck;
 import net.newtownia.NTAC.NTAC;
 import net.newtownia.NTAC.Utils.PunishUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerKickEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.*;
 
-public class AutoClicker extends AbstractCheck implements Listener
+public class AutoClicker extends AbstractCombatCheck
 {
     private Map<UUID, Long> playerLastAttackTimes;
     private Map<UUID, List<Integer>> playerDelays;
     private ViolationManager vlManager;
     private ActionData actionData;
 
-    PacketAdapter attackPacketEvent;
+    private int delayCount = 5;
+    private int timePuffer = 5;
+    private int combatTime = 5000;
+    private int invalidateThreshold = 5000;
 
-    int delayCount = 5;
-    int timePuffer = 5;
-    int combatTime = 5000;
-    int invalidateThreshold = 5000;
-
-    public AutoClicker(NTAC pl)
+    public AutoClicker(NTAC pl, CombatBase combatBase)
     {
-        super(pl, "Auto-Clicker");
+        super(pl, combatBase, "Auto-Clicker");
         loadConfig();
 
         playerLastAttackTimes = new HashMap<>();
         playerDelays = new HashMap<>();
         vlManager = new ViolationManager();
-
-        attackPacketEvent = new PacketAdapter(pl, ListenerPriority.LOW, PacketType.Play.Client.USE_ENTITY)
-        {
-            @Override
-            public void onPacketReceiving(PacketEvent event) {
-                handleAttackPacketEvent(event);
-
-            }
-        };
-        ProtocolLibrary.getProtocolManager().addPacketListener(attackPacketEvent);
 
         Bukkit.getScheduler().runTaskTimer(pl, new Runnable() {
             @Override
@@ -63,16 +41,10 @@ public class AutoClicker extends AbstractCheck implements Listener
         }, 20, 20);
     }
 
-    private void handleAttackPacketEvent(PacketEvent event)
+    @Override
+    protected void onAttackPacketReceive(PacketEvent event, WrapperPlayClientUseEntity packet)
     {
         if (!isEnabled())
-            return;
-        if(event.getPacketType() != PacketType.Play.Client.USE_ENTITY)
-            return;
-
-        WrapperPlayClientUseEntity packet = new WrapperPlayClientUseEntity(event.getPacket());
-
-        if(packet.getType() != EnumWrappers.EntityUseAction.ATTACK)
             return;
 
         Player p = event.getPlayer();
@@ -94,7 +66,7 @@ public class AutoClicker extends AbstractCheck implements Listener
 
         playerLastAttackTimes.put(pUUID, System.currentTimeMillis());
 
-        if (delays.size() == 0 || currentDelay < 5000)
+        if (delays.size() == 0 || currentDelay < combatTime)
             delays.add(0, currentDelay);
         else
             return;

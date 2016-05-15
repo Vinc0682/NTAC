@@ -1,9 +1,6 @@
 package net.newtownia.NTAC.Checks;
 
-import net.newtownia.NTAC.Checks.Combat.AntiKnockback;
-import net.newtownia.NTAC.Checks.Combat.AutoArmor;
-import net.newtownia.NTAC.Checks.Combat.AutoClicker;
-import net.newtownia.NTAC.Checks.Combat.KillauraNPC;
+import net.newtownia.NTAC.Checks.Combat.*;
 import net.newtownia.NTAC.Checks.Misc.AntiChorus;
 import net.newtownia.NTAC.Checks.Movement.AntiAFK.AntiAFKBase;
 import net.newtownia.NTAC.Checks.Movement.*;
@@ -18,10 +15,11 @@ import java.util.List;
 
 public class CheckManager
 {
-    NTAC pl;
+    private NTAC pl;
 
-    List<AbstractCheck> allChecks;
-    MovementBase movementBase = null;
+    private List<AbstractCheck> allChecks;
+    private MovementBase movementBase = null;
+    private CombatBase combatBase = null;
 
     public CheckManager(NTAC pl)
     {
@@ -50,16 +48,22 @@ public class CheckManager
             pl.getServer().getPluginManager().registerEvents(movementBase, pl);
             Bukkit.getLogger().info("Registered movement-base.");
         }
+        if (Boolean.valueOf(pl.getConfiguration().getString("Bases.Enable-Combat-Base")))
+        {
+            combatBase = new CombatBase(pl);
+            pl.getServer().getPluginManager().registerEvents(combatBase, pl);
+            Bukkit.getLogger().info("Registered combat-base.");
+        }
     }
 
     private void addChecks()
     {
         allChecks = new ArrayList<>();
 
-        allChecks.add(new KillauraNPC(pl));
-        allChecks.add(new AntiKnockback(pl));
-        allChecks.add(new AutoClicker(pl));
-        allChecks.add(new AutoArmor(pl));
+        allChecks.add(new KillauraNPC(pl, combatBase));
+        allChecks.add(new AntiKnockback(pl, combatBase));
+        allChecks.add(new AutoClicker(pl, combatBase));
+        allChecks.add(new AutoArmor(pl, combatBase));
 
         allChecks.add(new SkinDerp(pl));
         allChecks.add(new Headless(pl));

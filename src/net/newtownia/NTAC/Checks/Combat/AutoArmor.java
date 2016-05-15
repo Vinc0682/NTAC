@@ -2,7 +2,6 @@ package net.newtownia.NTAC.Checks.Combat;
 
 import net.newtownia.NTAC.Action.ActionData;
 import net.newtownia.NTAC.Action.ViolationManager;
-import net.newtownia.NTAC.Checks.AbstractCheck;
 import net.newtownia.NTAC.NTAC;
 import net.newtownia.NTAC.Utils.PunishUtils;
 import org.bukkit.Bukkit;
@@ -19,7 +18,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 /**
  * Created by Vinc0682 on 07.05.2016.
  */
-public class AutoArmor extends AbstractCheck
+public class AutoArmor extends AbstractCombatCheck
 {
     private int checkFreq = 300000;
     private int checkTime = 20;
@@ -30,8 +29,8 @@ public class AutoArmor extends AbstractCheck
     private long lastCheckTime = 0;
     private ItemStack item = null;
 
-    public AutoArmor(NTAC pl) {
-        super(pl, "Auto-Armor");
+    public AutoArmor(NTAC pl, CombatBase combatBase) {
+        super(pl, combatBase, "Auto-Armor");
 
         vlManager = new ViolationManager();
         loadConfig();

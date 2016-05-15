@@ -57,11 +57,15 @@ Auto-Ban:
 
 # Some options for the bases of NTAC
 Bases:
+
   # The movement base is a part of the integrated framework which keeps
   # tracking the player movement and saves serveral position data
   # Can be disabled if you don't use any of the movement checks
   # If disabled the movement base, enabled movement checks will be buggy / not working
   Enable-Movement-Base: true
+
+  # The combat base is required for every combat check (e.g. Killaura-NPC; AutoClicker)
+  Enable-Combat-Base: true
 
 # Killaura NPC-Check settings
 Killaura-NPC:

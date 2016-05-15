@@ -1,6 +1,5 @@
 package net.newtownia.NTAC.Checks.Combat;
 
-import net.newtownia.NTAC.Checks.AbstractCheck;
 import net.newtownia.NTAC.NTAC;
 import net.newtownia.NTAC.Utils.PlayerUtils;
 import net.newtownia.NTAC.Utils.PunishUtils;
@@ -13,20 +12,19 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import java.util.ArrayList;
 
-public class AntiKnockback extends AbstractCheck implements Listener
+public class AntiKnockback extends AbstractCombatCheck
 {
     private String kickMsg = "No Knockback";
     private int adjust = 2;
     private ArrayList<Material> unsolidMaterials;
 
-    public AntiKnockback(NTAC p)
+    public AntiKnockback(NTAC pl, CombatBase combatBase)
     {
-        super(p, "AntiKnockback");
+        super(pl, combatBase, "AntiKnockback");
         loadConfig();
 
         unsolidMaterials = new ArrayList<>();

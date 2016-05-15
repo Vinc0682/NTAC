@@ -6,10 +6,8 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
-import com.comphenix.protocol.wrappers.EnumWrappers;
 import net.newtownia.NTAC.Action.ActionData;
 import net.newtownia.NTAC.Action.ViolationManager;
-import net.newtownia.NTAC.Checks.AbstractCheck;
 import net.newtownia.NTAC.NTAC;
 import net.newtownia.NTAC.Utils.FakePlayer.FakePlayer;
 import net.newtownia.NTAC.Utils.FakePlayer.Identity;
@@ -24,7 +22,7 @@ import org.bukkit.entity.Player;
 
 import java.util.*;
 
-public class KillauraNPC extends AbstractCheck
+public class KillauraNPC extends AbstractCombatCheck
 {
     //int threshold = 5;
     private int combatTime = 5000;
@@ -42,7 +40,6 @@ public class KillauraNPC extends AbstractCheck
     private Map<UUID, Long> playerFirstHitTime;
     private Map<UUID, Identity> playerBotIdentitys;
 
-    private PacketAdapter usePacketEvent;
     private PacketAdapter moveLookPacketEvent;
     private FakePlayer bot;
 
@@ -56,9 +53,9 @@ public class KillauraNPC extends AbstractCheck
             EntityType.MINECART_FURNACE, EntityType.MINECART_HOPPER, EntityType.MINECART_MOB_SPAWNER,
             EntityType.MINECART_TNT);
 
-    public KillauraNPC(NTAC pl)
+    public KillauraNPC(NTAC pl, CombatBase combatBase)
     {
-        super(pl, "Killaura-NPC");
+        super(pl, combatBase, "Killaura-NPC");
 
         playerLastHitTime = new HashMap<>();
         playerFirstHitTime = new HashMap<>();
@@ -67,12 +64,6 @@ public class KillauraNPC extends AbstractCheck
         vlManager = new ViolationManager();
 
         bot = new FakePlayer(9910 + rnd.nextInt(90));
-
-        usePacketEvent = new PacketAdapter(pl, ListenerPriority.HIGH, PacketType.Play.Client.USE_ENTITY) {
-        @Override
-        public void onPacketReceiving(PacketEvent event) {
-            handleUsePacketEvent(event);
-        }};
 
         moveLookPacketEvent = new PacketAdapter(pl, ListenerPriority.HIGH, PacketType.Play.Client.POSITION,
                 PacketType.Play.Client.LOOK,
@@ -83,7 +74,6 @@ public class KillauraNPC extends AbstractCheck
             }
         };
 
-        ProtocolLibrary.getProtocolManager().addPacketListener(usePacketEvent);
         ProtocolLibrary.getProtocolManager().addPacketListener(moveLookPacketEvent);
 
         Bukkit.getScheduler().runTaskTimer(pl, new Runnable() {
@@ -130,17 +120,10 @@ public class KillauraNPC extends AbstractCheck
         }
     }
 
-    private void handleUsePacketEvent(PacketEvent e)
+    @Override
+    protected void onAttackPacketReceive(PacketEvent e, WrapperPlayClientUseEntity packet)
     {
         if(!isEnabled())
-            return;
-
-        if(e.getPacketType() != PacketType.Play.Client.USE_ENTITY)
-            return;
-
-        WrapperPlayClientUseEntity packet = new WrapperPlayClientUseEntity(e.getPacket());
-
-        if(packet.getType() != EnumWrappers.EntityUseAction.ATTACK)
             return;
 
         Player p = e.getPlayer();
