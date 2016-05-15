@@ -8,6 +8,9 @@ import net.newtownia.NTApi.Config.ConfigManager;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.IOException;
+import java.util.Map;
+
 
 public class NTAC extends JavaPlugin
 {
@@ -38,11 +41,53 @@ public class NTAC extends JavaPlugin
     public void reload()
     {
         config = ConfigManager.loadOrCreateConfigFile("config.yml", this);
+
+        // Config auto update
+        YamlConfiguration newestConfig = ConfigManager.loadConfig(ConfigManager.createConfigFile("config.yml",
+                "newest-config.yml", this));
+        updateConfig(config, newestConfig);
+        try {
+            ConfigManager.SaveConfigurationToFile(config, "config.yml", this);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         messageUtils = new MessageUtils(this, "messages.yml");
         banManger = new BanManger(this, "bans.yml");
 
         if (checkManager != null)
             checkManager.reload();
+    }
+
+    private void updateConfig(YamlConfiguration original, YamlConfiguration newest)
+    {
+        for (Map.Entry<String, Object> entry : newest.getValues(true).entrySet())
+        {
+            boolean hasValue = true;
+            try
+            {
+                Object value = original.get(entry.getKey());
+                if (value == null)
+                    hasValue = false;
+            }
+            catch (Exception e)
+            {
+                hasValue = false;
+            }
+            if (!hasValue)
+            {
+                String path = entry.getKey();
+                String[] parts = path.split("\\.");
+                if (parts.length >= 2)
+                {
+                    String part = parts[parts.length - 2];
+                    if (part.equals("Actions"))
+                        continue;
+                }
+
+                original.set(entry.getKey(), entry.getValue());
+            }
+        }
     }
 
 	public YamlConfiguration getConfiguration() {

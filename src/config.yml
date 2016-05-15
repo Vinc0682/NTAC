@@ -44,6 +44,17 @@ Enabled:
   # Miscellanious
   Anti-Chorus-Fruit: true # Block teleportation caused by chorus fruit to prevent people to teleport trough walls
 
+Auto-Ban:
+
+  # Should people be automaticly be banned?
+  # The vl is equal to the points given by the /ntac addbanpoint <Player> <Amount> command,
+  # so you can put you're own weights to certain checks :D
+  # To disable, simply replace with "Actions: []"
+  Actions:
+    3: "ntac ban %PLAYER% 15m"
+    4: "ntac ban %PLAYER% 1h"
+    5: "ntac ban %PLAYER% %VL%h"
+
 # Some options for the bases of NTAC
 Bases:
   # The movement base is a part of the integrated framework which keeps
@@ -92,8 +103,9 @@ Killaura-NPC:
   #Each violation is equal to a hit
   Actions:
     4:
-      - 'ntac kick %PLAYER% %%Kick-Killaura%%'
-      - 'ntac notify %%Notify-Killaura-Kick%%'
+      - "ntac addbanpoint %PLAYER% 1"
+      - "ntac kick %PLAYER% %%Kick-Killaura%%"
+      - "ntac notify %%Notify-Killaura-Kick%%"
 
 # Anti-Knockback / NoVelocity-Check
 Anti-Knockback:
@@ -120,6 +132,7 @@ Auto-Clicker:
   Actions:
     5: "ntac notify %%Notify-Autoclicker-Suspect%%"
     10:
+      - "ntac addbanpoint %PLAYER% 1"
       - "ntac kick %PLAYER% %%Kick-Autoclicker%%"
       - "ntac notify %%Notify-Autoclicker-Kick%%"
 

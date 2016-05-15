@@ -19,17 +19,17 @@ Reload: '&aConfig reloaded.'
 # You are not limited to entrys below, custom messages are loaded dynamicly!
 
 Kick-Prefix: '%nn&cNTAC &7>&c&l'
-Kick-Subtitle: '%n%n&c                Hacken ist auf newtownia.net verboten.%n%n'
+Kick-Subtitle: '%n%n&c     Hacking is forbidden!%n%n'
 
 Kick-Killaura: '%%Kick-Prefix%% Killaura %%Kick-Subtitle%%'
 Kick-Autoclicker: '%%Kick-Prefix%% AutoClicker %%Kick-Subtitle%%'
 Kick-Derp: '%%Kick-Prefix%% Derp %%Kick-Subtitle%%'
-Kick-AFK: '%%Kick-Prefix%% AFK%n%n&c            Du wurdest gekickt, weil du 3 Minuten AFK warst!%n%n'
+Kick-AFK: '%%Kick-Prefix%% AFK%n%n&c            You got kicked because you were AFK for 3 minutes.%n%n'
 Kick-Movement: '%%Kick-Prefix%% Suspicious Movement %%Kick-Subtitle%%'
 
 Notify-Player-Suspected: '%PLAYER% is suspected for'
 Notify-Kicked-For: '%PLAYER% got kicked for'
-Notify-VL: 'VL %VL%'
+Notify-VL: 'VL %VL% Ping %PING%'
 
 Notify-Killaura-Kick: '%%Notify-Kicked-For%% killaura %%Notify-VL%%'
 Notify-Autoclicker-Suspect: '%%Notify-Player-Suspected%% autoclicker %%Notify-VL%%'
@@ -40,4 +40,4 @@ Notify-Sneak-Kick: '%%Notify-Kicked-For%% sneak %%Notify-VL%%'
 Notify-NoSlow-Suspect: '%%Notify-Player-Suspected%% noslow %%Notify-VL%%'
 Notify-NoSlow-Kick: '%%Notify-Kicked-For%% noslow %%Notify-VL%%'
 
-Ban-Default-Reason: '%%Kick-Prefix%% Banned%n%n%n%n'
+Ban-Default-Reason: '%%Kick-Prefix%% Banned%n%n&c          The ban will end in %DURATION%!%n%n'

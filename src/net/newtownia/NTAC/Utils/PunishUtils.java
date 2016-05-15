@@ -4,6 +4,7 @@ import net.newtownia.NTAC.Action.ActionData;
 import net.newtownia.NTAC.Action.ViolationManager;
 import net.newtownia.NTAC.NTAC;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -11,8 +12,12 @@ import java.util.concurrent.Callable;
 
 public class PunishUtils
 {
-    public static void kickPlayer(final Player p, final String reason)
+    public static void kickPlayer(final OfflinePlayer player, final String reason)
     {
+        if (!player.isOnline())
+            return;
+        Player p = (Player)player;
+
         Bukkit.getScheduler().callSyncMethod(NTAC.getInstance(), new Callable<Boolean>()
         {
             public Boolean call()
@@ -23,7 +28,7 @@ public class PunishUtils
         });
     }
 
-    public static void banPlayer(final Player p, final String reason, final long until)
+    public static void banPlayer(final OfflinePlayer p, final String reason, final long until)
     {
         NTAC.getInstance().getBanManger().addBan(p.getUniqueId(), until, reason);
         kickPlayer(p, NTAC.getInstance().getMessageUtils().formatMessage(reason));
@@ -53,6 +58,8 @@ public class PunishUtils
             String realCommand = NTAC.getInstance().getMessageUtils().formatMessage(command);
             realCommand = realCommand.replaceAll("%PLAYER%", p.getName());
             realCommand = realCommand.replaceAll("%VL%", String.valueOf(realVL));
+            realCommand = realCommand.replaceAll("%PING%", String.valueOf(PlayerUtils.getPing(p)));
+
             dispatchCommandSynced(realCommand);
         }
     }

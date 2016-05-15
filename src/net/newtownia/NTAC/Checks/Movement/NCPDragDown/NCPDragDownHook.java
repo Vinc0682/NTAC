@@ -58,8 +58,10 @@ public class NCPDragDownHook implements NCPHook
         if (vlInfo.willCancel() && !PlayerUtils.isPlayerOnGround(p))
         {
             vlManager.setViolation(p, 1);
-            Location loc = vlManager.getFirstViolationLocation(p);
+            Location loc = vlManager.getFirstViolationLocation(p).clone();
             loc.setY(p.getLocation().getY() - downSpeed);
+            loc.setYaw(p.getLocation().getYaw());
+            loc.setPitch(p.getLocation().getPitch());
             Block b = loc.getWorld().getBlockAt(loc);
 
             if (loc.getY() - loc.getBlockY() < downSpeed)
@@ -90,7 +92,7 @@ public class NCPDragDownHook implements NCPHook
             NCPHookManager.addHook(CheckType.MOVING_SURVIVALFLY, this);
             hooked = true;
         }
-        else
+        if (!NCPUtils.hasNoCheatPlus())
         {
             Bukkit.getLogger().info("NoCheatPlus is required for NCP-Drag-Down.");
         }

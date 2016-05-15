@@ -1,6 +1,7 @@
 package net.newtownia.NTAC.Action;
 
 import net.newtownia.NTAC.NTAC;
+import net.newtownia.NTAC.Utils.DateUtils;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
@@ -21,6 +22,7 @@ public class BanListener implements Listener
         {
             String reason = banManger.getReason(pUUID);
             reason = NTAC.getInstance().getMessageUtils().formatMessage(reason);
+            reason = reason.replace("%DURATION%", DateUtils.formatDateDiff(banManger.getBanTime(pUUID)));
             event.setKickMessage(reason);
             event.setLoginResult(AsyncPlayerPreLoginEvent.Result.KICK_BANNED);
             event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, reason);

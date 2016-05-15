@@ -119,6 +119,9 @@ public class DateUtils // From https://github.com/essentials/Essentials/blob/2.x
 
     public static String formatDateDiff(long date)
     {
+        if (date == -1)
+            return "forever";
+
         Calendar c = new GregorianCalendar();
         c.setTimeInMillis(date);
         Calendar now = new GregorianCalendar();

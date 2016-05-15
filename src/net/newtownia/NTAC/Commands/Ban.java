@@ -4,9 +4,9 @@ import net.newtownia.NTAC.NTAC;
 import net.newtownia.NTAC.Utils.DateUtils;
 import net.newtownia.NTAC.Utils.PunishUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 /**
  * Created by Vinc0682 on 14.05.2016.
@@ -18,6 +18,7 @@ public class Ban extends SubCommand
         super("ban");
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void execute(NTAC pl, CommandSender cs, Command cmd, String label, String[] args)
     {
@@ -29,7 +30,7 @@ public class Ban extends SubCommand
 
         if(args.length > 1)
         {
-            Player p = Bukkit.getPlayer(args[1]);
+            OfflinePlayer p = Bukkit.getOfflinePlayer(args[1]);
             if(p != null)
             {
                 long banUntil = -1;

@@ -4,7 +4,6 @@ import net.newtownia.NTAC.Checks.Movement.AbstractMovementCheck;
 import net.newtownia.NTAC.Checks.Movement.MovementBase;
 import net.newtownia.NTAC.NTAC;
 import net.newtownia.NTAC.Utils.NCPUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 /**
@@ -34,10 +33,6 @@ public class NCPDragDown extends AbstractMovementCheck
             {
                 hook = new NCPDragDownHook(pl, this);
                 hook.hook();
-            }
-            else
-            {
-                Bukkit.getLogger().info("NoCheatPlus is required for NCP-Drag-Down!");
             }
         }
         else

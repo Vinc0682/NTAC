@@ -19,7 +19,7 @@ public class Kick extends SubCommand
     @Override
     public void execute(NTAC pl, CommandSender cs, Command cmd, String label, String[] args)
     {
-        if (!cs.hasPermission("ntac.command.kick"))
+        if (!cs.hasPermission("ntac.command.punish.kick"))
         {
             pl.getMessageUtils().printMessage(cs, "NoPermission");
             return;

@@ -1,19 +1,20 @@
 package net.newtownia.NTAC.Action;
 
 import net.newtownia.NTAC.NTAC;
+import net.newtownia.NTAC.Utils.PunishUtils;
 import net.newtownia.NTApi.Config.ConfigManager;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 
 import java.io.IOException;
 import java.util.*;
 
-/**
- * Created by Vinc0682 on 14.05.2016.
- */
 public class BanManger
 {
+    ActionData actionData;
+
     private NTAC pl;
     private YamlConfiguration config;
     private String fileName;
@@ -41,14 +42,14 @@ public class BanManger
             Bukkit.getPluginManager().registerEvents(listener, pl);
         }
 
-        loadBans();
+        load();
     }
 
     public void addBan(UUID pUUID, long until, String reason)
     {
         banTimes.put(pUUID, until);
         banReasons.put(pUUID, reason);
-        saveBans();
+        save();
     }
 
     public void removeBan(UUID pUUID)
@@ -57,7 +58,7 @@ public class BanManger
         {
             banTimes.remove(pUUID);
             banReasons.remove(pUUID);
-            saveBans();
+            save();
         }
     }
 
@@ -95,8 +96,13 @@ public class BanManger
     }
 
     public void addVL(UUID pUUID, int amount) {
-        vlManager.setViolationWithoutSetbackPos(pUUID, vlManager.getViolation(pUUID) + amount);
-        saveBans();
+        Player p = Bukkit.getPlayer(pUUID);
+        vlManager.addViolation(p, amount);
+        save();
+
+        Bukkit.getLogger().info("Got commands: " +
+                (actionData.getViolationCommands(vlManager.getViolation(p)) != null));
+        PunishUtils.runViolationActionWithValidation(p, vlManager, actionData);
     }
 
     public int getVL(UUID pUUID)
@@ -104,8 +110,10 @@ public class BanManger
         return vlManager.getViolation(pUUID);
     }
 
-    private void loadBans()
+    private void load()
     {
+        actionData = new ActionData(pl.getConfiguration(), "Auto-Ban.Actions");
+
         ConfigurationSection bannedSection = ConfigManager.getOrCreateSection(config,
                 CONFIG_BAN_PREFIX.substring(0, CONFIG_BAN_PREFIX.length() - 1));
         for (Map.Entry<String, Object> ban : bannedSection.getValues(false).entrySet())
@@ -117,14 +125,14 @@ public class BanManger
         }
         ConfigurationSection vlSection = ConfigManager.getOrCreateSection(config,
                 CONFIG_VL_PREFIX.substring(0, CONFIG_VL_PREFIX.length() - 1));
-        for (Map.Entry<String, Object> vl : bannedSection.getValues(false).entrySet())
+        for (Map.Entry<String, Object> vl : vlSection.getValues(false).entrySet())
         {
             vlManager.setViolationWithoutSetbackPos(UUID.fromString(vl.getKey()),
-                    Integer.valueOf(String.valueOf(vl.getValue())));
+                    Integer.valueOf(vlSection.getString(vl.getKey())));
         }
     }
 
-    private void saveBans()
+    private void save()
     {
         for (Map.Entry<UUID, Long> ban : banTimes.entrySet())
         {
