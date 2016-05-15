@@ -57,6 +57,8 @@ public class CombatBase implements Listener
     @EventHandler
     public void onEntityDamage(EntityDamageByEntityEvent event)
     {
+        for (AbstractCombatCheck check : combatChecks)
+            check.onAttack(event);
         if (event.getDamager() instanceof Player)
         {
             Player p = (Player)event.getDamager();
