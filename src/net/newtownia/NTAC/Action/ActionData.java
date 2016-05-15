@@ -10,19 +10,9 @@ import java.util.Map;
 
 public class ActionData
 {
-    Map<Integer, List<String>> violationCommands;
+    private Map<Integer, List<String>> violationCommands;
 
     public ActionData(ConfigurationSection section)
-    {
-        load(section);
-    }
-
-    public ActionData(YamlConfiguration config, String path)
-    {
-        load(config, path);
-    }
-
-    public void load(ConfigurationSection section)
     {
         violationCommands = new HashMap<>();
 
@@ -43,9 +33,9 @@ public class ActionData
         }
     }
 
-    public void load(YamlConfiguration config, String path)
+    public ActionData(YamlConfiguration config, String path)
     {
-        load(config.getConfigurationSection(path));
+        this(config.getConfigurationSection(path));
     }
 
     public int getValidViolationLevel(int realViolation)

@@ -22,7 +22,14 @@ public class PlayerUtils
     public static boolean isPlayerOnGround(Player p)
     {
         if (Bukkit.getPluginManager().getPlugin("NoCheatPlus") != null)
-            return isPlayerOnGroundNCP(p);
+            try
+            {
+                return isPlayerOnGroundNCP(p);
+            }
+            catch (Exception e)
+            {
+                return isPlayerOnGroundNTAC(p);
+            }
         else
             return isPlayerOnGroundNTAC(p);
     }
@@ -52,7 +59,7 @@ public class PlayerUtils
     public static boolean isPlayerOnGroundNCP(Player p)
     {
         AuxMoving aux = NCPAPIProvider.getNoCheatPlusAPI().getGenericInstance(AuxMoving.class);
-        MoveInfo moveInfo = aux.useMoveInfo();
+        MoveInfo moveInfo = aux.usePlayerMoveInfo();
         moveInfo.set(p, p.getLocation(), null, 0);
         return moveInfo.from.isOnGround();
     }

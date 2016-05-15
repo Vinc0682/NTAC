@@ -13,7 +13,7 @@ import java.util.*;
 
 public class BanManger
 {
-    ActionData actionData;
+    private ActionData actionData;
 
     private NTAC pl;
     private YamlConfiguration config;
@@ -100,8 +100,6 @@ public class BanManger
         vlManager.addViolation(p, amount);
         save();
 
-        Bukkit.getLogger().info("Got commands: " +
-                (actionData.getViolationCommands(vlManager.getViolation(p)) != null));
         PunishUtils.runViolationActionWithValidation(p, vlManager, actionData);
     }
 

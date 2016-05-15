@@ -55,9 +55,9 @@
       </library>
     </orderEntry>
     <orderEntry type="module-library">
-      <library name="NoCheatPlus">
+      <library>
         <CLASSES>
-          <root url="jar://D:/UserData/Vincent/Server/NTAC Debug/Dependencies/NoCheatPlus(4).jar!/" />
+          <root url="jar://D:/UserData/Vincent/Server/NTAC Debug/Dependencies/NoCheatPlus.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
