@@ -6,24 +6,24 @@ import net.newtownia.NTAC.Utils.MathUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by Vinc0682 on 15.05.2016.
  */
 public class Aimbot extends AbstractCombatCheck
 {
+    private int dataCount = 5;
+    private int threshold = 5;
+
     private ViolationManager vlManager;
-    private Map<UUID, List<Double>> playerAngles;
+    private Map<UUID, List<Double>> playerAttackAngles;
 
     public Aimbot(NTAC pl, CombatBase combatBase)
     {
         super(pl, combatBase, "Aimbot");
         vlManager = new ViolationManager();
-        playerAngles = new HashMap<>();
+        playerAttackAngles = new HashMap<>();
 
         loadConfig();
     }
@@ -32,8 +32,53 @@ public class Aimbot extends AbstractCombatCheck
     protected void onAttack(EntityDamageByEntityEvent event)
     {
         Player p = (Player)event.getDamager();
-        double angleDiff = MathUtils.getYawDiff(p.getLocation(), event.getEntity().getLocation());
+        UUID pUUID = p.getUniqueId();
 
+        double angleDiff = MathUtils.getYawDiff(p.getLocation(), event.getEntity().getLocation());
+        if (angleDiff < 0)
+            angleDiff *= -1;
+
+        if (!playerAttackAngles.containsKey(pUUID))
+        {
+            playerAttackAngles.put(pUUID, new ArrayList<>(Collections.singletonList(angleDiff)));
+            return;
+        }
+
+        List<Double> angles = playerAttackAngles.get(pUUID);
+        angles.add(0, angleDiff);
+        while (angles.size() > dataCount)
+            angles.remove(dataCount);
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
+        for (double angle : angles)
+        {
+            sb.append(angle);
+            sb.append(", ");
+        }
+        sb.append("]");
+        //p.sendMessage(sb.toString());
+
+
+        if (angles.size() == dataCount)
+        {
+            double average = MathUtils.getAverageDouble(angles);
+            double min = average - threshold;
+            double max = average + threshold;
+            boolean suspicious = true;
+            for (double angle : angles)
+            {
+                if (angle < min || angle > max)
+                {
+                    suspicious = false;
+                    p.sendMessage("Failed at: " + angle + " Average: " + average);
+                }
+            }
+            if (suspicious)
+            {
+                p.sendMessage("You are suspicious!");
+            }
+        }
     }
 
     @Override

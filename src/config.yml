@@ -20,6 +20,7 @@ Enabled:
 
   #Combat
   Killaura-NPC: true # Stable DEFAULT: true
+  Aimbot: true # In development
   Anti-Knockback: false # Gotta recode dat shit when I'm bored DEFAULT: false
   Auto-Clicker: true # Code stable, customize dat settings DEFAULT: true
   Auto-Armor: false # Beta, take a look at InvMove too! DEFAULT: true

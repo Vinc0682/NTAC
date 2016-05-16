@@ -5,6 +5,7 @@ import com.comphenix.protocol.events.PacketEvent;
 import net.newtownia.NTAC.Action.ActionData;
 import net.newtownia.NTAC.Action.ViolationManager;
 import net.newtownia.NTAC.NTAC;
+import net.newtownia.NTAC.Utils.MathUtils;
 import net.newtownia.NTAC.Utils.PunishUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -78,7 +79,7 @@ public class AutoClicker extends AbstractCombatCheck
         //Checking for autoclicker
         if (delays.size() == delayCount)
         {
-            double average = getAverage(delays);
+            double average = MathUtils.getAverageInteger(delays);
             boolean delaysSame = true;
             for (int delay : delays)
             {
@@ -97,14 +98,6 @@ public class AutoClicker extends AbstractCombatCheck
             }
         }
         playerDelays.put(pUUID, delays);
-    }
-
-    private double getAverage(List<Integer> numbers)
-    {
-        double result = 0;
-        for (int number : numbers)
-            result += number;
-        return result / numbers.size();
     }
 
     @Override
