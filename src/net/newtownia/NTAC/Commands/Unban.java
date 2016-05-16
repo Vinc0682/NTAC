@@ -26,17 +26,17 @@ public class Unban extends SubCommand
             return;
         }
 
-        if (args.length > 1) {
+        if (args.length > 2) {
             OfflinePlayer p = Bukkit.getOfflinePlayer(args[1]);
             if (p != null)
             {
                 pl.getBanManger().removeBan(p.getUniqueId());
                 pl.getMessageUtils().printMessage(cs, "Unbanned", p.getName());
             }
-        }
-        else
-        {
-            pl.getMessageUtils().printMessage(cs, "PlayerNotFound", args[1]);
+            else
+            {
+                pl.getMessageUtils().printMessage(cs, "PlayerNotFound", args[1]);
+            }
         }
     }
 }
