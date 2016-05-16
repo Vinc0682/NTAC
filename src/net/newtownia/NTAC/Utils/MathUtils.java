@@ -35,4 +35,24 @@ public class MathUtils
             tmp += number;
         return tmp / numbers.size();
     }
+
+    public static boolean isPositionSame(Location loc1, Location loc2, double threshold)
+    {
+        return isSame(loc1.getX(), loc2.getX(), threshold) ||
+                isSame(loc1. getY(), loc2.getY(), threshold) ||
+                isSame(loc1.getZ(), loc2.getZ(), threshold);
+    }
+
+    public static boolean isRotationSame(Location loc1, Location loc2, double threshold)
+    {
+        return isSame((double) loc1.getYaw(), (double)loc2.getYaw(), threshold) ||
+                isSame((double) loc2.getPitch(), (double) loc2.getPitch(), threshold);
+    }
+
+    public static boolean isSame(double a, double b, double threshold)
+    {
+        double min = a - threshold;
+        double max = a + threshold;
+        return b < min || b > max;
+    }
 }

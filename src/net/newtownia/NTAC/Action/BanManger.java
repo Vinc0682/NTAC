@@ -132,6 +132,10 @@ public class BanManger
 
     private void save()
     {
+        for (Map.Entry<String, Object> entry : config.getValues(true).entrySet())
+        {
+            config.set(entry.getKey(), null);
+        }
         for (Map.Entry<UUID, Long> ban : banTimes.entrySet())
         {
             String uuid = CONFIG_BAN_PREFIX + ban.getKey().toString();

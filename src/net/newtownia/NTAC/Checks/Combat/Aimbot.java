@@ -15,15 +15,18 @@ public class Aimbot extends AbstractCombatCheck
 {
     private int dataCount = 5;
     private int threshold = 5;
+    private int minYawChange = 5;
 
     private ViolationManager vlManager;
     private Map<UUID, List<Double>> playerAttackAngles;
+    private Map<UUID, Float> playerLastAttackYaw;
 
     public Aimbot(NTAC pl, CombatBase combatBase)
     {
         super(pl, combatBase, "Aimbot");
         vlManager = new ViolationManager();
         playerAttackAngles = new HashMap<>();
+        playerLastAttackYaw = new HashMap<>();
 
         loadConfig();
     }
@@ -33,6 +36,17 @@ public class Aimbot extends AbstractCombatCheck
     {
         Player p = (Player)event.getDamager();
         UUID pUUID = p.getUniqueId();
+
+        if (playerLastAttackYaw.containsKey(pUUID))
+        {
+            if (MathUtils.isSame((double)p.getLocation().getYaw(),
+                    playerLastAttackYaw.get(pUUID), minYawChange))
+            {
+                playerLastAttackYaw.put(pUUID, p.getLocation().getYaw());
+                return;
+            }
+        }
+        playerLastAttackYaw.put(pUUID, p.getLocation().getYaw());
 
         double angleDiff = MathUtils.getYawDiff(p.getLocation(), event.getEntity().getLocation());
         if (angleDiff < 0)
@@ -68,7 +82,7 @@ public class Aimbot extends AbstractCombatCheck
             boolean suspicious = true;
             for (double angle : angles)
             {
-                if (angle < min || angle > max)
+                if (MathUtils.isSame(angle, average, threshold))
                 {
                     suspicious = false;
                     p.sendMessage("Failed at: " + angle + " Average: " + average);
