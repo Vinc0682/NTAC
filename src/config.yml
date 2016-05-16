@@ -132,8 +132,9 @@ Aimbot:
   # Actions, the VL is equal to the amount of suspicious hits
   Actions:
     2:
-     - 'ntac kick %PLAYER% %%Kick-Aimbot%%'
-     - 'ntac notify %%Notify-Aimbot-Kick%%'
+      - 'ntac addbanpoint %PLAYER% 1'
+      - 'ntac kick %PLAYER% %%Kick-Aimbot%%'
+      - 'ntac notify %%Notify-Aimbot-Kick%%'
 
 # Anti-Knockback / NoVelocity-Check
 Anti-Knockback:

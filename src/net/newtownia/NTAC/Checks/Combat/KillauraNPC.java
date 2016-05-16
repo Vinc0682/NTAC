@@ -26,7 +26,6 @@ public class KillauraNPC extends AbstractCombatCheck
 {
     //int threshold = 5;
     private int combatTime = 5000;
-    private int clearFrequency = 60;
     private boolean copyAttackedType = true;
     private int slowWeaponVLIncrement = 2;
 
@@ -110,7 +109,7 @@ public class KillauraNPC extends AbstractCombatCheck
                 }
             }
 
-            bot.moveTo(p, getLocationBehindPlayer(p));
+            bot.moveTo(p, getBotLoc(p));
         }
     }
 
@@ -205,8 +204,8 @@ public class KillauraNPC extends AbstractCombatCheck
         if (player == null) {
             return null;
         }
-        boolean random = new Random().nextBoolean();
-        Location location = player.getLocation().add(0, 0, 0);
+        boolean random = rnd.nextDouble() > 0.5;
+        Location location = player.getLocation().clone().add(0, 0, 0);
         if (random) {
             location.add(0, 3, 0);
         } else {
@@ -249,7 +248,6 @@ public class KillauraNPC extends AbstractCombatCheck
     {
         YamlConfiguration config = pl.getConfiguration();
 
-        clearFrequency = Integer.parseInt(config.getString("Killaura-NPC.Clear-Frequency"));
         combatTime = Integer.parseInt(config.getString("Killaura-NPC.Combat-Time"));
         copyAttackedType = Boolean.valueOf(config.getString("Killaura-NPC.Copy-Attacked-Type"));
         angleMin = Integer.parseInt(config.getString("Killaura-NPC.Angle-Min"));

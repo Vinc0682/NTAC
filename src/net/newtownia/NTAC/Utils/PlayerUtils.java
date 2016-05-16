@@ -177,8 +177,8 @@ public class PlayerUtils
             Object craftPlayer = CPClass.cast(p);
 
             //Get EntityPlayer
-            Method getHandle = craftPlayer.getClass().getMethod("getHandle", new Class[0]);
-            Object EntityPlayer = getHandle.invoke(craftPlayer, new Object[0]);
+            Method getHandle = craftPlayer.getClass().getMethod("getHandle");
+            Object EntityPlayer = getHandle.invoke(craftPlayer);
 
             //Get Ping-Field
             Field ping = EntityPlayer.getClass().getDeclaredField("ping");

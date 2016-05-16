@@ -45,7 +45,7 @@ public class Jesus extends AbstractMovementCheck
         Location from = event.getFrom();
         Location to = event.getTo();
 
-        if (p.isInsideVehicle() || p.getAllowFlight())
+        if (p.isInsideVehicle() || p.isFlying())
             return;
 
         Material l = from.getBlock().getType();
@@ -61,7 +61,9 @@ public class Jesus extends AbstractMovementCheck
             return;
         }
 
-        if (p.getLocation().add(0, 0.5, 0).getBlock().getType() == Material.WATER || p.getLocation().add(0, 0.5, 0).getBlock().getType() == Material.STATIONARY_WATER) {
+        Material inType = p.getLocation().add(0, 0.5, 0).getBlock().getType();
+        if (inType == Material.WATER || inType == Material.STATIONARY_WATER)
+        {
             playerJumpCount.remove(pUUID);
             playerOnWaterCount.remove(pUUID);
             vlManager.resetPlayerViolation(p);
@@ -72,7 +74,7 @@ public class Jesus extends AbstractMovementCheck
             return;
         }
 
-        if (PlayerUtils.isOnWater(p))
+        if (PlayerUtils.isOnWater(p) || PlayerUtils.isInWater(p))
         {
             if(jumpJesus)
             {
@@ -82,16 +84,7 @@ public class Jesus extends AbstractMovementCheck
                     {
                         if (playerJumpCount.get(pUUID) > 3)
                         {
-                            vlManager.addViolation(p, 1);
-
-                            int vl = vlManager.getViolation(p);
-                            if(actionData.doesLastViolationCommandsContains(vl, "cancel"))
-                            {
-                                Location resetLoc = vlManager.getFirstViolationLocation(p);
-                                if(resetLoc != null)
-                                    p.teleport(resetLoc);
-                            }
-                            PunishUtils.runViolationAction(p, vl, vl, actionData);
+                            handleViolation(p);
                             playerJumpCount.remove(pUUID);
                             return;
                         }
@@ -110,13 +103,31 @@ public class Jesus extends AbstractMovementCheck
                 if (playerOnWaterCount.get(pUUID) > 8)
                 {
                     //flagging
+                    handleViolation(p);
                     playerOnWaterCount.remove(pUUID);
-                    vlManager.resetPlayerViolation(p);
                 }
             } else {
                 playerOnWaterCount.put(pUUID, 1);
             }
         }
+        else
+        {
+            vlManager.resetPlayerViolation(p);
+        }
+    }
+
+    private void handleViolation(Player p)
+    {
+        vlManager.addViolation(p, 1);
+
+        int vl = vlManager.getViolation(p);
+        if(actionData.doesLastViolationCommandsContains(vl, "cancel"))
+        {
+            Location resetLoc = vlManager.getFirstViolationLocation(p);
+            if(resetLoc != null)
+                p.teleport(resetLoc);
+        }
+        PunishUtils.runViolationAction(p, vl, vl, actionData);
     }
 
     @Override

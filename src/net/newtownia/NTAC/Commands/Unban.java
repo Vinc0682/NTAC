@@ -26,7 +26,7 @@ public class Unban extends SubCommand
             return;
         }
 
-        if (args.length > 2) {
+        if (args.length > 1) {
             OfflinePlayer p = Bukkit.getOfflinePlayer(args[1]);
             if (p != null)
             {
