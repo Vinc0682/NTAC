@@ -39,10 +39,10 @@ public class Kick extends SubCommand
                 PunishUtils.kickPlayer(p, message);
                 pl.getMessageUtils().printMessage(cs, "Kicked", p.getName());
             }
-        }
-        else
-        {
-            pl.getMessageUtils().printMessage(cs, "PlayerNotFound", args[1]);
+            else
+            {
+                pl.getMessageUtils().printMessage(cs, "PlayerNotFound", args[1]);
+            }
         }
     }
 }

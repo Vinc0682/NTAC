@@ -77,8 +77,6 @@ public class Aimbot extends AbstractCombatCheck
         if (angles.size() == dataCount)
         {
             double average = MathUtils.getAverageDouble(angles);
-            double min = average - threshold;
-            double max = average + threshold;
             boolean suspicious = true;
             for (double angle : angles)
             {
