@@ -2,8 +2,18 @@ Prefix: '&7<< &c&lNTAC&7 <<&f '
 Notify-Prefix: '&cNTAC&7: '
 
 NoPermission: '&cYou dont have the permission to do this!'
-Version: '&cNewtownia Anti-Cheat by VincBreaker; Patching NC+ as good as possible!'
+Version: '&cVersion %s &7|&c Upgrading NoCheatplus!'
 Reload: '&aConfig reloaded.'
+
+Kicked: '&fKicked &c%s&f!'
+Banned: '&fBanned &c%s&f!'
+Temp-Banned: '&fBanned &c%1s&f for %2s!'
+BanlistFormat: '&c%1s&7 - &c%2s&7 - &c%3s' # Player - Time - Reason
+BanlistEmpty: '&aNo players banned :)'
+Unbanned: '&fUnbanned &a%s&f!'
+AddedBanPoint: '&fAdded %1d ban-point(s) to &c%1s&f!'
+
+PlayerNotFound: "&cDidn't find player %s!"
 
 # You can define custom messages here, you can acces then later on by {{<MessageName>}}
 # Example:

@@ -16,6 +16,6 @@ public class Version extends SubCommand
     @Override
     public void execute(NTAC pl, CommandSender cs, Command cmd, String label, String[] args)
     {
-        pl.getMessageUtils().printMessage(cs, "Version");
+        pl.getMessageUtils().printMessage(cs, "Version", pl.getDescription().getVersion());
     }
 }

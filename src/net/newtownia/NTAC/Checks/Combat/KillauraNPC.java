@@ -199,7 +199,7 @@ public class KillauraNPC extends AbstractCombatCheck
 
     private Location getBotLoc(Player p)
     {
-        double angle =  angleMin + rnd.nextDouble() * (angleMax - angleMin);
+        double angle = angleMin + rnd.nextDouble() * (angleMax - angleMin);
         if(shouldBotBeRightSided(p))
             angle *= -1;
         double distance = distanceMin + rnd.nextDouble() * (distanceMax - distanceMin);

@@ -34,7 +34,6 @@ public class Aimbot extends AbstractCombatCheck
         Player p = (Player)event.getDamager();
         double angleDiff = MathUtils.getYawDiff(p.getLocation(), event.getEntity().getLocation());
 
-
     }
 
     @Override

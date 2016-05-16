@@ -54,6 +54,15 @@ public class Ban extends SubCommand
                         message += args[i] + " ";
                 }
                 PunishUtils.banPlayer(p, message, banUntil);
+                if (banUntil == -1)
+                    pl.getMessageUtils().printMessage(cs, "Banned", p.getName());
+                else
+                    pl.getMessageUtils().printMessage(cs, "Temp-Banned", p.getName(),
+                            DateUtils.formatDateDiff(banUntil));
+            }
+            else
+            {
+                pl.getMessageUtils().printMessage(cs, "PlayerNotFound", args[1]);
             }
         }
     }

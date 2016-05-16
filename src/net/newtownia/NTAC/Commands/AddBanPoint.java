@@ -33,7 +33,12 @@ public class AddBanPoint extends SubCommand
                 int points = 1;
                 if (args.length > 2)
                     points = Integer.valueOf(args[2]);
-                NTAC.getInstance().getBanManger().addVL(p.getUniqueId(), points);
+                pl.getBanManger().addVL(p.getUniqueId(), points);
+                pl.getMessageUtils().printMessage(cs, "AddedBanPoint", points, p.getName());
+            }
+            else
+            {
+                pl.getMessageUtils().printMessage(cs, "PlayerNotFound", args[1]);
             }
         }
     }

@@ -3,7 +3,7 @@ package net.newtownia.NTAC.Commands;
 import net.newtownia.NTAC.Action.BanManger;
 import net.newtownia.NTAC.NTAC;
 import net.newtownia.NTAC.Utils.DateUtils;
-import org.bukkit.ChatColor;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
@@ -28,6 +28,11 @@ public class Banlist extends SubCommand
         }
 
         BanManger banManger = pl.getBanManger();
+        if (banManger.getBannedUUIDS().size() == 0)
+        {
+            pl.getMessageUtils().printMessage(cs, "BanlistEmpty");
+            return;
+        }
         for (UUID pUUID : banManger.getBannedUUIDS())
         {
             String timeString = "&cForever";
@@ -35,10 +40,8 @@ public class Banlist extends SubCommand
             if (time != -1)
                 timeString = DateUtils.formatDateDiff(time);
             String reason = banManger.getReason(pUUID);
-            String message ="&c" + pUUID.toString() + "&7 - &c" + timeString + "&7 - &c" + reason;
-            message = ChatColor.translateAlternateColorCodes('&', message);
-
-            cs.sendMessage(message);
+            String player = Bukkit.getOfflinePlayer(pUUID).getName();
+            pl.getMessageUtils().printMessage(cs, "BanlistFormat", player, timeString, reason);
         }
     }
 }
