@@ -73,10 +73,7 @@ public class NCPDragDownHook implements NCPHook
             }
 
             if (b == null || isUnsolid(b))
-            {
                 p.teleport(loc, PlayerTeleportEvent.TeleportCause.UNKNOWN);
-                p.sendMessage("Dragging down");
-            }
             return false;
         }
         return true;
