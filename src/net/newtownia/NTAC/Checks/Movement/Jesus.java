@@ -20,8 +20,8 @@ public class Jesus extends AbstractMovementCheck
 
     private boolean jumpJesus = true;
 
-    private HashMap<UUID, Integer> count = new HashMap<>();
-    private HashMap<UUID, Integer> jumpcount = new HashMap<>();
+    private HashMap<UUID, Integer> playerOnWaterCount = new HashMap<>();
+    private HashMap<UUID, Integer> playerJumpCount = new HashMap<>();
 
     public Jesus(NTAC pl, MovementBase movementBase)
     {
@@ -62,8 +62,8 @@ public class Jesus extends AbstractMovementCheck
         }
 
         if (p.getLocation().add(0, 0.5, 0).getBlock().getType() == Material.WATER || p.getLocation().add(0, 0.5, 0).getBlock().getType() == Material.STATIONARY_WATER) {
-            jumpcount.remove(pUUID);
-            count.remove(pUUID);
+            playerJumpCount.remove(pUUID);
+            playerOnWaterCount.remove(pUUID);
             vlManager.resetPlayerViolation(p);
             return;
         }
@@ -78,9 +78,9 @@ public class Jesus extends AbstractMovementCheck
             {
                 if (from.getY() < to.getY())
                 {
-                    if (jumpcount.containsKey(pUUID))
+                    if (playerJumpCount.containsKey(pUUID))
                     {
-                        if (jumpcount.get(pUUID) > 3)
+                        if (playerJumpCount.get(pUUID) > 3)
                         {
                             vlManager.addViolation(p, 1);
 
@@ -92,29 +92,29 @@ public class Jesus extends AbstractMovementCheck
                                     p.teleport(resetLoc);
                             }
                             PunishUtils.runViolationAction(p, vl, vl, actionData);
-                            jumpcount.remove(pUUID);
+                            playerJumpCount.remove(pUUID);
                             return;
                         }
-                        int old = jumpcount.get(pUUID);
-                        jumpcount.put(pUUID, old + 1);
+                        int old = playerJumpCount.get(pUUID);
+                        playerJumpCount.put(pUUID, old + 1);
                     } else
                     {
-                        jumpcount.put(pUUID, 1);
+                        playerJumpCount.put(pUUID, 1);
                     }
                 }
             }
-            if (count.containsKey(pUUID))
+            if (playerOnWaterCount.containsKey(pUUID))
             {
-                int old = count.get(pUUID);
-                count.put(pUUID, old + 1);
-                if (count.get(pUUID) > 8)
+                int old = playerOnWaterCount.get(pUUID);
+                playerOnWaterCount.put(pUUID, old + 1);
+                if (playerOnWaterCount.get(pUUID) > 8)
                 {
                     //flagging
-                    count.remove(pUUID);
+                    playerOnWaterCount.remove(pUUID);
                     vlManager.resetPlayerViolation(p);
                 }
             } else {
-                count.put(pUUID, 1);
+                playerOnWaterCount.put(pUUID, 1);
             }
         }
     }

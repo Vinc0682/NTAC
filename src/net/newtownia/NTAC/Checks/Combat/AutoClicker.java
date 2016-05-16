@@ -23,7 +23,7 @@ public class AutoClicker extends AbstractCombatCheck
     private int delayCount = 5;
     private int timePuffer = 5;
     private int combatTime = 5000;
-    private int invalidateThreshold = 5000;
+    private int invalidateThreshold = 60000;
 
     public AutoClicker(NTAC pl, CombatBase combatBase)
     {

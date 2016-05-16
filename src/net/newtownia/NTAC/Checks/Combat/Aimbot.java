@@ -1,25 +1,28 @@
 package net.newtownia.NTAC.Checks.Combat;
 
+import net.newtownia.NTAC.Action.ActionData;
 import net.newtownia.NTAC.Action.ViolationManager;
 import net.newtownia.NTAC.NTAC;
 import net.newtownia.NTAC.Utils.MathUtils;
+import net.newtownia.NTAC.Utils.PunishUtils;
+import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import java.util.*;
 
-/**
- * Created by Vinc0682 on 15.05.2016.
- */
 public class Aimbot extends AbstractCombatCheck
 {
     private int dataCount = 5;
     private int threshold = 5;
     private int minYawChange = 5;
+    private int invalidateThreshold = 60000;
+    private ActionData actionData;
 
-    private ViolationManager vlManager;
     private Map<UUID, List<Double>> playerAttackAngles;
     private Map<UUID, Float> playerLastAttackYaw;
+    private ViolationManager vlManager;
 
     public Aimbot(NTAC pl, CombatBase combatBase)
     {
@@ -29,13 +32,26 @@ public class Aimbot extends AbstractCombatCheck
         playerLastAttackYaw = new HashMap<>();
 
         loadConfig();
+
+        Bukkit.getScheduler().runTaskTimer(pl, new Runnable() {
+            @Override
+            public void run() {
+                vlManager.resetAllOldViolation(invalidateThreshold);
+            }
+        }, 20L, 20L);
     }
 
     @Override
     protected void onAttack(EntityDamageByEntityEvent event)
     {
+        if (!isEnabled())
+            return;
+
         Player p = (Player)event.getDamager();
         UUID pUUID = p.getUniqueId();
+
+        if (p.hasPermission("ntac.bypass.aimbot"))
+            return;
 
         if (playerLastAttackYaw.containsKey(pUUID))
         {
@@ -81,14 +97,12 @@ public class Aimbot extends AbstractCombatCheck
             for (double angle : angles)
             {
                 if (MathUtils.isSame(angle, average, threshold))
-                {
                     suspicious = false;
-                    p.sendMessage("Failed at: " + angle + " Average: " + average);
-                }
             }
             if (suspicious)
             {
-                p.sendMessage("You are suspicious!");
+                vlManager.addViolation(p, 1);
+                PunishUtils.runViolationAction(p, vlManager, actionData);
             }
         }
     }
@@ -96,6 +110,11 @@ public class Aimbot extends AbstractCombatCheck
     @Override
     public void loadConfig()
     {
-
+        YamlConfiguration config = pl.getConfiguration();
+        dataCount = Integer.parseInt(config.getString("Aimbot.Data-Count"));
+        threshold = Integer.parseInt(config.getString("Aimbot.Angle-Threshold"));
+        minYawChange = Integer.parseInt(config.getString("Aimbot.Min-Yaw"));
+        invalidateThreshold = Integer.parseInt(config.getString("Aimbot.Invalidate-Threshold"));
+        actionData = new ActionData(config, "Aimbot.Actions");
     }
 }

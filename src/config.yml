@@ -74,9 +74,6 @@ Bases:
 # Killaura NPC-Check settings
 Killaura-NPC:
 
-  # Frequency to reset the violations's in TICKS DEFAULT: 20
-  Clear-Frequency: 20
-
   # Combat time
   # Time (in milliseconds (1000 ms equal 1 sec) the bot is visible after
   # hitting an entity
@@ -115,6 +112,29 @@ Killaura-NPC:
       - "ntac kick %PLAYER% %%Kick-Killaura%%"
       - "ntac notify %%Notify-Killaura-Kick%%"
 
+Aimbot:
+
+  # How many angles should the Aimbot-Check save?
+  Data-Count: 5
+
+  # How far are the angles allowed to fall apart to still
+  # be assumed as hacking
+  Angle-Threshold: 5
+
+  # How much must the head move the be checked for aimbot,
+  # important to fix false positives while the player is not
+  # moving the head
+  Min-Yaw: 5
+
+  # How long should there be no new violations until they are resettet?
+  Invalidate-Threshold: 60000
+
+  # Actions, the VL is equal to the amount of suspicious hits
+  Actions:
+    2:
+     - 'ntac kick %PLAYER% %%Kick-Aimbot%%'
+     - 'ntac notify %%Notify-Aimbot-Kick%%'
+
 # Anti-Knockback / NoVelocity-Check
 Anti-Knockback:
 
@@ -146,7 +166,7 @@ Auto-Clicker:
 
   # The time until the VL get's invalidated (in ms)
   # NOTE: The VL only get's invalidated when there are no new VLs.
-  Invalidate-Threshold: 5000
+  Invalidate-Threshold: 60000
 
 # AutoArmor works by adding a special diamond chestplate to the inventory of the player looks up if the player
 # put it on in a certain time.
@@ -364,9 +384,10 @@ NCP-Drag-Down:
 
 Jesus:
 
-  #//TODO: Description
+  # Should jesus care about the jumping in water? This will fix several bypasses
   Jump-Jesus: true
-  # Actions performed when player moves while the inv is opened, VL equals the count of moves
+
+  # Actions performed when player is suspected for jesus, VL equals to the count of suspicious moves.
   Actions:
     0: 'cancel'
     5: 'ntac kick %PLAYER% %%Kick-Movement%%'

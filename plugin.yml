@@ -20,6 +20,8 @@ commands:
 permissions:
   ntac.bypass.killaura.npc:
     default: OP
+  ntac.bypass.aimbot:
+    default: OP
   ntac.bypass.antiknockback:
     default: OP
   ntac.bypass.autoclicker:
@@ -43,6 +45,8 @@ permissions:
   ntac.bypass.inventory-move:
     default: OP
   ntac.bypass.ncp-dragdown:
+    default: OP
+  ntac.bypass.jesus:
     default: OP
   ntac.command.notify:
     default: OP
