@@ -6,7 +6,7 @@ import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.EnumWrappers;
-import net.newtownia.NTAC.Utils.ItemUtils;
+import net.newtownia.NTAC.Utils.MaterialUtils;
 import net.newtownia.NTAC.Utils.PlayerUtils;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -121,7 +121,7 @@ public class MovementBase implements Listener
         {
             p.sendMessage("Gotta place packet");
             WrapperPlayClientBlockPlace packet = new WrapperPlayClientBlockPlace(event.getPacket());
-            if (ItemUtils.isUsable(p.getInventory().getItemInMainHand()))
+            if (MaterialUtils.isUsable(p.getInventory().getItemInMainHand()))
                 playerUsingItem.put(pUUID, true);
         }
     }

@@ -11,6 +11,24 @@ public class NCPUtils
     public static boolean hasNoCheatPlus()
     {
         Plugin pl = Bukkit.getPluginManager().getPlugin("NoCheatPlus");
-        return pl != null && pl.isEnabled();
+        if (pl != null && pl.isEnabled())
+        {
+            try
+            {
+                if (Class.forName("fr.neatmonster.nocheatplus.NCPAPIProvider") == null)
+                    return false;
+                if (Class.forName("fr.neatmonster.nocheatplus.checks.moving.model.MoveInfo") == null)
+                    return false;
+                if (Class.forName("fr.neatmonster.nocheatplus.checks.moving.util.AuxMoving") == null)
+                    return false;
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+        else
+            return false;
     }
 }

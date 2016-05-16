@@ -7,10 +7,14 @@ import net.newtownia.NTAC.Utils.PlayerUtils;
 import net.newtownia.NTAC.Utils.PunishUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerMoveEvent;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 public class Jesus extends AbstractMovementCheck
@@ -45,25 +49,27 @@ public class Jesus extends AbstractMovementCheck
         Location from = event.getFrom();
         Location to = event.getTo();
 
+        Block fromBlock = from.getBlock();
+
         if (p.isInsideVehicle() || p.isFlying())
             return;
 
-        if (p.getLocation().getBlock().getType() == Material.WEB ||
-                p.getLocation().add(0, 1, 0).getBlock().getType() == Material.WEB)
+        if (fromBlock.getType() == Material.WEB ||
+                fromBlock.getRelative(BlockFace.UP).getType() == Material.WEB)
             return;
 
-        Material l = from.getBlock().getType();
-        Material l1 = from.getBlock().getRelative(1, 0, 0).getType();
-        Material l2 = from.getBlock().getRelative(-1, 0, 0).getType();
-        Material l3 = from.getBlock().getRelative(0, 0, 1).getType();
-        Material l4 = from.getBlock().getRelative(0, 0, -1).getType();
-        Material l5 = from.getBlock().getRelative(1, 0, 1).getType();
-        Material l6 = from.getBlock().getRelative(-1, 0, -1).getType();
-        Material l7 = from.getBlock().getRelative(-1, 0, 1).getType();
-        Material l8 = from.getBlock().getRelative(1, 0, -1).getType();
-        if ((l == Material.WATER_LILY) || (l1 == Material.WATER_LILY) || (l2 == Material.WATER_LILY) || (l3 == Material.WATER_LILY) || (l4 == Material.WATER_LILY) || (l5 == Material.WATER_LILY) || (l6 == Material.WATER_LILY) || (l7 == Material.WATER_LILY) || (l8 == Material.WATER_LILY)) {
+        List<Material> arround = new ArrayList<>();
+        arround.add(fromBlock.getType());
+        arround.add(fromBlock.getRelative(1, 0, 0).getType());
+        arround.add(fromBlock.getRelative(-1, 0, 0).getType());
+        arround.add(fromBlock.getRelative(0, 0, 1).getType());
+        arround.add(fromBlock.getRelative(0, 0, -1).getType());
+        arround.add(fromBlock.getRelative(1, 0, 1).getType());
+        arround.add(fromBlock.getRelative(-1, 0, -1).getType());
+        arround.add(fromBlock.getRelative(-1, 0, 1).getType());
+        arround.add(fromBlock.getRelative(1, 0, -1).getType());
+        if (arround.contains(Material.WATER_LILY))
             return;
-        }
 
         Material inType = p.getLocation().add(0, 0.5, 0).getBlock().getType();
         if (inType == Material.WATER || inType == Material.STATIONARY_WATER)

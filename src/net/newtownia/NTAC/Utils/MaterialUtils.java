@@ -1,19 +1,24 @@
 package net.newtownia.NTAC.Utils;
 
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
  * Created by Vinc0682 on 21.03.2016.
  */
-public class ItemUtils
+public class MaterialUtils
 {
     private static List<Material> swords;
     private static List<Material> foods;
     private static List<Material> slowWeapons;
+    private static List<Material> unsolidMaterials = Arrays.asList(Material.AIR, Material.SIGN, Material.SIGN_POST,
+            Material.TRIPWIRE, Material.TRIPWIRE_HOOK, Material.SUGAR_CANE_BLOCK, Material.LONG_GRASS, Material.FLOWER_POT,
+            Material.YELLOW_FLOWER);
 
     public static List<Material> getSwords()
     {
@@ -137,5 +142,17 @@ public class ItemUtils
     public static boolean isSlowWeapon(ItemStack stack)
     {
         return stack != null && isSlowWeapon(stack.getType());
+    }
+
+    public static List<Material> getUnsolidMaterials() {
+        return unsolidMaterials;
+    }
+    public static boolean isUnsolid(Material m)
+    {
+        return getUnsolidMaterials().contains(m);
+    }
+    public static boolean isUnsolid(Block b)
+    {
+        return isUnsolid(b.getType());
     }
 }

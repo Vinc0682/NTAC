@@ -11,7 +11,7 @@ import net.newtownia.NTAC.Action.ViolationManager;
 import net.newtownia.NTAC.NTAC;
 import net.newtownia.NTAC.Utils.FakePlayer.FakePlayer;
 import net.newtownia.NTAC.Utils.FakePlayer.Identity;
-import net.newtownia.NTAC.Utils.ItemUtils;
+import net.newtownia.NTAC.Utils.MaterialUtils;
 import net.newtownia.NTAC.Utils.PunishUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -152,7 +152,7 @@ public class KillauraNPC extends AbstractCombatCheck
 
         if(packet.getTargetID() == bot.getEntityID())
         {
-            if (ItemUtils.isSlowWeapon(p.getInventory().getItemInMainHand()))
+            if (MaterialUtils.isSlowWeapon(p.getInventory().getItemInMainHand()))
                 vlManager.addViolation(p, slowWeaponVLIncrement);
             else
                 vlManager.addViolation(p, 1);

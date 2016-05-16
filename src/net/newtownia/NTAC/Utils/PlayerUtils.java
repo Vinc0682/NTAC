@@ -1,8 +1,5 @@
 package net.newtownia.NTAC.Utils;
 
-import fr.neatmonster.nocheatplus.NCPAPIProvider;
-import fr.neatmonster.nocheatplus.checks.moving.model.MoveInfo;
-import fr.neatmonster.nocheatplus.checks.moving.util.AuxMoving;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -21,17 +18,21 @@ public class PlayerUtils
 
     public static boolean isPlayerOnGround(Player p)
     {
-        if (Bukkit.getPluginManager().getPlugin("NoCheatPlus") != null)
-            try
-            {
-                return isPlayerOnGroundNCP(p);
-            }
-            catch (Exception e)
-            {
+        try
+        {
+            if (NCPUtils.hasNoCheatPlus())
+                return NCPLayer.isPlayerOnGround(p);
+            else
                 return isPlayerOnGroundNTAC(p);
-            }
-        else
+        }
+        catch (ClassNotFoundException e)
+        {
             return isPlayerOnGroundNTAC(p);
+        }
+        catch (Exception e)
+        {
+            return isPlayerOnGroundNTAC(p);
+        }
     }
 
     public static boolean isPlayerOnGroundNTAC(Player p)
@@ -56,13 +57,6 @@ public class PlayerUtils
         return false;
     }
 
-    public static boolean isPlayerOnGroundNCP(Player p)
-    {
-        AuxMoving aux = NCPAPIProvider.getNoCheatPlusAPI().getGenericInstance(AuxMoving.class);
-        MoveInfo moveInfo = aux.usePlayerMoveInfo();
-        moveInfo.set(p, p.getLocation(), null, 0);
-        return moveInfo.from.isOnGround();
-    }
 
     public static Location getPlayerStandOnBlockLocation(Location locationUnderPlayer, Material mat) {
         Location b11 = locationUnderPlayer.clone().add(0.3, 0, -0.3);

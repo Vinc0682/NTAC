@@ -6,6 +6,7 @@ import fr.neatmonster.nocheatplus.hooks.NCPHook;
 import fr.neatmonster.nocheatplus.hooks.NCPHookManager;
 import net.newtownia.NTAC.Action.ViolationManager;
 import net.newtownia.NTAC.NTAC;
+import net.newtownia.NTAC.Utils.MaterialUtils;
 import net.newtownia.NTAC.Utils.NCPUtils;
 import net.newtownia.NTAC.Utils.PlayerUtils;
 import org.bukkit.Bukkit;
@@ -67,15 +68,23 @@ public class NCPDragDownHook implements NCPHook
             if (loc.getY() - loc.getBlockY() < downSpeed)
             {
                 Block bDown = b.getRelative(BlockFace.DOWN);
-                if (bDown.getType() != Material.AIR)
+                if (!isUnsolid(bDown))
                     loc.setY(loc.getBlockY());
             }
 
-            if (b == null || b.getType() == Material.AIR)
+            if (b == null || isUnsolid(b))
+            {
                 p.teleport(loc, PlayerTeleportEvent.TeleportCause.UNKNOWN);
+                p.sendMessage("Dragging down");
+            }
             return false;
         }
         return true;
+    }
+
+    private boolean isUnsolid(Block b)
+    {
+        return MaterialUtils.isUnsolid(b.getType()) || b.getType() == Material.WEB;
     }
 
     public void loadConfig()
@@ -83,7 +92,6 @@ public class NCPDragDownHook implements NCPHook
         invalidateThreshold = Integer.parseInt(pl.getConfiguration().getString("NCP-Drag-Down.Invalidate-Threshold"));
         downSpeed = Double.parseDouble(pl.getConfiguration().getString("NCP-Drag-Down.Down-Speed"));
     }
-
 
     public void hook()
     {
