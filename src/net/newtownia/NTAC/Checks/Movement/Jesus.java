@@ -48,6 +48,10 @@ public class Jesus extends AbstractMovementCheck
         if (p.isInsideVehicle() || p.isFlying())
             return;
 
+        if (p.getLocation().getBlock().getType() == Material.WEB ||
+                p.getLocation().add(0, 1, 0).getBlock().getType() == Material.WEB)
+            return;
+
         Material l = from.getBlock().getType();
         Material l1 = from.getBlock().getRelative(1, 0, 0).getType();
         Material l2 = from.getBlock().getRelative(-1, 0, 0).getType();
@@ -74,7 +78,7 @@ public class Jesus extends AbstractMovementCheck
             return;
         }
 
-        if (PlayerUtils.isOnWater(p) || PlayerUtils.isInWater(p))
+        if (PlayerUtils.isOnWater(p))
         {
             if(jumpJesus)
             {

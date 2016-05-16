@@ -9,6 +9,7 @@ import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import net.newtownia.NTAC.NTAC;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -59,7 +60,7 @@ public class CombatBase implements Listener
     {
         for (AbstractCombatCheck check : combatChecks)
             check.onAttack(event);
-        if (event.getDamager() instanceof Player)
+        if (event.getDamager().getType() == EntityType.PLAYER)
         {
             Player p = (Player)event.getDamager();
             lastPlayerTarget.put(p.getUniqueId(), event.getEntity());
