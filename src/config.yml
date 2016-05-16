@@ -389,7 +389,7 @@ Jesus:
 
   # Actions performed when player is suspected for jesus, VL equals to the count of suspicious moves.
   Actions:
-    0: 'cancel'
+    2: 'cancel' # First cancel should be at lease 2 to fix a "Wrong movement" false positive
     5:
       - 'ntac kick %PLAYER% %%Kick-Movement%%'
       - 'ntac notify %%Notify-Jesus-Kick%%'

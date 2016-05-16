@@ -1,14 +1,17 @@
 package net.newtownia.NTAC.Checks.Combat;
 
+import com.comphenix.packetwrapper.WrapperPlayClientUseEntity;
+import com.comphenix.protocol.events.PacketEvent;
 import net.newtownia.NTAC.Action.ActionData;
 import net.newtownia.NTAC.Action.ViolationManager;
 import net.newtownia.NTAC.NTAC;
+import net.newtownia.NTAC.Utils.EntityUtils;
 import net.newtownia.NTAC.Utils.MathUtils;
 import net.newtownia.NTAC.Utils.PunishUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import java.util.*;
 
@@ -42,12 +45,12 @@ public class Aimbot extends AbstractCombatCheck
     }
 
     @Override
-    protected void onAttack(EntityDamageByEntityEvent event)
+    protected void onAttackPacketReceive(PacketEvent event, WrapperPlayClientUseEntity packet)
     {
         if (!isEnabled())
             return;
 
-        Player p = (Player)event.getDamager();
+        Player p = event.getPlayer();
         UUID pUUID = p.getUniqueId();
 
         if (p.hasPermission("ntac.bypass.aimbot"))
@@ -64,7 +67,14 @@ public class Aimbot extends AbstractCombatCheck
         }
         playerLastAttackYaw.put(pUUID, p.getLocation().getYaw());
 
-        double angleDiff = MathUtils.getYawDiff(p.getLocation(), event.getEntity().getLocation());
+        Entity attacked = EntityUtils.getEntityByEntityID(packet.getTargetID(), p.getLocation().getWorld());
+        if (attacked == null)
+        {
+            Bukkit.getLogger().info("Unable to find attacked entity");
+            return;
+        }
+
+        double angleDiff = MathUtils.getYawDiff(p.getLocation(), attacked.getLocation());
         if (angleDiff < 0)
             angleDiff *= -1;
 
@@ -78,17 +88,6 @@ public class Aimbot extends AbstractCombatCheck
         angles.add(0, angleDiff);
         while (angles.size() > dataCount)
             angles.remove(dataCount);
-
-        StringBuilder sb = new StringBuilder();
-        sb.append("[");
-        for (double angle : angles)
-        {
-            sb.append(angle);
-            sb.append(", ");
-        }
-        sb.append("]");
-        //p.sendMessage(sb.toString());
-
 
         if (angles.size() == dataCount)
         {

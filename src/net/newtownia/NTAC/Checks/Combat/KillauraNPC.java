@@ -9,6 +9,7 @@ import com.comphenix.protocol.events.PacketEvent;
 import net.newtownia.NTAC.Action.ActionData;
 import net.newtownia.NTAC.Action.ViolationManager;
 import net.newtownia.NTAC.NTAC;
+import net.newtownia.NTAC.Utils.EntityUtils;
 import net.newtownia.NTAC.Utils.FakePlayer.FakePlayer;
 import net.newtownia.NTAC.Utils.FakePlayer.Identity;
 import net.newtownia.NTAC.Utils.MaterialUtils;
@@ -126,11 +127,7 @@ public class KillauraNPC extends AbstractCombatCheck
             Identity botId = null;
             if (copyAttackedType)
             {
-                Entity attacked = null;
-                for (Entity en : p.getWorld().getEntities())
-                    if (en.getEntityId() == packet.getTargetID())
-                        attacked = en;
-
+                Entity attacked = EntityUtils.getEntityByEntityID(packet.getTargetID(), p.getLocation().getWorld());
                 if (attacked == null)
                 {
                     Bukkit.getLogger().info("Unable to find attacked entity");
