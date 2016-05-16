@@ -15,7 +15,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class Boatfly extends AbstractMovementCheck {
+public class Boatfly extends AbstractMovementCheck
+{
     private ActionData actionData;
     private ViolationManager vlManager;
     private boolean cancelAllUpMotions = true;

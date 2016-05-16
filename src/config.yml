@@ -85,20 +85,13 @@ Killaura-NPC:
   # If false, the bot will always be a player
   Copy-Attacked-Type: true
 
-  # The minimum and maximum angle the bot will have (in relation to the player)
-  # DEFAULT MIN: 100 (To adjust since these values were generic)
-  # DEFAULT MAX: 120
-  Angle-Min: 100
-  Angle-Max: 120
+  # How high should the bot be, anything under 2.7 may affect PvP, anything above 4.5 may be out of range
+  Min-Height: 3.4
+  Max-Height: 4
 
-  # The minimum and maximum distance between the bot and the player
-  # DEFAULT MIN: 2
-  # DEFAULT MAX: 4
-  Distance-Min: 2
-  Distance-Max: 4
-
-  # The frequecy (in ms) the bot switch the side
-  Switch-Time: 1000
+  # How far away should the bot be (on x and y axis)
+  Min-Distance: 2
+  Max-Distance: 4
 
   # Slow weapon vl increasement
   # How much should the vl be increased when the player is using a slow weapon, e.g. an axe

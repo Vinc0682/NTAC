@@ -29,11 +29,10 @@ public class KillauraNPC extends AbstractCombatCheck
     private boolean copyAttackedType = true;
     private int slowWeaponVLIncrement = 2;
 
-    private double distanceMin = 2;
-    private double distanceMax = 4;
-    private int angleMin = 100;
-    private int angleMax = 120;
-    private int switchTime = 1000;
+    private double minHeight = 3.4;
+    private double maxHeight = 4;
+    private double minDist = 2;
+    private double maxDist = 4;
 
     private Map<UUID, Long> playerLastHitTime;
     private Map<UUID, Long> playerFirstHitTime;
@@ -192,56 +191,18 @@ public class KillauraNPC extends AbstractCombatCheck
 
     private Location getBotLoc(Player p)
     {
-        double angle = angleMin + rnd.nextDouble() * (angleMax - angleMin);
-        if(shouldBotBeRightSided(p))
-            angle *= -1;
-        double distance = distanceMin + rnd.nextDouble() * (distanceMax - distanceMin);
+        double height = minHeight + rnd.nextDouble() * (maxHeight - minHeight);
+        double dist = minDist + rnd.nextDouble() * (maxDist - minDist);
 
-        return FakePlayer.getAroundPos(p, angle, distance);
-    }
+        double rot = Math.toRadians(-p.getLocation().getPitch());
+        if (rnd.nextDouble() > 0.9)
+            rot = Math.toRadians(91);
+        height *= Math.cos(rot);
+        dist *= Math.sin(rot);
 
-    private Location getLocationBehindPlayer(Player player) {
-        if (player == null) {
-            return null;
-        }
-        boolean random = rnd.nextDouble() > 0.5;
-        Location location = player.getLocation().clone().add(0, 0, 0);
-        if (random) {
-            location.add(0, 3, 0);
-        } else {
-            location.add(0, -3, 0);
-        }
-        org.bukkit.util.Vector direction = location.getDirection().multiply(new org.bukkit.util.Vector(-3, 0, -3));
-
-        Location loc = location.add(direction);
-        if (player.getLocation().getPitch() >= 70) {
-            return new Location(player.getWorld(), player.getLocation().getX(), player.getLocation().getY() + 3.8, player.getLocation().getZ());
-        }
-        if (player.getLocation().getPitch() <= -70) {
-            return new Location(player.getWorld(), player.getLocation().getX(), player.getLocation().getY() - 3.8, player.getLocation().getZ());
-        }
+        Location loc = FakePlayer.getAroundPos(p, 180, dist);
+        loc.setY(p.getLocation().getY() + height);
         return loc;
-    }
-
-    private boolean shouldBotBeRightSided(Player p)
-    {
-        UUID pUUID = p.getUniqueId();
-
-        if(!playerFirstHitTime.containsKey(pUUID))
-        {
-            playerFirstHitTime.put(pUUID, System.currentTimeMillis());
-            return false;
-        }
-
-        int timeDiff = (int)(System.currentTimeMillis() - playerFirstHitTime.get(pUUID));
-        boolean result = false;
-        while (timeDiff > switchTime)
-        {
-            result = !result;
-            timeDiff -= switchTime;
-        }
-
-        return result;
     }
 
     public void loadConfig()
@@ -250,11 +211,10 @@ public class KillauraNPC extends AbstractCombatCheck
 
         combatTime = Integer.parseInt(config.getString("Killaura-NPC.Combat-Time"));
         copyAttackedType = Boolean.valueOf(config.getString("Killaura-NPC.Copy-Attacked-Type"));
-        angleMin = Integer.parseInt(config.getString("Killaura-NPC.Angle-Min"));
-        angleMax = Integer.parseInt(config.getString("Killaura-NPC.Angle-Max"));
-        distanceMin = Double.parseDouble(config.getString("Killaura-NPC.Distance-Min"));
-        distanceMax = Double.parseDouble(config.getString("Killaura-NPC.Distance-Max"));
-        switchTime = Integer.parseInt(config.getString("Killaura-NPC.Switch-Time"));
+        minHeight = Integer.parseInt(config.getString("Killaura-NPC.Min-Height"));
+        maxHeight = Integer.parseInt(config.getString("Killaura-NPC.Max-Height"));
+        minDist = Double.parseDouble(config.getString("Killaura-NPC.Min-Distance"));
+        maxDist = Double.parseDouble(config.getString("Killaura-NPC.Max-Distance"));
         slowWeaponVLIncrement = Integer.parseInt(config.getString("Killaura-NPC.Slow-Weapon-Increment"));
 
         actionData = new ActionData(config, "Killaura-NPC.Actions");
