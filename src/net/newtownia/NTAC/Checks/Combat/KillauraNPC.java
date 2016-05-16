@@ -19,7 +19,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.util.*;
 
 import java.util.*;
 
@@ -77,13 +76,6 @@ public class KillauraNPC extends AbstractCombatCheck
 
         ProtocolLibrary.getProtocolManager().addPacketListener(moveLookPacketEvent);
 
-        Bukkit.getScheduler().runTaskTimer(pl, new Runnable() {
-            @Override
-            public void run() {
-                vlManager.resetAllViolations();
-            }
-        }, clearFrequency, clearFrequency);
-
         loadConfig();
     }
 
@@ -113,6 +105,7 @@ public class KillauraNPC extends AbstractCombatCheck
                     bot.destroyForPlayer(p);
 
                     playerBotIdentitys.remove(pUUID);
+                    vlManager.resetPlayerViolation(p);
                     return;
                 }
             }

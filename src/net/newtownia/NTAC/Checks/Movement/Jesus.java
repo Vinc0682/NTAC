@@ -11,39 +11,41 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 import java.util.HashMap;
+import java.util.UUID;
 
-/**
- * Created by HorizonCode on 16.05.2016.
- */
-public class Jesus extends AbstractMovementCheck {
+public class Jesus extends AbstractMovementCheck
+{
+    private ViolationManager vlManager;
+    private ActionData actionData;
 
-    public Jesus(NTAC pl, MovementBase movementBase) {
+    private boolean jumpJesus = true;
+
+    private HashMap<UUID, Integer> count = new HashMap<>();
+    private HashMap<UUID, Integer> jumpcount = new HashMap<>();
+
+    public Jesus(NTAC pl, MovementBase movementBase)
+    {
         super(pl, movementBase, "Jesus");
         loadConfig();
         vlManager = new ViolationManager();
     }
 
-    public ViolationManager vlManager;
-    public ActionData actionData;
-
-    public boolean jumpjesus;
-
-    public HashMap<Player, Integer> count = new HashMap<Player, Integer>();
-    public HashMap<Player, Integer> jumpcount = new HashMap<Player, Integer>();
-
     @Override
-    public void onPlayerMove(PlayerMoveEvent event) {
+    public void onPlayerMove(PlayerMoveEvent event)
+    {
         if(!isEnabled())
             return;
+
         Player p = event.getPlayer();
+        UUID pUUID = p.getUniqueId();
+
         if(p.hasPermission("ntac.bypass.jesus"))
             return;
+
         Location from = event.getFrom();
         Location to = event.getTo();
-        if (p.isInsideVehicle() || p.getAllowFlight())
-            return;
 
-        if (p.isOp())
+        if (p.isInsideVehicle() || p.getAllowFlight())
             return;
 
         Material l = from.getBlock().getType();
@@ -60,8 +62,9 @@ public class Jesus extends AbstractMovementCheck {
         }
 
         if (p.getLocation().add(0, 0.5, 0).getBlock().getType() == Material.WATER || p.getLocation().add(0, 0.5, 0).getBlock().getType() == Material.STATIONARY_WATER) {
-            jumpcount.remove(p);
-            count.remove(p);
+            jumpcount.remove(pUUID);
+            count.remove(pUUID);
+            vlManager.resetPlayerViolation(p);
             return;
         }
 
@@ -69,11 +72,16 @@ public class Jesus extends AbstractMovementCheck {
             return;
         }
 
-        if (PlayerUtils.isOnWater(p)) {
-            if(jumpjesus) {
-                if (from.getY() < to.getY()) {
-                    if (jumpcount.containsKey(p)) {
-                        if (jumpcount.get(p) > 3) {
+        if (PlayerUtils.isOnWater(p))
+        {
+            if(jumpJesus)
+            {
+                if (from.getY() < to.getY())
+                {
+                    if (jumpcount.containsKey(pUUID))
+                    {
+                        if (jumpcount.get(pUUID) > 3)
+                        {
                             vlManager.addViolation(p, 1);
 
                             int vl = vlManager.getViolation(p);
@@ -84,32 +92,37 @@ public class Jesus extends AbstractMovementCheck {
                                     p.teleport(resetLoc);
                             }
                             PunishUtils.runViolationAction(p, vl, vl, actionData);
-                            jumpcount.remove(p);
+                            jumpcount.remove(pUUID);
                             return;
                         }
-                        int old = jumpcount.get(p);
-                        jumpcount.put(p, old + 1);
-                    } else {
-                        jumpcount.put(p, 1);
+                        int old = jumpcount.get(pUUID);
+                        jumpcount.put(pUUID, old + 1);
+                    } else
+                    {
+                        jumpcount.put(pUUID, 1);
                     }
                 }
             }
-            if (count.containsKey(p)) {
-                int old = count.get(p);
-                count.put(p, old + 1);
-                if (count.get(p) > 8) {
+            if (count.containsKey(pUUID))
+            {
+                int old = count.get(pUUID);
+                count.put(pUUID, old + 1);
+                if (count.get(pUUID) > 8)
+                {
                     //flagging
-                    count.remove(p);
+                    count.remove(pUUID);
+                    vlManager.resetPlayerViolation(p);
                 }
             } else {
-                count.put(p, 1);
+                count.put(pUUID, 1);
             }
         }
     }
 
     @Override
-    public void loadConfig() {
+    public void loadConfig()
+    {
         actionData = new ActionData(pl.getConfiguration(), "Jesus.Actions");
-        jumpjesus = Boolean.valueOf(pl.getConfiguration().getString("Jesus.Jump-Jesus"));
+        jumpJesus = Boolean.valueOf(pl.getConfiguration().getString("Jesus.Jump-Jesus"));
     }
 }
