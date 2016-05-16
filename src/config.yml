@@ -25,6 +25,9 @@ Enabled:
   Auto-Clicker: true # Code stable, customize dat settings DEFAULT: true
   Auto-Armor: false # Beta, take a look at InvMove too! DEFAULT: true
 
+  #Jesus
+  Jesus: true # Stable DEFAULT: true
+
   #Movement (all require movement base enabled)
   Anti-AFK: true # Beta, testing on newtownia.net + more subchecks'll be added soon! DEFAULT: true
   Sneak: true # Stable, patches a NC+ Bypass DEFAULT: true
@@ -358,3 +361,12 @@ NCP-Drag-Down:
 
   # How fast should players be dragged down, be careful to not lead into bugs...
   Down-Speed: 0.5
+
+Jesus:
+
+  #//TODO: Description
+  Jump-Jesus: true
+  # Actions performed when player moves while the inv is opened, VL equals the count of moves
+  Actions:
+    0: 'cancel'
+    5: 'ntac kick %PLAYER% %%Kick-Movement%%'

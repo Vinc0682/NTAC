@@ -64,6 +64,78 @@ public class PlayerUtils
         return moveInfo.from.isOnGround();
     }
 
+    public static Location getPlayerStandOnBlockLocation(Location locationUnderPlayer, Material mat) {
+        Location b11 = locationUnderPlayer.clone().add(0.3, 0, -0.3);
+        if (b11.getBlock().getType() != mat) {
+            return b11;
+        }
+        Location b12 = locationUnderPlayer.clone().add(-0.3, 0, -0.3);
+        if (b12.getBlock().getType() != mat) {
+            return b12;
+        }
+        Location b21 = locationUnderPlayer.clone().add(0.3, 0, 0.3);
+        if (b21.getBlock().getType() != mat) {
+            return b21;
+        }
+        Location b22 = locationUnderPlayer.clone().add(-0.3, 0, +0.3);
+        if (b22.getBlock().getType() != mat) {
+            return b22;
+        }
+        return locationUnderPlayer;
+    }
+
+    public static Location getPlayerStandOnBlockLocations(Location locationUnderPlayer, Material mat) {
+        Location b11 = locationUnderPlayer.clone().add(0.3, 0, -0.3);
+        if (b11.getBlock().getType() == mat) {
+            return b11;
+        }
+        Location b12 = locationUnderPlayer.clone().add(-0.3, 0, -0.3);
+        if (b12.getBlock().getType() == mat) {
+            return b12;
+        }
+        Location b21 = locationUnderPlayer.clone().add(0.3, 0, 0.3);
+        if (b21.getBlock().getType() == mat) {
+            return b21;
+        }
+        Location b22 = locationUnderPlayer.clone().add(-0.3, 0, +0.3);
+        if (b22.getBlock().getType() == mat) {
+            return b22;
+        }
+        return locationUnderPlayer;
+    }
+
+    public static boolean isInWater(Player p) {
+        Location loc = p.getLocation().subtract(0, 0.2, 0);
+        if (getPlayerStandOnBlockLocations(loc, Material.STATIONARY_WATER).getBlock().getType() == Material.STATIONARY_WATER || getPlayerStandOnBlockLocations(loc, Material.WATER).getBlock().getType() == Material.WATER) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean isInBlock(Player p, Material block) {
+        Location loc = p.getLocation().add(0, 0, 0);
+        if (getPlayerStandOnBlockLocations(loc, block).getBlock().getType() == block) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean isOnWater(Player p) {
+        Location loc = p.getLocation().subtract(0, 1, 0);
+        if (getPlayerStandOnBlockLocations(loc, Material.STATIONARY_WATER).getBlock().getType() == Material.STATIONARY_WATER) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean isOnBlock(Player p, Material mat) {
+        Location loc = p.getLocation().subtract(0, 1, 0);
+        if (getPlayerStandOnBlockLocation(loc, mat).getBlock().getType() == mat) {
+            return true;
+        }
+        return false;
+    }
+
     public static List<Material> getMaterialsBelow(Player p)
     {
         return getMaterialsBelow(p.getLocation());

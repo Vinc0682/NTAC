@@ -19,6 +19,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.util.*;
 
 import java.util.*;
 
@@ -116,7 +117,7 @@ public class KillauraNPC extends AbstractCombatCheck
                 }
             }
 
-            bot.moveTo(p, getBotLoc(p));
+            bot.moveTo(p, getLocationBehindPlayer(p));
         }
     }
 
@@ -205,6 +206,29 @@ public class KillauraNPC extends AbstractCombatCheck
         double distance = distanceMin + rnd.nextDouble() * (distanceMax - distanceMin);
 
         return FakePlayer.getAroundPos(p, angle, distance);
+    }
+
+    private Location getLocationBehindPlayer(Player player) {
+        if (player == null) {
+            return null;
+        }
+        boolean random = new Random().nextBoolean();
+        Location location = player.getLocation().add(0, 0, 0);
+        if (random) {
+            location.add(0, 3, 0);
+        } else {
+            location.add(0, -3, 0);
+        }
+        org.bukkit.util.Vector direction = location.getDirection().multiply(new org.bukkit.util.Vector(-3, 0, -3));
+
+        Location loc = location.add(direction);
+        if (player.getLocation().getPitch() >= 70) {
+            return new Location(player.getWorld(), player.getLocation().getX(), player.getLocation().getY() + 3.8, player.getLocation().getZ());
+        }
+        if (player.getLocation().getPitch() <= -70) {
+            return new Location(player.getWorld(), player.getLocation().getX(), player.getLocation().getY() - 3.8, player.getLocation().getZ());
+        }
+        return loc;
     }
 
     private boolean shouldBotBeRightSided(Player p)

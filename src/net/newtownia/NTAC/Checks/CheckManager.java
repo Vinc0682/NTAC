@@ -17,7 +17,7 @@ public class CheckManager
 {
     private NTAC pl;
 
-    private List<AbstractCheck> allChecks;
+    private List<AbstractCheck> allChecks = new ArrayList<>();
     private MovementBase movementBase = null;
     private CombatBase combatBase = null;
 
@@ -73,9 +73,10 @@ public class CheckManager
         allChecks.add(new Sneak(pl, movementBase));
         //allChecks.add(new NoSlowBlock(pl, movementBase)); Can't block anymore
         allChecks.add(new FastLadder(pl, movementBase));
-        allChecks.add(new BoatFly(pl, movementBase));
+        allChecks.add(new Boatfly(pl, movementBase));
         allChecks.add(new InventoryMove(pl, movementBase));
         allChecks.add(new NCPDragDown(pl, movementBase));
+        allChecks.add(new Jesus(pl, movementBase));
 
         //allChecks.add(new Tracers(pl));
 

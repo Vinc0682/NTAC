@@ -51,7 +51,7 @@ public class CombatBase implements Listener
 
     public long getLastAttackTime(UUID pUUID)
     {
-        return lastPlayerAttackTime.getOrDefault(pUUID, -1L);
+        return lastPlayerAttackTime.getOrDefault(pUUID, 0L);
     }
 
     @EventHandler

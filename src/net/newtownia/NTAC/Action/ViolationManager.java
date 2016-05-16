@@ -28,7 +28,7 @@ public class ViolationManager {
 
     public int getViolation(UUID pUUID)
     {
-        return playerViolations.getOrDefault(pUUID, 0);
+        return playerViolations.get(pUUID);
     }
 
     public void setViolation(Player p, int newViolation)

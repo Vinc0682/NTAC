@@ -31,7 +31,7 @@ public class Headless extends AbstractCheck implements Listener
         Player p = event.getPlayer();
         float pitch = p.getLocation().getPitch();
 
-        if(pitch < -100 || pitch > 100)
+        if(pitch < -90 || pitch > 90)
         {
             if(p.hasPermission("ntac.bypass.headless"))
                 return;
