@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class Boatfly extends AbstractMovementCheck
+public class BoatFly extends AbstractMovementCheck
 {
     private ActionData actionData;
     private ViolationManager vlManager;
@@ -26,7 +26,7 @@ public class Boatfly extends AbstractMovementCheck
 
     private Map<UUID, Integer> playerOffGroundMoves;
 
-    public Boatfly(NTAC pl, MovementBase movementBase)
+    public BoatFly(NTAC pl, MovementBase movementBase)
     {
         super(pl, movementBase, "Boat-Fly");
         vlManager = new ViolationManager();

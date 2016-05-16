@@ -21,7 +21,8 @@ public class BanListener implements Listener
         if (banManger.isBanned(pUUID))
         {
             String reason = banManger.getReason(pUUID);
-            reason = NTAC.getInstance().getMessageUtils().formatMessage(reason);          reason = reason.replace("%DURATION%", DateUtils.formatDateDiff(banManger.getBanTime(pUUID)));
+            reason = NTAC.getInstance().getMessageUtils().formatMessage(reason);
+            reason = reason.replace("%DURATION%", DateUtils.formatDateDiff(banManger.getBanTime(pUUID)));
             event.setKickMessage(reason);
             event.setLoginResult(AsyncPlayerPreLoginEvent.Result.KICK_BANNED);
             event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, reason);

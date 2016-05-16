@@ -152,11 +152,11 @@ Auto-Clicker:
 
   # The vl is equal to the amount of detected attacs
   Actions:
-    5: "ntac notify %%Notify-Autoclicker-Suspect%%"
+    5: 'ntac notify %%Notify-Autoclicker-Suspect%%'
     10:
-      - "ntac addbanpoint %PLAYER% 1"
-      - "ntac kick %PLAYER% %%Kick-Autoclicker%%"
-      - "ntac notify %%Notify-Autoclicker-Kick%%"
+      - 'ntac addbanpoint %PLAYER% 1'
+      - 'ntac kick %PLAYER% %%Kick-Autoclicker%%'
+      - 'ntac notify %%Notify-Autoclicker-Kick%%'
 
   # The time until the VL get's invalidated (in ms)
   # NOTE: The VL only get's invalidated when there are no new VLs.
@@ -178,7 +178,9 @@ Auto-Armor:
 
   # Commands run when the player is suspected for AutoArmor.
   Actions:
-    8: 'ntac kick %%Kick-AutoArmor%%'
+    8:
+      - 'ntac kick %%Kick-AutoArmor%%'
+      - 'ntac notify %%Notify-AutoArmor-Kick%%'
 
 # Skinderp-Properties:
 SkinDerp:
@@ -319,7 +321,9 @@ Fast-Ladder:
   # The actions, the vl equals the count of suspicious movements
   Actions:
     3: 'cancel'
-    25: 'ntac kick %PLAYER% %%Kick-Movement%%'
+    25:
+      - 'ntac kick %PLAYER% %%Kick-Movement%%'
+      - 'ntac notify %%Notify-FastLadder-Kick%%'
 
 Boat-Fly:
 
@@ -363,7 +367,9 @@ Inventory-Move:
   # Actions performed when player moves while the inv is opened, VL equals the count of moves
   Actions:
     2: 'cancel'
-    10: 'ntac kick %PLAYER% %%Kick-Movement%%'
+    10:
+      - 'ntac kick %PLAYER% %%Kick-Movement%%'
+      - 'ntac notify %%Notify-InvMove-Kick%%'
 
 NCP-Drag-Down:
 
@@ -384,4 +390,6 @@ Jesus:
   # Actions performed when player is suspected for jesus, VL equals to the count of suspicious moves.
   Actions:
     0: 'cancel'
-    5: 'ntac kick %PLAYER% %%Kick-Movement%%'
+    5:
+      - 'ntac kick %PLAYER% %%Kick-Movement%%'
+      - 'ntac notify %%Notify-Jesus-Kick%%'

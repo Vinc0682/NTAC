@@ -211,8 +211,8 @@ public class KillauraNPC extends AbstractCombatCheck
 
         combatTime = Integer.parseInt(config.getString("Killaura-NPC.Combat-Time"));
         copyAttackedType = Boolean.valueOf(config.getString("Killaura-NPC.Copy-Attacked-Type"));
-        minHeight = Integer.parseInt(config.getString("Killaura-NPC.Min-Height"));
-        maxHeight = Integer.parseInt(config.getString("Killaura-NPC.Max-Height"));
+        minHeight = Double.parseDouble(config.getString("Killaura-NPC.Min-Height"));
+        maxHeight = Double.parseDouble(config.getString("Killaura-NPC.Max-Height"));
         minDist = Double.parseDouble(config.getString("Killaura-NPC.Min-Distance"));
         maxDist = Double.parseDouble(config.getString("Killaura-NPC.Max-Distance"));
         slowWeaponVLIncrement = Integer.parseInt(config.getString("Killaura-NPC.Slow-Weapon-Increment"));
