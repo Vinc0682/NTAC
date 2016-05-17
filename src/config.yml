@@ -21,7 +21,7 @@ Enabled:
   #Combat
   Killaura-NPC: true # Stable DEFAULT: true
   Aimbot: true # In development
-  Anti-Knockback: false # Gotta recode dat shit when I'm bored DEFAULT: false
+  Anti-Knockback: true # Recoded and awesome DEFAULT: true
   Auto-Clicker: true # Code stable, customize dat settings DEFAULT: true
   Auto-Armor: false # Stable, take a look at InvMove too! DEFAULT: true
   Criticals: false # Devolpment DEFAULT: false (by HorizonCode)

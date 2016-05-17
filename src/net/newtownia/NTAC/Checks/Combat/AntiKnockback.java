@@ -93,7 +93,6 @@ public class AntiKnockback extends AbstractCombatCheck
             return;
 
         WrapperPlayClientKeepAlive packet = new WrapperPlayClientKeepAlive(event.getPacket());
-
         if (!playerKeepAliveID.containsKey(pUUID) || playerKeepAliveID.get(pUUID) != packet.getKeepAliveId())
             return;
         event.setCancelled(true); // Don't affect tablist ping
