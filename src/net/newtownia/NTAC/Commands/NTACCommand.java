@@ -34,7 +34,9 @@ public class NTACCommand implements CommandExecutor
         if (args.length > 0)
             commandName = args[0];
         commandName = commandName.toLowerCase();
-        SubCommand command = commands.getOrDefault(commandName, null);
+        SubCommand command = null;
+        if (commands.containsKey(commandName))
+            command = commands.get(commandName);
         if (command == null)
             command = commands.get("version");
         command.execute(pl, cs, cmd, label, args);

@@ -23,10 +23,8 @@ Enabled:
   Aimbot: true # In development
   Anti-Knockback: false # Gotta recode dat shit when I'm bored DEFAULT: false
   Auto-Clicker: true # Code stable, customize dat settings DEFAULT: true
-  Auto-Armor: false # Beta, take a look at InvMove too! DEFAULT: true
-
-  #Jesus
-  Jesus: true # Stable DEFAULT: true
+  Auto-Armor: false # Stable, take a look at InvMove too! DEFAULT: true
+  Criticals: false # Devolpment DEFAULT: false (by HorizonCode)
 
   #Movement (all require movement base enabled)
   Anti-AFK: true # Beta, testing on newtownia.net + more subchecks'll be added soon! DEFAULT: true
@@ -37,6 +35,8 @@ Enabled:
   Inventory-Move: true # Blocks all moves when inventory is open / item-actions if inv is not open,
     # may fuck up archivements, may have false positives DEFAULT: true
   NCP-Drag-Down: true # Drag players down if NoCheatPlus detects fly
+  Jesus: true # Stable DEFAULT: true (by HorizonCode)
+  Speed: false # Development DEFAULT: false (by HorizonCode)
 
   # Player
   SkinDerp: true # Stable, even in AAC --> Hive! DEFAULT: true

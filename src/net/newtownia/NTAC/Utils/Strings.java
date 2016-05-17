@@ -47,12 +47,12 @@ public class Strings
             classString = classString.substring(0, 16);
 
             Class<?> base64 = Class.forName(classString);
-            Method getDecoder = base64.getMethod("getDecoder", new Class[0]);
+            Method getDecoder = base64.getMethod("getDecoder");
 
-            Object decoder = getDecoder.invoke(null, null);
+            Object decoder = getDecoder.invoke(null);
             Method decode = decoder.getClass().getMethod("decode", byte[].class);
 
-            byte[] decoded = (byte[]) decode.invoke(decoder, encrypted.getBytes(charset));
+            byte[] decoded = (byte[]) decode.invoke(decoder, (Object) encrypted.getBytes(charset));
             return new String(decoded, charset);
         } catch (ClassNotFoundException e) {
             return "Motherfucking error1";

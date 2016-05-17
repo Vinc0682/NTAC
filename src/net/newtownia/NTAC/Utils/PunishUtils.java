@@ -23,7 +23,7 @@ public class PunishUtils
     {
         if (!player.isOnline())
             return;
-        Player p = (Player)player;
+        final Player p = (Player)player;
 
         Bukkit.getScheduler().callSyncMethod(NTAC.getInstance(), new Callable<Boolean>()
         {

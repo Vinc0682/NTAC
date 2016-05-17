@@ -82,12 +82,16 @@ public class BanManger
 
     public long getBanTime(UUID pUUID)
     {
-        return banTimes.getOrDefault(pUUID, -2L);
+        if (!banTimes.containsKey(pUUID))
+            return -1;
+        return banTimes.get(pUUID);
     }
 
     public String getReason(UUID pUUID)
     {
-        return banReasons.getOrDefault(pUUID, "%%Ban-Default-Reason%%");
+        if (!banReasons.containsKey(pUUID))
+            return "%%Ban-Default-Reason%%";
+        return banReasons.get(pUUID);
     }
 
     public List<UUID> getBannedUUIDS()

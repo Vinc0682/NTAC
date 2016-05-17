@@ -83,8 +83,8 @@ public class AntiKnockback extends AbstractCombatCheck
         if (!isEnabled())
             return;
 
-        Player p = event.getPlayer();
-        UUID pUUID = p.getUniqueId();
+        final Player p = event.getPlayer();
+        final UUID pUUID = p.getUniqueId();
 
         if (p.hasPermission("ntac.bypass.antiknockback"))
             return;
@@ -94,7 +94,7 @@ public class AntiKnockback extends AbstractCombatCheck
 
         WrapperPlayClientKeepAlive packet = new WrapperPlayClientKeepAlive(event.getPacket());
 
-        if (playerKeepAliveID.getOrDefault(pUUID, -1) != packet.getKeepAliveId())
+        if (!playerKeepAliveID.containsKey(pUUID) || playerKeepAliveID.get(pUUID) != packet.getKeepAliveId())
             return;
         event.setCancelled(true); // Don't affect tablist ping
 

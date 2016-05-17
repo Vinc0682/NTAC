@@ -89,7 +89,6 @@ public class CheckManager
         allChecks.add(new Jesus(pl, movementBase));
 
         //allChecks.add(new Tracers(pl));
-
         allChecks.add(new AntiChorus(pl));
     }
 

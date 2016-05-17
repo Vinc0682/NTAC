@@ -47,12 +47,16 @@ public class CombatBase implements Listener
 
     public Entity getLastTarget(UUID pUUID)
     {
-        return lastPlayerTarget.getOrDefault(pUUID, null);
+        if (!lastPlayerTarget.containsKey(pUUID))
+            return null;
+        return lastPlayerTarget.get(pUUID);
     }
 
     public long getLastAttackTime(UUID pUUID)
     {
-        return lastPlayerAttackTime.getOrDefault(pUUID, 0L);
+        if (!lastPlayerAttackTime.containsKey(pUUID))
+            return 0;
+        return lastPlayerAttackTime.get(pUUID);
     }
 
     @EventHandler
