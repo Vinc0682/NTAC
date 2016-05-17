@@ -18,10 +18,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
 /**
  * Created by Vinc0682 on 14.05.2016.
  */
@@ -32,7 +28,6 @@ public class NCPDragDownHook implements NCPHook
     private double downSpeed = 0.5;
 
     private ViolationManager vlManager;
-    private Map<UUID, Long> playerResetTimes;
     private boolean hooked = false;
 
     public NCPDragDownHook(NTAC pl, NCPDragDown ncpDragDown)
@@ -41,7 +36,6 @@ public class NCPDragDownHook implements NCPHook
         this.ncpDragDown = ncpDragDown;
 
         vlManager = new ViolationManager();
-        playerResetTimes = new HashMap<>();
         loadConfig();
     }
 
@@ -83,16 +77,8 @@ public class NCPDragDownHook implements NCPHook
     public void onPlayerMove(PlayerMoveEvent event)
     {
         Player p = event.getPlayer();
-        UUID pUUID = p.getUniqueId();
-        boolean allowReset = true;
-        if (playerResetTimes.containsKey(pUUID) &&
-                System.currentTimeMillis() - playerResetTimes.get(pUUID) < 1000)
-            allowReset = false;
-        if (PlayerUtils.isPlayerOnGround(p) && allowReset)
-        {
+        if (vlManager.getViolation(p) > 0 && PlayerUtils.isPlayerOnGround(p))
             vlManager.resetPlayerViolation(p);
-            playerResetTimes.put(pUUID, System.currentTimeMillis());
-        }
     }
 
     private boolean isUnsolid(Block b)
