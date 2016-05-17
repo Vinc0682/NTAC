@@ -41,4 +41,9 @@ public class NCPDragDown extends AbstractMovementCheck
             hook.hook();
         }
     }
+
+    public MovementBase getMovementBase()
+    {
+        return movementBase;
+    }
 }

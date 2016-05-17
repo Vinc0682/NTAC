@@ -8,7 +8,6 @@ import net.newtownia.NTAC.Utils.PunishUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerMoveEvent;
 
@@ -49,15 +48,14 @@ public class Jesus extends AbstractMovementCheck
         Location from = event.getFrom();
         Location to = event.getTo();
 
-        Block fromBlock = from.getBlock();
-
         if (p.isInsideVehicle() || p.isFlying())
             return;
 
-        if (fromBlock.getType() == Material.WEB ||
-                fromBlock.getRelative(BlockFace.UP).getType() == Material.WEB)
+        if (PlayerUtils.isInWeb(from) || PlayerUtils.isInWeb(to))
             return;
 
+
+        Block fromBlock = from.getBlock();
         List<Material> arround = new ArrayList<>();
         arround.add(fromBlock.getType());
         arround.add(fromBlock.getRelative(1, 0, 0).getType());
@@ -84,7 +82,7 @@ public class Jesus extends AbstractMovementCheck
             return;
         }
 
-        if (PlayerUtils.isOnWater(p))
+        if (PlayerUtils.isOnWater(p) && !PlayerUtils.isPlayerOnGroundNTAC(p))
         {
             if(jumpJesus)
             {

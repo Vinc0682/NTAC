@@ -37,26 +37,20 @@ public class PlayerUtils
 
     public static boolean isPlayerOnGroundNTAC(Player p)
     {
-
-        Block blockDown = p.getLocation().getBlock().getRelative(BlockFace.DOWN);
-
-        ArrayList<Material> materials = new ArrayList<>();
-        materials.add(blockDown.getType());
-        materials.add(blockDown.getRelative(BlockFace.NORTH).getType());
-        materials.add(blockDown.getRelative(BlockFace.NORTH_EAST).getType());
-        materials.add(blockDown.getRelative(BlockFace.EAST).getType());
-        materials.add(blockDown.getRelative(BlockFace.SOUTH_EAST).getType());
-        materials.add(blockDown.getRelative(BlockFace.SOUTH).getType());
-        materials.add(blockDown.getRelative(BlockFace.SOUTH_WEST).getType());
-        materials.add(blockDown.getRelative(BlockFace.WEST).getType());
-        materials.add(blockDown.getRelative(BlockFace.NORTH_WEST).getType());
-
+        List<Material> materials = getMaterialsBelow(p);
         for (Material m : materials)
-            if (m != Material.AIR)
+            if (m != Material.AIR && !MaterialUtils.isUnsolid(m) &&
+                    m != Material.WATER && m != Material.STATIONARY_WATER &&
+                    m != Material.LAVA && m != Material.STATIONARY_LAVA)
                 return true;
         return false;
     }
 
+    public static boolean isInWeb(Location loc)
+    {
+        return loc.getBlock().getType() == Material.WEB ||
+                loc.getBlock().getRelative(BlockFace.UP).getType() == Material.WEB;
+    }
 
     public static Location getPlayerStandOnBlockLocation(Location locationUnderPlayer, Material mat) {
         Location b11 = locationUnderPlayer.clone().add(0.3, 0, -0.3);
@@ -78,56 +72,25 @@ public class PlayerUtils
         return locationUnderPlayer;
     }
 
-    public static Location getPlayerStandOnBlockLocations(Location locationUnderPlayer, Material mat) {
-        Location b11 = locationUnderPlayer.clone().add(0.3, 0, -0.3);
-        if (b11.getBlock().getType() == mat) {
-            return b11;
-        }
-        Location b12 = locationUnderPlayer.clone().add(-0.3, 0, -0.3);
-        if (b12.getBlock().getType() == mat) {
-            return b12;
-        }
-        Location b21 = locationUnderPlayer.clone().add(0.3, 0, 0.3);
-        if (b21.getBlock().getType() == mat) {
-            return b21;
-        }
-        Location b22 = locationUnderPlayer.clone().add(-0.3, 0, +0.3);
-        if (b22.getBlock().getType() == mat) {
-            return b22;
-        }
-        return locationUnderPlayer;
-    }
-
     public static boolean isInWater(Player p) {
         Location loc = p.getLocation().subtract(0, 0.2, 0);
-        if (getPlayerStandOnBlockLocations(loc, Material.STATIONARY_WATER).getBlock().getType() == Material.STATIONARY_WATER || getPlayerStandOnBlockLocations(loc, Material.WATER).getBlock().getType() == Material.WATER) {
-            return true;
-        }
-        return false;
+        return getPlayerStandOnBlockLocation(loc, Material.STATIONARY_WATER).getBlock().getType() == Material.STATIONARY_WATER
+                || getPlayerStandOnBlockLocation(loc, Material.WATER).getBlock().getType() == Material.WATER;
     }
 
     public static boolean isInBlock(Player p, Material block) {
         Location loc = p.getLocation().add(0, 0, 0);
-        if (getPlayerStandOnBlockLocations(loc, block).getBlock().getType() == block) {
-            return true;
-        }
-        return false;
+        return getPlayerStandOnBlockLocation(loc, block).getBlock().getType() == block;
     }
 
     public static boolean isOnWater(Player p) {
         Location loc = p.getLocation().subtract(0, 1, 0);
-        if (getPlayerStandOnBlockLocations(loc, Material.STATIONARY_WATER).getBlock().getType() == Material.STATIONARY_WATER) {
-            return true;
-        }
-        return false;
+        return getPlayerStandOnBlockLocation(loc, Material.STATIONARY_WATER).getBlock().getType() == Material.STATIONARY_WATER;
     }
 
     public static boolean isOnBlock(Player p, Material mat) {
         Location loc = p.getLocation().subtract(0, 1, 0);
-        if (getPlayerStandOnBlockLocation(loc, mat).getBlock().getType() == mat) {
-            return true;
-        }
-        return false;
+        return getPlayerStandOnBlockLocation(loc, mat).getBlock().getType() == mat;
     }
 
     public static List<Material> getMaterialsBelow(Player p)

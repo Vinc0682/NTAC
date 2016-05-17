@@ -114,12 +114,12 @@ public class KillauraNPC extends AbstractCombatCheck
     }
 
     @Override
-    protected void onAttackPacketReceive(PacketEvent e, WrapperPlayClientUseEntity packet)
+    protected void onAttackPacketReceive(PacketEvent event, WrapperPlayClientUseEntity packet)
     {
         if(!isEnabled())
             return;
 
-        Player p = e.getPlayer();
+        Player p = event.getPlayer();
         UUID pUUID = p.getUniqueId();
 
         if(!playerLastHitTime.containsKey(pUUID) && !p.hasPermission("ntac.bypass.killaura.npc"))
@@ -149,6 +149,7 @@ public class KillauraNPC extends AbstractCombatCheck
 
         if(packet.getTargetID() == bot.getEntityID())
         {
+            event.setCancelled(true);
             if (MaterialUtils.isSlowWeapon(p.getInventory().getItemInMainHand()))
                 vlManager.addViolation(p, slowWeaponVLIncrement);
             else

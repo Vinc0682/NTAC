@@ -1,123 +1,140 @@
 package net.newtownia.NTAC.Checks.Combat;
 
+import com.comphenix.packetwrapper.WrapperPlayClientKeepAlive;
+import com.comphenix.packetwrapper.WrapperPlayServerKeepAlive;
+import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.events.ListenerPriority;
+import com.comphenix.protocol.events.PacketAdapter;
+import com.comphenix.protocol.events.PacketEvent;
 import net.newtownia.NTAC.NTAC;
+import net.newtownia.NTAC.Utils.MaterialUtils;
 import net.newtownia.NTAC.Utils.PlayerUtils;
-import net.newtownia.NTAC.Utils.PunishUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerVelocityEvent;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
+import java.util.UUID;
 
 public class AntiKnockback extends AbstractCombatCheck
 {
-    private String kickMsg = "No Knockback";
-    private int adjust = 2;
-    private ArrayList<Material> unsolidMaterials;
+    private double minVelocityY = 0.001;
+    private int graceTime = 3;
+
+    private Map<UUID, Integer> playerKeepAliveID;
+    private Map<UUID, Double> playerHitY;
+    private Random rnd;
+
+    private PacketAdapter keepAlivePacketEvent;
 
     public AntiKnockback(NTAC pl, CombatBase combatBase)
     {
-        super(pl, combatBase, "AntiKnockback");
-        loadConfig();
+        super(pl, combatBase, "Anti-Knockback");
 
-        unsolidMaterials = new ArrayList<>();
-        unsolidMaterials.add(Material.AIR);
-        unsolidMaterials.add(Material.SIGN);
-        unsolidMaterials.add(Material.SIGN_POST);
-        unsolidMaterials.add(Material.TRIPWIRE);
-        unsolidMaterials.add(Material.TRIPWIRE_HOOK);
-        unsolidMaterials.add(Material.SUGAR_CANE_BLOCK);
-        unsolidMaterials.add(Material.LONG_GRASS);
-        unsolidMaterials.add(Material.YELLOW_FLOWER);
-    }
-
-    public void loadConfig()
-    {
-        YamlConfiguration config = pl.getConfiguration();
-
-        adjust = Integer.valueOf(config.getString("Anti-Knockback.Adjustment"));
-
-        kickMsg = config.getString("Anti-Knockback.Kick-Message");
-        kickMsg = pl.getMessageUtils().formatMessage(kickMsg);
+        playerKeepAliveID = new HashMap<>();
+        playerHitY = new HashMap<>();
+        rnd = new Random(System.currentTimeMillis());
+        keepAlivePacketEvent = new PacketAdapter(pl, ListenerPriority.HIGH, PacketType.Play.Client.KEEP_ALIVE)
+        {
+            @Override
+            public void onPacketReceiving(PacketEvent event)
+            {
+                handleKeepAlivePacket(event);
+            }
+        };
+        ProtocolLibrary.getProtocolManager().addPacketListener(keepAlivePacketEvent);
     }
 
     @EventHandler
-    public void onPlayerHit(EntityDamageByEntityEvent e)
+    public void onVelocity(PlayerVelocityEvent event)
     {
-        if(!isEnabled())
+        double x = event.getVelocity().getX();
+        double y = event.getVelocity().getY();
+        double z = event.getVelocity().getZ();
+        if (y < minVelocityY)
             return;
 
-        if(!isKnockbackEvent(e))
+        Player p = event.getPlayer();
+        UUID pUUID = p.getUniqueId();
+
+        playerHitY.put(pUUID, p.getLocation().getY());
+
+        int keepAliveId = rnd.nextInt(20000) + 50;
+        playerKeepAliveID.put(pUUID, keepAliveId);
+
+        WrapperPlayServerKeepAlive packet = new WrapperPlayServerKeepAlive();
+        packet.setKeepAliveId(keepAliveId);
+        packet.sendPacket(event.getPlayer());
+    }
+
+    private void handleKeepAlivePacket(PacketEvent event)
+    {
+        Player p = event.getPlayer();
+        UUID pUUID = p.getUniqueId();
+
+        if (event.getPacketType() != PacketType.Play.Client.KEEP_ALIVE)
             return;
 
-        final Player p = (Player)e.getEntity();
-        final Location oldLoc = p.getLocation();
+        WrapperPlayClientKeepAlive packet = new WrapperPlayClientKeepAlive(event.getPacket());
 
-        if(p.hasPermission("ntac.bypass.antiknockback"))
+        if (playerKeepAliveID.getOrDefault(pUUID, -1) != packet.getKeepAliveId())
+            return;
+        event.setCancelled(true); // Don't affect tablist ping
+
+        if (!isKnockable(p))
             return;
 
-        Bukkit.getScheduler().runTaskLater(pl, new Runnable() {
+        Bukkit.getScheduler().runTaskLater(pl, new Runnable()
+        {
             @Override
             public void run()
             {
-                if(!isStillKnockbackable(p))
+                if (!isKnockable(p))
                     return;
 
-                Location currentLoc = p.getLocation();
-
-                if(currentLoc.getY() == oldLoc.getY())
-                    PunishUtils.kickPlayer(p, kickMsg);
+                if (playerKeepAliveID.containsKey(pUUID))
+                {
+                    p.sendMessage("Anti-Knockback?");
+                }
             }
-        }, getTicksToWait(p) + adjust);
+        }, graceTime);
     }
 
-    private boolean isKnockbackEvent(EntityDamageByEntityEvent e)
+    @EventHandler
+    public void onPlayerMove(PlayerMoveEvent event)
     {
-        if(e.isCancelled())
-            return false;
-
-        if(e.getEntityType() != EntityType.PLAYER)
-             return false;
-
-        if(e.getDamager().getType() == EntityType.ENDER_DRAGON)
-            return false;
-
-        Player p = (Player)e.getEntity();
-        Block b = p.getEyeLocation().getBlock().getRelative(BlockFace.UP);
-
-        if(isBlockSolid(b.getType()))
+        Player p = event.getPlayer();
+        UUID pUUID = p.getUniqueId();
+        double yDiff = event.getTo().getY() - event.getFrom().getY();
+        if (yDiff > 0 && playerKeepAliveID.containsKey(pUUID))
         {
-            return false;
+            playerKeepAliveID.remove(pUUID);
+            playerHitY.remove(pUUID);
         }
+    }
 
+    private boolean isKnockable(Player p)
+    {
+        if (p.isDead())
+            return false;
+        if (PlayerUtils.isInWeb(p.getLocation()))
+            return false;
+        Block blockAbove = p.getEyeLocation().getBlock().getRelative(BlockFace.UP);
+        if (blockAbove != null && !MaterialUtils.isUnsolid(blockAbove))
+            return false;
         return true;
     }
 
-    private boolean isStillKnockbackable(Player p)
+    @Override
+    public void loadConfig()
     {
-        if(!p.isOnline())
-            return false;
 
-        if(p.isDead())
-            return false;
-
-        return true;
-    }
-
-    private boolean isBlockSolid(Material m)
-    {
-        return !unsolidMaterials.contains(m);
-    }
-
-    public int getTicksToWait(Player p)
-    {
-        return  PlayerUtils.getPing(p) / 50;
     }
 }

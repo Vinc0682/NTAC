@@ -12,10 +12,13 @@ import net.newtownia.NTAC.Utils.PlayerUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
+
+import java.util.UUID;
 
 /**
  * Created by Vinc0682 on 14.05.2016.
@@ -24,7 +27,6 @@ public class NCPDragDownHook implements NCPHook
 {
     private NTAC pl;
     private NCPDragDown ncpDragDown;
-    private int invalidateThreshold = 250;
     private double downSpeed = 0.5;
 
     private ViolationManager vlManager;
@@ -40,8 +42,18 @@ public class NCPDragDownHook implements NCPHook
         loadConfig();
         Bukkit.getScheduler().runTaskTimer(pl, new Runnable() {
             @Override
-            public void run() {
-                vlManager.resetAllOldViolation(invalidateThreshold);
+            public void run()
+            {
+                for (UUID pUUID : vlManager.getAllViolations().keySet())
+                {
+                    OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(pUUID);
+                    if (offlinePlayer.isOnline())
+                    {
+                        Player p = offlinePlayer.getPlayer();
+                        if (PlayerUtils.isPlayerOnGround(p))
+                            vlManager.resetPlayerViolation(p);
+                    }
+                }
             }
         }, 2L, 2L);
     }
@@ -76,6 +88,8 @@ public class NCPDragDownHook implements NCPHook
                 p.teleport(loc, PlayerTeleportEvent.TeleportCause.UNKNOWN);
             return false;
         }
+        else
+            vlManager.resetPlayerViolation(p);
         return true;
     }
 
@@ -86,7 +100,6 @@ public class NCPDragDownHook implements NCPHook
 
     public void loadConfig()
     {
-        invalidateThreshold = Integer.parseInt(pl.getConfiguration().getString("NCP-Drag-Down.Invalidate-Threshold"));
         downSpeed = Double.parseDouble(pl.getConfiguration().getString("NCP-Drag-Down.Down-Speed"));
     }
 
