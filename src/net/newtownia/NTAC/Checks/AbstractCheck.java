@@ -48,5 +48,5 @@ public abstract class AbstractCheck implements Listener
         onPlayerDisconnect(event.getPlayer());
     }
 
-    public void onUpdate() {}
+    public void onUpdate(Player p) {}
 }

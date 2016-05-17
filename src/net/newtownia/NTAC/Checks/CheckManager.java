@@ -9,6 +9,7 @@ import net.newtownia.NTAC.Checks.Player.Headless;
 import net.newtownia.NTAC.Checks.Player.SkinDerp;
 import net.newtownia.NTAC.NTAC;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +36,8 @@ public class CheckManager
             @Override
             public void run() {
                 for (AbstractCheck check : allChecks)
-                    check.onUpdate();
+                    for (Player p : Bukkit.getOnlinePlayers())
+                        check.onUpdate(p);
             }
         }, 1L, 1L);
     }

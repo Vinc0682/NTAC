@@ -4,6 +4,7 @@ import com.comphenix.packetwrapper.WrapperPlayClientUseEntity;
 import com.comphenix.protocol.events.PacketEvent;
 import net.newtownia.NTAC.Checks.AbstractCheck;
 import net.newtownia.NTAC.NTAC;
+import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 /**
@@ -22,4 +23,7 @@ public abstract class AbstractCombatCheck extends AbstractCheck
 
     protected void onAttackPacketReceive(PacketEvent event, WrapperPlayClientUseEntity packet) {};
     protected void onAttack(EntityDamageByEntityEvent event) {};
+
+    @Override
+    public void onUpdate(Player p) {}
 }
