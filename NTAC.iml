@@ -21,7 +21,7 @@
     <orderEntry type="module-library">
       <library name="ProtocolLib">
         <CLASSES>
-          <root url="jar://$USER_HOME$/Downloads/ProtocolLib.jar!/" />
+          <root url="jar://D:/UserData/Vincent/Server/NTAC Debug/Dependencies/ProtocolLib(4).jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -30,7 +30,7 @@
     <orderEntry type="module-library">
       <library name="NTApi">
         <CLASSES>
-          <root url="jar://$USER_HOME$/Downloads/NTApi.jar!/" />
+          <root url="jar://D:/UserData/Vincent/Server/NTAC Debug/Dependencies/NTApi.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -39,7 +39,7 @@
     <orderEntry type="module-library">
       <library name="Netty">
         <CLASSES>
-          <root url="jar://$USER_HOME$/Downloads/netty-all-4.0.36.Final.jar!/" />
+          <root url="jar://$USER_HOME$/Documents/Minecraft-Development/netty-all-4.0.35.Final.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -48,18 +48,18 @@
     <orderEntry type="module-library">
       <library name="SpigotAPI">
         <CLASSES>
-          <root url="jar://$USER_HOME$/Downloads/spigot-1.9.4-R0.1-SNAPSHOT-latest.jar!/" />
+          <root url="jar://D:/UserData/Vincent/Server/NTAC Debug/spigot.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES>
-          <root url="jar://$USER_HOME$/Downloads/spigot-1.9.4-R0.1-SNAPSHOT-latest.jar!/" />
+          <root url="jar://D:/UserData/Vincent/Server/NTAC Debug/spigot.jar!/" />
         </SOURCES>
       </library>
     </orderEntry>
     <orderEntry type="module-library">
       <library name="NoCheatPlus">
         <CLASSES>
-          <root url="jar://$USER_HOME$/Downloads/NoCheatPlus(5).jar!/" />
+          <root url="jar://D:/UserData/Vincent/Server/NTAC Debug/Dependencies/NoCheatPlus.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

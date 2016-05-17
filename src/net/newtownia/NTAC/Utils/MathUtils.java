@@ -51,8 +51,13 @@ public class MathUtils
 
     public static boolean isSame(double a, double b, double threshold)
     {
+        if (a == b)
+            return true;
+        if (threshold == 0)
+            return a == b;
+
         double min = a - threshold;
         double max = a + threshold;
-        return b < min || b > max;
+        return b > min && b < max;
     }
 }

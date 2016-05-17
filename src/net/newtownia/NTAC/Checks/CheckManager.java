@@ -30,6 +30,14 @@ public class CheckManager
         addChecks();
         registerCheckListeners();
         switchChecksByConfig();
+
+        Bukkit.getScheduler().runTaskTimer(pl, new Runnable() {
+            @Override
+            public void run() {
+                for (AbstractCheck check : allChecks)
+                    check.onUpdate();
+            }
+        }, 1L, 1L);
     }
 
     public void reload()
