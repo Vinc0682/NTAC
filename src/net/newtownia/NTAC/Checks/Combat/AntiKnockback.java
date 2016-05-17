@@ -7,9 +7,12 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
+import net.newtownia.NTAC.Action.ActionData;
+import net.newtownia.NTAC.Action.ViolationManager;
 import net.newtownia.NTAC.NTAC;
 import net.newtownia.NTAC.Utils.MaterialUtils;
 import net.newtownia.NTAC.Utils.PlayerUtils;
+import net.newtownia.NTAC.Utils.PunishUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -26,10 +29,11 @@ import java.util.UUID;
 public class AntiKnockback extends AbstractCombatCheck
 {
     private double minVelocityY = 0.001;
-    private int graceTime = 3;
+    private int adjustment = 3;
+    private ActionData actionData;
 
     private Map<UUID, Integer> playerKeepAliveID;
-    private Map<UUID, Double> playerHitY;
+    private ViolationManager vlManager;
     private Random rnd;
 
     private PacketAdapter keepAlivePacketEvent;
@@ -39,7 +43,7 @@ public class AntiKnockback extends AbstractCombatCheck
         super(pl, combatBase, "Anti-Knockback");
 
         playerKeepAliveID = new HashMap<>();
-        playerHitY = new HashMap<>();
+        vlManager = new ViolationManager();
         rnd = new Random(System.currentTimeMillis());
         keepAlivePacketEvent = new PacketAdapter(pl, ListenerPriority.HIGH, PacketType.Play.Client.KEEP_ALIVE)
         {
@@ -50,21 +54,18 @@ public class AntiKnockback extends AbstractCombatCheck
             }
         };
         ProtocolLibrary.getProtocolManager().addPacketListener(keepAlivePacketEvent);
+
+        loadConfig();
     }
 
     @EventHandler
     public void onVelocity(PlayerVelocityEvent event)
     {
-        double x = event.getVelocity().getX();
-        double y = event.getVelocity().getY();
-        double z = event.getVelocity().getZ();
-        if (y < minVelocityY)
+        if (event.getVelocity().getY() < minVelocityY)
             return;
 
         Player p = event.getPlayer();
         UUID pUUID = p.getUniqueId();
-
-        playerHitY.put(pUUID, p.getLocation().getY());
 
         int keepAliveId = rnd.nextInt(20000) + 50;
         playerKeepAliveID.put(pUUID, keepAliveId);
@@ -101,10 +102,11 @@ public class AntiKnockback extends AbstractCombatCheck
 
                 if (playerKeepAliveID.containsKey(pUUID))
                 {
-                    p.sendMessage("Anti-Knockback?");
+                    vlManager.addViolation(p, 1);
+                    PunishUtils.runViolationAction(p, vlManager, actionData);
                 }
             }
-        }, graceTime);
+        }, adjustment);
     }
 
     @EventHandler
@@ -114,10 +116,7 @@ public class AntiKnockback extends AbstractCombatCheck
         UUID pUUID = p.getUniqueId();
         double yDiff = event.getTo().getY() - event.getFrom().getY();
         if (yDiff > 0 && playerKeepAliveID.containsKey(pUUID))
-        {
             playerKeepAliveID.remove(pUUID);
-            playerHitY.remove(pUUID);
-        }
     }
 
     private boolean isKnockable(Player p)
@@ -135,6 +134,8 @@ public class AntiKnockback extends AbstractCombatCheck
     @Override
     public void loadConfig()
     {
-
+        adjustment = Integer.valueOf(pl.getConfiguration().getString("Anti-Knockback.Adjustment"));
+        minVelocityY = Double.valueOf(pl.getConfiguration().getString("Anti-Knockback.Minimum-Y-Velocity"));
+        actionData = new ActionData(pl.getConfiguration(), "Anti-Knockback.Actions");
     }
 }

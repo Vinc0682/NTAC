@@ -129,15 +129,6 @@ Aimbot:
       - 'ntac kick %PLAYER% %%Kick-Aimbot%%'
       - 'ntac notify %%Notify-Aimbot-Kick%%'
 
-# Anti-Knockback / NoVelocity-Check
-Anti-Knockback:
-
-  # Adjustment (Ticks) to prevent false positives DEFAULT: 2
-  Adjustment: 2
-
-  # The message shown when sb. gets kicked for NoVelocity DEFAULT: No Knockback
-  Kick-Message: No Knockback
-
 # Auto-Clicker-Check, in development
 Auto-Clicker:
 
@@ -161,6 +152,25 @@ Auto-Clicker:
   # The time until the VL get's invalidated (in ms)
   # NOTE: The VL only get's invalidated when there are no new VLs.
   Invalidate-Threshold: 60000
+
+# Anti-Knockback / NoVelocity-Check
+Anti-Knockback:
+
+  # The adjustment is a delay (in ticks) to give player more time to move even if he should already have
+  Adjustment: 3
+
+  # Every velocity which is weaker than the given value on the y axis will be ignored
+  Minimum-Y-Velocity: 0.001
+
+  # The time until the VL get's invalidated (in ms)
+  # NOTE: The VL only get's invalidated when there are no new VLs.
+  Invalidate-Threshold: 60000
+
+  # The VL equals the count of velocitys the players did not react to
+  Actions:
+    5:
+      - 'ntac kick %PLAYER% %%Kick-AntiKnockback%%'
+      - 'ntac notify %%Notify-AntiKnockback-Kick%%'
 
 # AutoArmor works by adding a special diamond chestplate to the inventory of the player looks up if the player
 # put it on in a certain time.
