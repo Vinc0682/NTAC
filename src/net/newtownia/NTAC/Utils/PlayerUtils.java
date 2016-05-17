@@ -46,6 +46,12 @@ public class PlayerUtils
                 loc.getBlock().getRelative(BlockFace.UP).getType() == Material.WEB;
     }
 
+    public static boolean isUnderBlock(Player p)
+    {
+        Block blockAbove = p.getEyeLocation().getBlock().getRelative(BlockFace.UP);
+        return blockAbove != null && !MaterialUtils.isUnsolid(blockAbove);
+    }
+
     public static Location getPlayerStandOnBlockLocation(Location locationUnderPlayer, Material mat) {
         Location b11 = locationUnderPlayer.clone().add(0.3, 0, -0.3);
         if (b11.getBlock().getType() != mat) {

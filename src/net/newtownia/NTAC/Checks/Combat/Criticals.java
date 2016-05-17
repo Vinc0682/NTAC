@@ -1,7 +1,9 @@
 package net.newtownia.NTAC.Checks.Combat;
 
 import net.newtownia.NTAC.NTAC;
+import net.newtownia.NTAC.Utils.PlayerUtils;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -15,46 +17,47 @@ import java.util.HashMap;
 public class Criticals extends AbstractCombatCheck {
     private static HashMap<Player, Integer> time = new HashMap<>();
 
-    public Criticals(NTAC pl, CombatBase combatBase) {
+    public Criticals(NTAC pl, CombatBase combatBase)
+    {
         super(pl, combatBase, "Criticals");
     }
 
-    @Override
-    public void onUpdate(Player p) {
+    public void onUpdate(Player p)
+    {
         if (!isEnabled())
             return;
-        if (time.containsKey(p)) {
-            if (time.get(p) <= 1) {
+        if (time.containsKey(p))
+        {
+            if (time.get(p) <= 1)
                 time.remove(p);
-            } else {
+            else
                 time.put(p, time.get(p) - 1);
-            }
         }
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
-    public void onPlayerJoin(EntityDamageByEntityEvent event) {
+    public void onEntityDamage(EntityDamageByEntityEvent event)
+    {
         if (!isEnabled())
             return;
-        if (!(event.getDamager() instanceof Player)) {
+        if (!(event.getDamager() instanceof Player && event.getDamager().getType() == EntityType.PLAYER))
             return;
-        }
-        Player player = (Player) event.getDamager();
+        Player p = (Player) event.getDamager();
 
-        if (player.isOp()) {
+        if (p.hasPermission("ntac.bypass.criticals"))
             return;
-        }
-        if (player.getLocation().getBlock().getRelative(BlockFace.DOWN).isLiquid()) {
+        if (p.getLocation().getBlock().getRelative(BlockFace.DOWN).isLiquid())
             return;
-        }
-        if (player.getLocation().getBlock().getRelative(BlockFace.UP).isLiquid()) {
+        if (p.getLocation().getBlock().getRelative(BlockFace.UP).isLiquid())
             return;
-        }
-        if ((!player.isOnGround()) && (!player.isFlying())) {
-            if (player.getLocation().getY() % 1.0D == 0.0D) {
-                if (player.getLocation().getBlock().getRelative(BlockFace.DOWN).getType().isSolid()) {
+        if (!PlayerUtils.isPlayerOnGround(p) && !p.isFlying())
+        {
+            if (p.getLocation().getY() % 1.0D == 0.0D) {
+                if (p.getLocation().getBlock().getRelative(BlockFace.DOWN).getType().isSolid())
+                {
                     event.setCancelled(true);
-                    //flag
+
+
                 }
             }
         }

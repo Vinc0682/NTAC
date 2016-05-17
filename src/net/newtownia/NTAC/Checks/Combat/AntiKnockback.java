@@ -10,12 +10,9 @@ import com.comphenix.protocol.events.PacketEvent;
 import net.newtownia.NTAC.Action.ActionData;
 import net.newtownia.NTAC.Action.ViolationManager;
 import net.newtownia.NTAC.NTAC;
-import net.newtownia.NTAC.Utils.MaterialUtils;
 import net.newtownia.NTAC.Utils.PlayerUtils;
 import net.newtownia.NTAC.Utils.PunishUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -144,8 +141,11 @@ public class AntiKnockback extends AbstractCombatCheck
             return false;
         if (PlayerUtils.isInWeb(p.getLocation()))
             return false;
-        Block blockAbove = p.getEyeLocation().getBlock().getRelative(BlockFace.UP);
-        if (blockAbove != null && !MaterialUtils.isUnsolid(blockAbove))
+        if (PlayerUtils.isUnderBlock(p))
+            return false;
+        if (p.isInsideVehicle())
+            return false;
+        if (p.getPassenger() != null)
             return false;
         return true;
     }

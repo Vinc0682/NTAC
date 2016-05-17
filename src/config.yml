@@ -199,7 +199,7 @@ SkinDerp:
   Time-Threshold: 100
 
   # Count of unlegit changes till the player get kicked DEFAULT: 10
-  Count-Threshold: 10
+  Count-Threshold: 50
 
   # Kick-message DEFAULT: Skinderp
   Kick-Message: Skinderp

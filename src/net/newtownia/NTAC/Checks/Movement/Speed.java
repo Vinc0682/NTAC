@@ -1,6 +1,7 @@
 package net.newtownia.NTAC.Checks.Movement;
 
 import net.newtownia.NTAC.NTAC;
+import net.newtownia.NTAC.Utils.PlayerUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -33,13 +34,16 @@ public class Speed extends AbstractMovementCheck {
         Location to = event.getTo();
         double dX = from.getX() - to.getX();
         double dZ = from.getZ() - to.getZ();
-        if (p.hasPermission("//permission,doe") || p.getAllowFlight() || p.isInsideVehicle())
+        if (p.hasPermission("ntac.bypass.speed") || p.isFlying() || p.isInsideVehicle())
             return;
 
-        if (PlayerHelper.isUnderBlock(p))
+        if (PlayerUtils.isUnderBlock(p))
             return;
 
-        if (dX > 0.633 || dZ > 0.633 || dX < -0.633 || dZ < -0.633) {
+        double speed = 0.633;
+
+        if (dX > speed || dZ > speed || dX < -speed || dZ < -speed)
+        {
             boolean check = p.getLocation().add(0, 2, 0).getBlock().getType() != Material.AIR || p.getLocation().add(0, 1.8, 0).getBlock().getType() != Material.AIR || p.getLocation().add(1, 2, 0).getBlock().getType() != Material.AIR || p.getLocation().add(1, 1.8, 0).getBlock().getType() != Material.AIR || p.getLocation().add(1, 2, 1).getBlock().getType() != Material.AIR || p.getLocation().add(1, 1.8, 1).getBlock().getType() != Material.AIR || p.getLocation().add(0, 2, 1).getBlock().getType() != Material.AIR || p.getLocation().add(0, 1.8, 1).getBlock().getType() != Material.AIR || p.getLocation().add(-1, 2, 0).getBlock().getType() != Material.AIR || p.getLocation().add(-1, 1.8, 0).getBlock().getType() != Material.AIR || p.getLocation().add(-1, 2, -1).getBlock().getType() != Material.AIR || p.getLocation().add(-1, 1.8, -1).getBlock().getType() != Material.AIR || p.getLocation().add(0, 2, -1).getBlock().getType() != Material.AIR || p.getLocation().add(0, 1.8, -1).getBlock().getType() != Material.AIR || p.getLocation().add(1, 2, -1).getBlock().getType() != Material.AIR || p.getLocation().add(1, 1.8, -1).getBlock().getType() != Material.AIR || p.getLocation().add(-1, 2, 1).getBlock().getType() != Material.AIR || p.getLocation().add(-1, 1.8, 1).getBlock().getType() != Material.AIR;
             if (check)
                 return;
