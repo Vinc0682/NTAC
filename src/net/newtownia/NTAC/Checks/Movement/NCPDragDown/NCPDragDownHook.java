@@ -12,13 +12,11 @@ import net.newtownia.NTAC.Utils.PlayerUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
-
-import java.util.UUID;
 
 /**
  * Created by Vinc0682 on 14.05.2016.
@@ -38,24 +36,7 @@ public class NCPDragDownHook implements NCPHook
         this.ncpDragDown = ncpDragDown;
 
         vlManager = new ViolationManager();
-
         loadConfig();
-        Bukkit.getScheduler().runTaskTimer(pl, new Runnable() {
-            @Override
-            public void run()
-            {
-                for (UUID pUUID : vlManager.getAllViolations().keySet())
-                {
-                    OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(pUUID);
-                    if (offlinePlayer.isOnline())
-                    {
-                        Player p = offlinePlayer.getPlayer();
-                        if (PlayerUtils.isPlayerOnGround(p))
-                            vlManager.resetPlayerViolation(p);
-                    }
-                }
-            }
-        }, 2L, 2L);
     }
 
     @Override
@@ -91,6 +72,13 @@ public class NCPDragDownHook implements NCPHook
         else
             vlManager.resetPlayerViolation(p);
         return true;
+    }
+
+    public void onPlayerMove(PlayerMoveEvent event)
+    {
+        Player p = event.getPlayer();
+        if (vlManager.getViolation(p) > 0 && PlayerUtils.isPlayerOnGround(p))
+            vlManager.resetPlayerViolation(p);
     }
 
     private boolean isUnsolid(Block b)

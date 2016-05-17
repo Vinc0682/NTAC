@@ -82,7 +82,7 @@ public class Jesus extends AbstractMovementCheck
             return;
         }
 
-        if (PlayerUtils.isOnWater(p) && !PlayerUtils.isPlayerOnGroundNTAC(p))
+        if (PlayerUtils.isOnWater(p) && !PlayerUtils.isPlayerOnGroundNTACOld(p))
         {
             if(jumpJesus)
             {

@@ -20,8 +20,10 @@ public class NCPDragDown extends AbstractMovementCheck
     }
 
     @Override
-    public void onPlayerMove(PlayerMoveEvent event) {
-
+    public void onPlayerMove(PlayerMoveEvent event)
+    {
+        if (hook != null)
+            hook.onPlayerMove(event);
     }
 
     @Override

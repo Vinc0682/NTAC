@@ -73,6 +73,8 @@ public class Aimbot extends AbstractCombatCheck
             Bukkit.getLogger().info("Unable to find attacked entity");
             return;
         }
+        if (EntityUtils.isPassive(attacked))
+            return;
 
         double angleDiff = MathUtils.getYawDiff(p.getLocation(), attacked.getLocation());
         if (angleDiff < 0)

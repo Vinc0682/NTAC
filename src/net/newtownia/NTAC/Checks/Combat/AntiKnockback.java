@@ -61,11 +61,17 @@ public class AntiKnockback extends AbstractCombatCheck
     @EventHandler
     public void onVelocity(PlayerVelocityEvent event)
     {
+        if (!isEnabled())
+            return;
+
         if (event.getVelocity().getY() < minVelocityY)
             return;
 
         Player p = event.getPlayer();
         UUID pUUID = p.getUniqueId();
+
+        if (p.hasPermission("ntac.bypass.antiknockback"))
+            return;
 
         int keepAliveId = rnd.nextInt(20000) + 50;
         playerKeepAliveID.put(pUUID, keepAliveId);
@@ -77,8 +83,14 @@ public class AntiKnockback extends AbstractCombatCheck
 
     private void handleKeepAlivePacket(PacketEvent event)
     {
+        if (!isEnabled())
+            return;
+
         Player p = event.getPlayer();
         UUID pUUID = p.getUniqueId();
+
+        if (p.hasPermission("ntac.bypass.antiknockback"))
+            return;
 
         if (event.getPacketType() != PacketType.Play.Client.KEEP_ALIVE)
             return;
@@ -112,8 +124,15 @@ public class AntiKnockback extends AbstractCombatCheck
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event)
     {
+        if (!isEnabled())
+            return;
+
         Player p = event.getPlayer();
         UUID pUUID = p.getUniqueId();
+
+        if (p.hasPermission("ntac.bypass.antiknockback"))
+            return;
+
         double yDiff = event.getTo().getY() - event.getFrom().getY();
         if (yDiff > 0 && playerKeepAliveID.containsKey(pUUID))
             playerKeepAliveID.remove(pUUID);
