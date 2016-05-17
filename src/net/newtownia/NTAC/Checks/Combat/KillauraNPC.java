@@ -18,10 +18,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
+import java.util.UUID;
 
 public class KillauraNPC extends AbstractCombatCheck
 {
@@ -46,11 +48,6 @@ public class KillauraNPC extends AbstractCombatCheck
 
     private ActionData actionData;
     private ViolationManager vlManager;
-
-    private List<EntityType> ignoredEntityType = Arrays.asList(EntityType.BOAT, EntityType.MINECART,
-            EntityType.ITEM_FRAME, EntityType.ARMOR_STAND, EntityType.MINECART_CHEST, EntityType.MINECART_COMMAND,
-            EntityType.MINECART_FURNACE, EntityType.MINECART_HOPPER, EntityType.MINECART_MOB_SPAWNER,
-            EntityType.MINECART_TNT);
 
     public KillauraNPC(NTAC pl, CombatBase combatBase)
     {
@@ -134,7 +131,7 @@ public class KillauraNPC extends AbstractCombatCheck
                     return;
                 }
 
-                if (ignoredEntityType.contains(attacked.getType()))
+                if (EntityUtils.isPassive(attacked))
                     return;
 
                 botId = Identity.Generator.generateIdentityForPlayer(p, attacked);

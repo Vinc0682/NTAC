@@ -12,12 +12,14 @@ import net.newtownia.NTAC.Utils.PlayerUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -30,6 +32,7 @@ public class NCPDragDownHook implements NCPHook
     private double downSpeed = 0.5;
 
     private ViolationManager vlManager;
+    private Map<UUID, Long> playerResetTimes;
     private boolean hooked = false;
 
     public NCPDragDownHook(NTAC pl, NCPDragDown ncpDragDown)
@@ -38,24 +41,8 @@ public class NCPDragDownHook implements NCPHook
         this.ncpDragDown = ncpDragDown;
 
         vlManager = new ViolationManager();
-
+        playerResetTimes = new HashMap<>();
         loadConfig();
-        Bukkit.getScheduler().runTaskTimer(pl, new Runnable() {
-            @Override
-            public void run()
-            {
-                for (UUID pUUID : vlManager.getAllViolations().keySet())
-                {
-                    OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(pUUID);
-                    if (offlinePlayer.isOnline())
-                    {
-                        Player p = offlinePlayer.getPlayer();
-                        if (PlayerUtils.isPlayerOnGround(p))
-                            vlManager.resetPlayerViolation(p);
-                    }
-                }
-            }
-        }, 2L, 2L);
     }
 
     @Override
@@ -91,6 +78,21 @@ public class NCPDragDownHook implements NCPHook
         else
             vlManager.resetPlayerViolation(p);
         return true;
+    }
+
+    public void onPlayerMove(PlayerMoveEvent event)
+    {
+        Player p = event.getPlayer();
+        UUID pUUID = p.getUniqueId();
+        boolean allowReset = true;
+        if (playerResetTimes.containsKey(pUUID) &&
+                System.currentTimeMillis() - playerResetTimes.get(pUUID) < 1000)
+            allowReset = false;
+        if (PlayerUtils.isPlayerOnGround(p) && allowReset)
+        {
+            vlManager.resetPlayerViolation(p);
+            playerResetTimes.put(pUUID, System.currentTimeMillis());
+        }
     }
 
     private boolean isUnsolid(Block b)

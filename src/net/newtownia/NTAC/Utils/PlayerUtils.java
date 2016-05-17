@@ -14,30 +14,24 @@ import java.util.List;
 
 public class PlayerUtils
 {
-    private static ArrayList<Material> usableItems = null;
-
     public static boolean isPlayerOnGround(Player p)
     {
-        try
-        {
-            if (NCPUtils.hasNoCheatPlus())
-                return NCPLayer.isPlayerOnGround(p);
-            else
-                return isPlayerOnGroundNTAC(p);
-        }
-        catch (ClassNotFoundException e)
-        {
-            return isPlayerOnGroundNTAC(p);
-        }
-        catch (Exception e)
-        {
-            return isPlayerOnGroundNTAC(p);
-        }
+        return isPlayerOnGroundNTAC(p);
     }
 
     public static boolean isPlayerOnGroundNTAC(Player p)
     {
-        List<Material> materials = getMaterialsBelow(p);
+        List<Material> materials = getMaterialsAround(p.getLocation().clone().add(0, -0.001, 0));
+        for (Material m : materials)
+            if (!MaterialUtils.isUnsolid(m) && m != Material.WATER && m != Material.STATIONARY_WATER &&
+                    m != Material.LAVA && m != Material.STATIONARY_LAVA)
+                return true;
+        return false;
+    }
+
+    public static boolean isPlayerOnGroundNTACOld(Player p)
+    {
+        List<Material> materials = getMaterialsBelowOld(p);
         for (Material m : materials)
             if (m != Material.AIR && !MaterialUtils.isUnsolid(m) &&
                     m != Material.WATER && m != Material.STATIONARY_WATER &&
@@ -93,12 +87,23 @@ public class PlayerUtils
         return getPlayerStandOnBlockLocation(loc, mat).getBlock().getType() == mat;
     }
 
-    public static List<Material> getMaterialsBelow(Player p)
+    public static List<Material> getMaterialsAround(Location loc)
     {
-        return getMaterialsBelow(p.getLocation());
+        List<Material> result = new ArrayList<>();
+        result.add(loc.getBlock().getType());
+        result.add(loc.clone().add(0.3, 0, -0.3).getBlock().getType());
+        result.add(loc.clone().add(-0.3, 0, -0.3).getBlock().getType());
+        result.add(loc.clone().add(0.3, 0, 0.3).getBlock().getType());
+        result.add(loc.clone().add(-0.3, 0, 0.3).getBlock().getType());
+        return result;
     }
 
-    public static List<Material> getMaterialsBelow(Location loc)
+    public static List<Material> getMaterialsBelowOld(Player p)
+    {
+        return getMaterialsBelowOld(p.getLocation());
+    }
+
+    public static List<Material> getMaterialsBelowOld(Location loc)
     {
         Block blockDown = loc.getBlock().getRelative(BlockFace.DOWN);
 
@@ -118,7 +123,7 @@ public class PlayerUtils
 
     public static boolean materialsBelowContains(Player p, Material m)
     {
-        return getMaterialsBelow(p).contains(m);
+        return getMaterialsBelowOld(p).contains(m);
     }
 
     public static int getPing(Player p)
