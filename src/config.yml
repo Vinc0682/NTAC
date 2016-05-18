@@ -24,7 +24,7 @@ Enabled:
   Anti-Knockback: true # Recoded and awesome DEFAULT: true
   Auto-Clicker: true # Code stable, customize dat settings DEFAULT: true
   Auto-Armor: false # Stable, take a look at InvMove too! DEFAULT: true
-  Criticals: false # Devolpment DEFAULT: false (by HorizonCode)
+  Criticals: true # Stable, by HorizonCode DEFAULT: true
 
   #Movement (all require movement base enabled)
   Anti-AFK: true # Beta, testing on newtownia.net + more subchecks'll be added soon! DEFAULT: true
@@ -189,23 +189,21 @@ Auto-Armor:
   # Commands run when the player is suspected for AutoArmor.
   Actions:
     8:
-      - 'ntac kick %%Kick-AutoArmor%%'
+      - 'ntac kick %PLAYER% %%Kick-AutoArmor%%'
       - 'ntac notify %%Notify-AutoArmor-Kick%%'
 
 Criticals:
 
+  # The time until the VL get's invalidated (in ms)
+  # NOTE: The VL only get's invalidated when there are no new VLs.
+  Invalidate-Threshold: 60000
+
   # Action data, VL equal to the count of suspicious attacks
   Actions:
-    1: 'ntac nofity Critcals? VL %VL%'
-    2: 'ntac nofity Critcals? VL %VL%'
-    3: 'ntac nofity Critcals? VL %VL%'
-    4: 'ntac nofity Critcals? VL %VL%'
-    5: 'ntac nofity Critcals? VL %VL%'
-    6: 'ntac nofity Critcals? VL %VL%'
-    7: 'ntac nofity Critcals? VL %VL%'
-    8: 'ntac nofity Critcals? VL %VL%'
-    9: 'ntac nofity Critcals? VL %VL%'
-    10: 'ntac nofity Critcals? VL %VL%'
+    3: 'cancel'
+    20:
+      - 'ntac kick %PLAYER% %%Kick-Criticals%%'
+      - 'ntac notify %%Notify-Criticals-Kick%%'
 
 
 # Skinderp-Properties:

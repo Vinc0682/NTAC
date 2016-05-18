@@ -11,22 +11,18 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
-import java.util.HashMap;
-
 /**
  * Created by HorizonCode on 17.05.2016.
  */
 public class Criticals extends AbstractCombatCheck
 {
+    private int invalidateThreshold = 60000;
     private ActionData actionData;
-
-    private HashMap<Player, Integer> time;
     private ViolationManager vlManager;
 
     public Criticals(NTAC pl, CombatBase combatBase)
     {
         super(pl, combatBase, "Criticals");
-        time = new HashMap<>();
         vlManager = new ViolationManager();
 
         loadConfig();
@@ -35,15 +31,7 @@ public class Criticals extends AbstractCombatCheck
     @Override
     public void onUpdate(Player p)
     {
-        if (!isEnabled())
-            return;
-        if (time.containsKey(p))
-        {
-            if (time.get(p) <= 1)
-                time.remove(p);
-            else
-                time.put(p, time.get(p) - 1);
-        }
+        vlManager.resetAllOldViolation(invalidateThreshold);
     }
 
     @SuppressWarnings("deprecation")
@@ -52,7 +40,7 @@ public class Criticals extends AbstractCombatCheck
     {
         if (!isEnabled())
             return;
-        if (!(event.getDamager() instanceof Player && event.getDamager().getType() == EntityType.PLAYER))
+        if (event.getDamager().getType() != EntityType.PLAYER)
             return;
         Player p = (Player) event.getDamager();
         if (p.hasPermission("ntac.bypass.criticals"))
@@ -77,8 +65,14 @@ public class Criticals extends AbstractCombatCheck
     }
 
     @Override
+    protected void onPlayerDisconnect(Player p) {
+        vlManager.resetPlayerViolation(p);
+    }
+
+    @Override
     public void loadConfig()
     {
+        invalidateThreshold = Integer.parseInt(pl.getConfiguration().getString("Criticals.Invalidate-Threshold"));
         actionData = new ActionData(pl.getConfiguration(), "Criticals.Actions");
     }
 }
