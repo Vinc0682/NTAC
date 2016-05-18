@@ -192,6 +192,22 @@ Auto-Armor:
       - 'ntac kick %%Kick-AutoArmor%%'
       - 'ntac notify %%Notify-AutoArmor-Kick%%'
 
+Criticals:
+
+  # Action data, VL equal to the count of suspicious attacks
+  Actions:
+    1: 'ntac nofity Critcals? VL %VL%'
+    2: 'ntac nofity Critcals? VL %VL%'
+    3: 'ntac nofity Critcals? VL %VL%'
+    4: 'ntac nofity Critcals? VL %VL%'
+    5: 'ntac nofity Critcals? VL %VL%'
+    6: 'ntac nofity Critcals? VL %VL%'
+    7: 'ntac nofity Critcals? VL %VL%'
+    8: 'ntac nofity Critcals? VL %VL%'
+    9: 'ntac nofity Critcals? VL %VL%'
+    10: 'ntac nofity Critcals? VL %VL%'
+
+
 # Skinderp-Properties:
 SkinDerp:
 

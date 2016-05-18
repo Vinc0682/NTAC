@@ -75,6 +75,7 @@ public class CheckManager
         allChecks.add(new AntiKnockback(pl, combatBase));
         allChecks.add(new AutoClicker(pl, combatBase));
         allChecks.add(new AutoArmor(pl, combatBase));
+        allChecks.add(new Criticals(pl, combatBase));
 
         allChecks.add(new SkinDerp(pl));
         allChecks.add(new Headless(pl));

@@ -27,6 +27,7 @@ public class AntiKnockback extends AbstractCombatCheck
 {
     private double minVelocityY = 0.001;
     private int adjustment = 3;
+    private int invalidateThreshold = 60000;
     private ActionData actionData;
 
     private Map<UUID, Integer> playerKeepAliveID;
@@ -53,6 +54,13 @@ public class AntiKnockback extends AbstractCombatCheck
         ProtocolLibrary.getProtocolManager().addPacketListener(keepAlivePacketEvent);
 
         loadConfig();
+
+        Bukkit.getScheduler().runTaskTimer(pl, new Runnable() {
+            @Override
+            public void run() {
+                vlManager.resetAllOldViolation(invalidateThreshold);
+            }
+        }, 60L, 60L);
     }
 
     @EventHandler
@@ -130,7 +138,8 @@ public class AntiKnockback extends AbstractCombatCheck
             return;
 
         double yDiff = event.getTo().getY() - event.getFrom().getY();
-        if (yDiff > 0 && playerKeepAliveID.containsKey(pUUID))
+        if (yDiff > 0 && playerKeepAliveID.containsKey(pUUID) ||
+                p.getFallDistance() > 1.5) // Ignore falling players
             playerKeepAliveID.remove(pUUID);
     }
 
@@ -154,6 +163,7 @@ public class AntiKnockback extends AbstractCombatCheck
     {
         adjustment = Integer.valueOf(pl.getConfiguration().getString("Anti-Knockback.Adjustment"));
         minVelocityY = Double.valueOf(pl.getConfiguration().getString("Anti-Knockback.Minimum-Y-Velocity"));
+        invalidateThreshold = Integer.valueOf(pl.getConfiguration().getString("Anti-Knockback.Invalidate-Threshold"));
         actionData = new ActionData(pl.getConfiguration(), "Anti-Knockback.Actions");
     }
 }
