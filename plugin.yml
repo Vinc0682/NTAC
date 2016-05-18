@@ -26,12 +26,16 @@ permissions:
     default: OP
   ntac.bypass.autoclicker:
     default: OP
+  ntac.bypass.criticals:
+    default: OP
   ntac.bypass.autoarmor:
     default: OP
   ntac.bypass.skinderp:
     default: OP
   ntac.bypass.headless:
       default: OP
+  ntac.bypass.speed:
+    default: OP
   ntac.bypass.antiafk:
     default: OP
   ntac.bypass.sneak:

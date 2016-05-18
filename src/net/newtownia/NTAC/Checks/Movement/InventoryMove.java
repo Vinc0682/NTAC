@@ -92,10 +92,12 @@ public class InventoryMove extends AbstractMovementCheck
 
         if (hasInventoryOpenWithGrace(p) &&
                 !movementBase.isTeleporting(pUUID) &&
+                movementBase.hasPlayerMoveTimePassed(pUUID, graceTime) &&
                 MathUtils.getYDiff(event) >= 0 &&
                 !PlayerUtils.isOnIce(p) &&
                 p.getVehicle() == null &&
-                !p.isLeashed())
+                !p.isLeashed() &&
+                !PlayerUtils.isGlidingWithElytra(p))
         {
             vlManager.addViolation(p, 1);
             int vl = vlManager.getViolationInt(p);
@@ -142,13 +144,6 @@ public class InventoryMove extends AbstractMovementCheck
         {
             playerLastInvOpenTime.put(event.getPlayer().getUniqueId(), System.currentTimeMillis());
         }
-    }
-
-    @EventHandler
-    public void onPlayerVelocity(PlayerVelocityEvent event)
-    {
-        if (playerLastInvOpenTime.containsKey(event.getPlayer().getUniqueId()))
-            playerLastInvOpenTime.put(event.getPlayer().getUniqueId(), System.currentTimeMillis());
     }
 
     @EventHandler

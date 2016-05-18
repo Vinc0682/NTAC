@@ -163,11 +163,16 @@ public class MovementBase implements Listener
 
     //region Getters for the caching
 
-    public long getLastVeleocityTime(UUID pUUID)
+    public long getLastVelocityTime(UUID pUUID)
     {
         if (!playerLastVelocityTime.containsKey(pUUID))
             return 0;
         return playerLastVelocityTime.get(pUUID);
+    }
+
+    public boolean hasVelocityTimePassed(UUID pUUID, int time)
+    {
+        return System.currentTimeMillis() - getLastVelocityTime(pUUID) > time;
     }
 
     public boolean hasPlayerMoveTimePassed(Player p, int milliseconds)

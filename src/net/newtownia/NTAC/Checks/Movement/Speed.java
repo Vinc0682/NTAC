@@ -1,9 +1,12 @@
 package net.newtownia.NTAC.Checks.Movement;
 
+import net.newtownia.NTAC.Action.ActionData;
 import net.newtownia.NTAC.Action.ViolationManager;
 import net.newtownia.NTAC.NTAC;
 import net.newtownia.NTAC.Utils.PlayerUtils;
+import net.newtownia.NTAC.Utils.PunishUtils;
 import org.bukkit.Location;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.potion.PotionEffectType;
@@ -15,24 +18,27 @@ import java.util.UUID;
  */
 public class Speed extends AbstractMovementCheck
 {
-    private double sprinting = 0.415;
+    private double sprinting = 0.83;
     private double sneaking = 0.215;
     private double cobweb = 0.1;
     private double ice = 0.71;
     private double jump = 1.8;
     private double velocity = 2;
-    private double speedPotion = 1.32;
-    private double slowPotion = 0.997;
+    private double speedPotion = 1.45;
+    private double slowPotion = 0.8;
 
-    private double bandFactor = 5;
-    private int bandInvalidateThreshold = 12000;
+    private double vlDecrease = 0.5;
+    private double maxVL = 10;
+    private ActionData actionData;
 
-    private ViolationManager bandVLManager;
+    private ViolationManager vlManager;
 
     public Speed(NTAC pl, MovementBase movementBase)
     {
         super(pl, movementBase, "Speed");
-        bandVLManager = new ViolationManager();
+        vlManager = new ViolationManager();
+
+        loadConfig();
     }
 
     @Override
@@ -42,12 +48,12 @@ public class Speed extends AbstractMovementCheck
             return;
         Player p = event.getPlayer();
         UUID pUUID = p.getUniqueId();
-        if (p.hasPermission("ntac.bypass.speed") || p.isFlying() || p.isInsideVehicle())
+        if (p.hasPermission("ntac.bypass.speed") || p.getAllowFlight() || p.isInsideVehicle())
             return;
 
         if (PlayerUtils.isUnderBlock(p))
             return;
-        if (p.isFlying())
+        if (p.isFlying() || PlayerUtils.isGlidingWithElytra(p))
             return;
 
         Location from = event.getFrom();
@@ -56,7 +62,7 @@ public class Speed extends AbstractMovementCheck
         double dZ = from.getZ() - to.getZ();
         double distSq = dX * dX + dZ * dZ;
 
-        if (movementBase.isTeleporting(pUUID)) // @HorizonCode: This will fix my boost
+        if (movementBase.isTeleporting(pUUID))
             return;
 
         double speed = sprinting;
@@ -68,40 +74,50 @@ public class Speed extends AbstractMovementCheck
             speed = cobweb;
         if (isJumping(p, to))
             speed *= jump;
-        if (System.currentTimeMillis() - movementBase.getLastVeleocityTime(pUUID) > 1000)
+        if (!movementBase.hasVelocityTimePassed(pUUID, 1000))
             speed *= velocity;
         if (p.hasPotionEffect(PotionEffectType.SPEED))
-            speed *= PlayerUtils.getPotionEffect(p, PotionEffectType.SPEED).getAmplifier() * speedPotion;
+            speed *= (PlayerUtils.getPotionEffect(p, PotionEffectType.SPEED).getAmplifier() + 1) * speedPotion;
         if (p.hasPotionEffect(PotionEffectType.SLOW))
-            speed *= PlayerUtils.getPotionEffect(p, PotionEffectType.SLOW).getAmplifier() * slowPotion;
+            speed *= (PlayerUtils.getPotionEffect(p, PotionEffectType.SLOW).getAmplifier() + 1) * slowPotion;
         speed *= 0.1;
-
-        p.sendMessage((distSq > speed ? "§c" : "§a") + "Expected speed: " + speed + " DistSQ: " + distSq);
 
         if (distSq > speed)
         {
-            double vlIncrement = (distSq - speed) * bandFactor;
-            bandVLManager.addViolation(p, 1);
-            p.sendMessage("Band-VL: " + bandVLManager.getViolation(p));
-            if (bandVLManager.getViolation(p) > 8)
+            if (vlManager.getViolation(p) < maxVL)
+                vlManager.addViolation(p, 1);
+            int vl = vlManager.getViolationInt(p);
+            if(actionData.doesLastViolationCommandsContains(vl, "cancel"))
             {
-                p.sendMessage("Resetting");
-                p.teleport(bandVLManager.getFirstViolationLocation(p));
+                Location resetLoc = vlManager.getFirstViolationLocation(p);
+                if(resetLoc != null)
+                    p.teleport(resetLoc);
             }
+            PunishUtils.runViolationAction(p, vl, vl, actionData);
         }
         else
-            bandVLManager.subtractViolation(p, 0.5);
+            vlManager.subtractViolation(p, vlDecrease);
     }
 
     private boolean isJumping(Player p, Location to)
     {
-        p.sendMessage("Moves on ground: " + movementBase.getPlayerOnGroundMoves(p.getUniqueId()));
         return !movementBase.isPlayerOnGround(p) || !PlayerUtils.isLocationOnGroundNTAC(to);
     }
 
     @Override
     public void loadConfig()
     {
-
+        YamlConfiguration config = pl.getConfiguration();
+        sprinting = Double.valueOf(config.getString("Speed.Sprinting"));
+        sneaking = Double.valueOf(config.getString("Speed.Sneaking"));
+        cobweb = Double.valueOf(config.getString("Speed.Cobweb"));
+        ice = Double.valueOf(config.getString("Speed.Ice"));
+        jump = Double.valueOf(config.getString("Speed.Jump-Multiplier"));
+        velocity = Double.valueOf(config.getString("Speed.Velocity-Multiplier"));
+        speedPotion = Double.valueOf(config.getString("Speed.Speed-Potion"));
+        slowPotion = Double.valueOf(config.getString("Speed.Slow-Potion"));
+        vlDecrease = Double.valueOf(config.getString("Speed.VL-Decrease"));
+        maxVL = Double.valueOf(config.getString("Speed.Max-VL"));
+        actionData = new ActionData(config, "Speed.Actions");
     }
 }

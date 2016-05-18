@@ -6,6 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -151,6 +152,12 @@ public class PlayerUtils
     public static boolean materialsBelowContains(Player p, Material m)
     {
         return getMaterialsBelowOld(p).contains(m);
+    }
+
+    public static boolean isGlidingWithElytra(Player p)
+    {
+        ItemStack chestplate = p.getInventory().getChestplate();
+        return p.isGliding() && chestplate != null && chestplate.getType() == Material.ELYTRA;
     }
 
     public static PotionEffect getPotionEffect(Player p, PotionEffectType type)

@@ -48,7 +48,7 @@ public class Jesus extends AbstractMovementCheck
         Location from = event.getFrom();
         Location to = event.getTo();
 
-        if (p.isInsideVehicle() || p.isFlying())
+        if (p.isInsideVehicle() || p.isFlying() || PlayerUtils.isGlidingWithElytra(p))
             return;
 
         if (PlayerUtils.isInWeb(from) || PlayerUtils.isInWeb(to))

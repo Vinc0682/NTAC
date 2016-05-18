@@ -20,44 +20,52 @@ Enabled:
 
   #Combat
   Killaura-NPC: true # Stable DEFAULT: true
-  Aimbot: true # In development
+  Aimbot: false # False positives, fixed soon :D
   Anti-Knockback: true # Recoded and awesome DEFAULT: true
   Auto-Clicker: true # Code stable, customize dat settings DEFAULT: true
-  Auto-Armor: false # Stable, take a look at InvMove too! DEFAULT: true
   Criticals: true # Stable, by HorizonCode DEFAULT: true
+  Auto-Armor: false # Stable, take a look at InvMove too! DEFAULT: true
 
   #Movement (all require movement base enabled)
-  Anti-AFK: true # Beta, testing on newtownia.net + more subchecks'll be added soon! DEFAULT: true
-  Sneak: true # Stable, patches a NC+ Bypass DEFAULT: true
-  NoSlowBlock: true # Stable, patches a NC+ Bypass DEFAULT: true
-  Fast-Ladder: true # Stable, NC+ is unable to fix it :(
+  Speed: true # Stable, fixes Speeds bypassing NC+ DEFAULT: true
   Boat-Fly: true # Stable, fixes the most common 1.9 fly bypass using boats. :D DEFAULT: true
-  Inventory-Move: true # Blocks all moves when inventory is open / item-actions if inv is not open,
-    # may fuck up archivements, may have false positives DEFAULT: true
   NCP-Drag-Down: true # Drag players down if NoCheatPlus detects fly
   Jesus: true # Stable DEFAULT: true (by HorizonCode)
-  Speed: false # Development DEFAULT: false (by HorizonCode)
+  Sneak: true # Stable, patches a NC+ Bypass DEFAULT: true
+  Fast-Ladder: true # Stable, NC+ is unable to fix it :(
+  Inventory-Move: true # Blocks all moves when inventory is open / item-actions if inv is not open,
+    # may fuck up archivements, may have false positives DEFAULT: true
+  Anti-AFK: false # Beta, testing on newtownia.net + more subchecks'll be added soon! DEFAULT: true
 
   # Player
   SkinDerp: true # Stable, even in AAC --> Hive! DEFAULT: true
   Headless: true # Stable :D
 
   # Render
-  #Tracers: true # In development, has no effect atm
+  #Tracers: true # Not implemented yet :/
 
   # Miscellanious
   Anti-Chorus-Fruit: true # Block teleportation caused by chorus fruit to prevent people to teleport trough walls
+
+# ///////////////////////////////////////////////////////////////////
+# General settings
+# ///////////////////////////////////////////////////////////////////
 
 Auto-Ban:
 
   # Should people be automaticly be banned?
   # The vl is equal to the points given by the /ntac addbanpoint <Player> <Amount> command,
   # so you can put you're own weights to certain checks :D
-  # To disable, simply replace with "Actions: []"
+  # REMOVE THE HASHTAGS BEFORE THE LINES TO ENABLE AUTO-BANNING
+
+  #Actions:
+  #  3: "ntac ban %PLAYER% 15m"
+  #  4: "ntac ban %PLAYER% 1h"
+  #  5: "ntac ban %PLAYER% %VL%h"
+
+  # REMOVE THIS LINE WHEN ENABLING AUTO-BANNING
   Actions:
-    3: "ntac ban %PLAYER% 15m"
-    4: "ntac ban %PLAYER% 1h"
-    5: "ntac ban %PLAYER% %VL%h"
+    10000: 'cancel'
 
 # Some options for the bases of NTAC
 Bases:
@@ -70,6 +78,11 @@ Bases:
 
   # The combat base is required for every combat check (e.g. Killaura-NPC; AutoClicker)
   Enable-Combat-Base: true
+
+
+# ///////////////////////////////////////////////////////////////////
+# Combat hacks
+# ///////////////////////////////////////////////////////////////////
 
 # Killaura NPC-Check settings
 Killaura-NPC:
@@ -172,6 +185,19 @@ Anti-Knockback:
       - 'ntac kick %PLAYER% %%Kick-AntiKnockback%%'
       - 'ntac notify %%Notify-AntiKnockback-Kick%%'
 
+Criticals:
+
+  # The time until the VL get's invalidated (in ms)
+  # NOTE: The VL only get's invalidated when there are no new VLs.
+  Invalidate-Threshold: 60000
+
+  # Action data, VL equal to the count of suspicious attacks
+  Actions:
+    3: 'cancel'
+    20:
+      - 'ntac kick %PLAYER% %%Kick-Criticals%%'
+      - 'ntac notify %%Notify-Criticals-Kick%%'
+
 # AutoArmor works by adding a special diamond chestplate to the inventory of the player looks up if the player
 # put it on in a certain time.
 Auto-Armor:
@@ -192,47 +218,148 @@ Auto-Armor:
       - 'ntac kick %PLAYER% %%Kick-AutoArmor%%'
       - 'ntac notify %%Notify-AutoArmor-Kick%%'
 
-Criticals:
+# ///////////////////////////////////////////////////////////////////
+# Movement hacks
+# ///////////////////////////////////////////////////////////////////
+
+Speed:
+
+  # Block people going faster than sonic, values skidded from AAC
+  # https://gist.github.com/konsolas/67108a5d48a90fa6964c
+
+  # Basic speeds
+  Sprinting: 0.83
+  Sneaking: 0.215
+  Cobweb: 0.1
+  Ice: 0.71
+
+  Jump-Multiplier: 1.8
+  Velocity-Multiplier: 2
+
+  # Potion-Multipliers
+  Speed-Potion: 1.45
+  Slow-Potion: 0.8
+
+  # How fast should the VL decrease
+  VL-Decrease: 0.5
+  # To prevent setback-exploits
+  Max-VL: 10
+
+  # VL equals the amount of suspicious moves
+  Actions:
+    8: 'cancel' # DON'T LOWER THIS!
+
+Boat-Fly:
 
   # The time until the VL get's invalidated (in ms)
   # NOTE: The VL only get's invalidated when there are no new VLs.
-  Invalidate-Threshold: 60000
+  Invalidate-Threshold: 250
 
-  # Action data, VL equal to the count of suspicious attacks
+  # Should all movements upwards be cancelled? Suggested if the first VL with 'cancel' is above 1
+  # to prevent some bypasses and eventually exploits
+  Cancel-All-Up-Movements: true
+
+  # How long should boats be off ground untill they get checked? (Moves)
+  Min-Offground-Moves: 3
+
+  # How fast do someone have to fall to get ignored by the check
+  # This reenables the ability to glide legit with a boat. If you higher the value,
+  # you'll have to higher the Friction-Min-Time to prevent false positives.
+  # Set to Ignore-Threshold to 0 and the actions to 0: 'cancel' to completly disable falling
+  # with boats (no more MLG-Legit-Boatgliding)
+  Min-Down-Speed: 0.12
+
+  # Actions, the VL is equal to the count of suspicious movements
+  Actions:
+    2: 'cancel'
+    10: 'ntac kick %PLAYER% %%Kick-Movement%%'
+
+NCP-Drag-Down:
+
+  # The time until the VL get's invalidated (in ms)
+  # This is required for the position on the x and z axis to be
+  # sure that no one flyes very fast while abusing going down slowly
+  # NOTE: The VL only get's invalidated when there are no new VLs.
+  Invalidate-Threshold: 250
+
+  # How fast should players be dragged down, be careful to not lead into bugs...
+  Down-Speed: 0.5
+
+Jesus:
+
+  # Should jesus care about the jumping in water? This will fix several bypasses
+  Jump-Jesus: true
+
+  # Actions performed when player is suspected for jesus, VL equals to the count of suspicious moves.
+  Actions:
+    2: 'cancel' # First cancel should be at lease 2 to fix a "Wrong movement" false positive
+    5:
+      - 'ntac kick %PLAYER% %%Kick-Movement%%'
+      - 'ntac notify %%Notify-Jesus-Kick%%'
+
+# Sneak properties
+# NOTE: This check isn't ment to be a completly check for Sneak. It is a patch for NC+ fixes a bypass (for NC+)
+Sneak:
+
+  # The time between to sneak actions to get detected as legit.
+  Sneak-Threshold: 40
+
+  # Actions, the vl equals the count of detected packets
   Actions:
     3: 'cancel'
     20:
-      - 'ntac kick %PLAYER% %%Kick-Criticals%%'
-      - 'ntac notify %%Notify-Criticals-Kick%%'
+      - 'ntac notify %%Notify-Sneak-Suspect%%'
+      - 'cancel'
+    100:
+      - 'ntac kick %PLAYER% %%Kick-Movement%%'
+      - 'ntac notify %%Notify-Sneak-Kick%%'
 
+  # The time until the VL get's invalidated (in ms)
+  # NOTE: The VL only get's invalidated when there are no new VLs.
+  Invalidate-Threshold: 1000
 
-# Skinderp-Properties:
-SkinDerp:
+  # The frequencie (in ticks) for the invalidate-cycle
+  Invalidate-Freq: 5
 
-  # Time between skin-changes to make a change legit (Milliseconds) DEFAULT: 100
-  Time-Threshold: 100
+Fast-Ladder:
 
-  # Count of unlegit changes till the player get kicked DEFAULT: 10
-  Count-Threshold: 50
+  # The normal climbing speed
+  Climbing-Speed: 0.13
 
-  # Kick-message DEFAULT: Skinderp
-  Kick-Message: Skinderp
+  # The speed allowed when you start to climb a ladder
+  Start-Speed: 1.5
 
-  # The commands run when a player is suspected for killaura
-  # Each violation is equal to a hit
+  # The time until the VL get's invalidated (in ms)
+  # NOTE: The VL only get's invalidated when there are no new VLs.
+  Invalidate-Threshold: 250
+
+  # The actions, the vl equals the count of suspicious movements
   Actions:
+    3: 'cancel'
+    25:
+      - 'ntac kick %PLAYER% %%Kick-Movement%%'
+      - 'ntac notify %%Notify-FastLadder-Kick%%'
+
+Inventory-Move:
+
+  # Should all item-actions be blocked when the invenotry is closed? This fixes
+  # AutoArmor. Note that actions with items in the hotbar wont be blocked since
+  # you are able right click them to put armor on...
+  Cancel-Item-Actions: true
+
+  # How long after opening the inventory / getting damage should players be ignored
+  Grace-Time: 1000
+
+  # The time until the VL get's invalidated (in ms)
+  # NOTE: The VL only get's invalidated when there are no new VLs.
+  Invalidate-Threshold: 250
+
+  # Actions performed when player moves while the inv is opened, VL equals the count of moves
+  Actions:
+    2: 'cancel'
     10:
-      - 'ntac kick %PLAYER% %%Kick-Derp%%'
-      - 'ntac notify %%Notify-Derp-Kick%%'
-
-# Headless
-Headless:
-
-  # The commands run when someone get suspected for headless, the vl is equal to the count of suspicious movements
-  Actions:
-    1:
-      - 'ntac kick %PLAYER% %%Kick-Derp%%'
-      - 'ntac notify %%Notify-Derp-Kick%%'
+      - 'ntac kick %PLAYER% %%Kick-Movement%%'
+      - 'ntac notify %%Notify-InvMove-Kick%%'
 
 # Anti-AFK
 Anti-AFK:
@@ -280,140 +407,36 @@ Anti-AFK:
     # The delay (ms) until a player is unmarked, required to ignore steps in afk-maschines (also fixes infinite jump-maschines) DEFAULT: 3000
     Unmark-Delay: 3000
 
-# Sneak properties
-# NOTE: This check isn't ment to be a completly check for Sneak. It is a patch for NC+ fixes a bypass (for NC+)
-Sneak:
 
-  # The time between to sneak actions to get detected as legit.
-  Sneak-Threshold: 40
 
-  # Actions, the vl equals the count of detected packets
+# ///////////////////////////////////////////////////////////////////
+# Player hacks
+# ///////////////////////////////////////////////////////////////////
+
+# Skinderp-Properties:
+SkinDerp:
+
+  # Time between skin-changes to make a change legit (Milliseconds) DEFAULT: 100
+  Time-Threshold: 100
+
+  # Count of unlegit changes till the player get kicked DEFAULT: 10
+  Count-Threshold: 50
+
+  # Kick-message DEFAULT: Skinderp
+  Kick-Message: Skinderp
+
+  # The commands run when a player is suspected for killaura
+  # Each violation is equal to a hit
   Actions:
-    3: 'cancel'
-    20:
-      - 'ntac notify %%Notify-Sneak-Suspect%%'
-      - 'cancel'
-    100:
-      - 'ntac kick %PLAYER% %%Kick-Movement%%'
-      - 'ntac notify %%Notify-Sneak-Kick%%'
-
-  # The time until the VL get's invalidated (in ms)
-  # NOTE: The VL only get's invalidated when there are no new VLs.
-  Invalidate-Threshold: 1000
-
-  # The frequencie (in ticks) for the invalidate-cycle
-  Invalidate-Freq: 5
-
-# NoSlowBlock properties
-# NOTE: This check isn't ment to be a completly check for NoSlow. This just fixes a bypass for NC+ allowing
-# to NoSlow while blocking releasing the blocking pre move and block again on past move. Easy to detect
-# and just like sneak :D
-NoSlowBlock:
-
-  # The time between to sneak actions to get detected as legit.
-  Use-Release-Threshold: 50
-
-  # Actions, the vl equals the count of detected packets
-  Actions:
-    1: 'cancel'
-    5:
-      - 'ntac notify %%Notify-NoSlow-Suspect%%'
-      - 'cancel'
     10:
-      - 'ntac kick %PLAYER% %%Kick-Movement%%'
-      - 'ntac notify %%Notify-Sneak-Kick%%'
+      - 'ntac kick %PLAYER% %%Kick-Derp%%'
+      - 'ntac notify %%Notify-Derp-Kick%%'
 
-  # The time until the VL get's invalidated (in ms)
-  # NOTE: The VL only get's invalidated when there are no new VLs.
-  Invalidate-Threshold: 1000
+# Headless
+Headless:
 
-  # The frequencie (in ticks) for the invalidate-cycle
-  Invalidate-Freq: 5
-
-Fast-Ladder:
-
-  # The normal climbing speed
-  Climbing-Speed: 0.13
-
-  # The speed allowed when you start to climb a ladder
-  Start-Speed: 1.5
-
-  # The time until the VL get's invalidated (in ms)
-  # NOTE: The VL only get's invalidated when there are no new VLs.
-  Invalidate-Threshold: 250
-
-  # The actions, the vl equals the count of suspicious movements
+  # The commands run when someone get suspected for headless, the vl is equal to the count of suspicious movements
   Actions:
-    3: 'cancel'
-    25:
-      - 'ntac kick %PLAYER% %%Kick-Movement%%'
-      - 'ntac notify %%Notify-FastLadder-Kick%%'
-
-Boat-Fly:
-
-  # The time until the VL get's invalidated (in ms)
-  # NOTE: The VL only get's invalidated when there are no new VLs.
-  Invalidate-Threshold: 250
-
-  # Should all movements upwards be cancelled? Suggested if the first VL with 'cancel' is above 1
-  # to prevent some bypasses and eventually exploits
-  Cancel-All-Up-Movements: true
-
-  # How long should boats be off ground untill they get checked? (Moves)
-  Min-Offground-Moves: 3
-
-  # How fast do someone have to fall to get ignored by the check
-  # This reenables the ability to glide legit with a boat. If you higher the value,
-  # you'll have to higher the Friction-Min-Time to prevent false positives.
-  # Set to Ignore-Threshold to 0 and the actions to 0: 'cancel' to completly disable falling
-  # with boats (no more MLG-Legit-Boatgliding)
-  Min-Down-Speed: 0.12
-
-  # Actions, the VL is equal to the count of suspicious movements
-  Actions:
-    2: 'cancel'
-    10: 'ntac kick %PLAYER% %%Kick-Movement%%'
-
-Inventory-Move:
-
-  # Should all item-actions be blocked when the invenotry is closed? This fixes
-  # AutoArmor. Note that actions with items in the hotbar wont be blocked since
-  # you are able right click them to put armor on...
-  Cancel-Item-Actions: true
-
-  # How long after opening the inventory / getting damage should players be ignored
-  Grace-Time: 1000
-
-  # The time until the VL get's invalidated (in ms)
-  # NOTE: The VL only get's invalidated when there are no new VLs.
-  Invalidate-Threshold: 250
-
-  # Actions performed when player moves while the inv is opened, VL equals the count of moves
-  Actions:
-    2: 'cancel'
-    10:
-      - 'ntac kick %PLAYER% %%Kick-Movement%%'
-      - 'ntac notify %%Notify-InvMove-Kick%%'
-
-NCP-Drag-Down:
-
-  # The time until the VL get's invalidated (in ms)
-  # This is required for the position on the x and z axis to be
-  # sure that no one flyes very fast while abusing going down slowly
-  # NOTE: The VL only get's invalidated when there are no new VLs.
-  Invalidate-Threshold: 250
-
-  # How fast should players be dragged down, be careful to not lead into bugs...
-  Down-Speed: 0.5
-
-Jesus:
-
-  # Should jesus care about the jumping in water? This will fix several bypasses
-  Jump-Jesus: true
-
-  # Actions performed when player is suspected for jesus, VL equals to the count of suspicious moves.
-  Actions:
-    2: 'cancel' # First cancel should be at lease 2 to fix a "Wrong movement" false positive
-    5:
-      - 'ntac kick %PLAYER% %%Kick-Movement%%'
-      - 'ntac notify %%Notify-Jesus-Kick%%'
+    1:
+      - 'ntac kick %PLAYER% %%Kick-Derp%%'
+      - 'ntac notify %%Notify-Derp-Kick%%'
