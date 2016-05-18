@@ -9,6 +9,7 @@ import com.comphenix.protocol.wrappers.EnumWrappers;
 import net.newtownia.NTAC.Utils.MaterialUtils;
 import net.newtownia.NTAC.Utils.MathUtils;
 import net.newtownia.NTAC.Utils.PlayerUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -49,7 +50,7 @@ public class MovementBase implements Listener
         teleportedPlayers = new ArrayList<>();
 
         playerOnGround = new HashMap<>();
-
+        playerOnGroundMoves = new HashMap<>();
         playerLastVelocityTime = new HashMap<>();
         playerUsingItem = new HashMap<>();
 
@@ -97,6 +98,15 @@ public class MovementBase implements Listener
         }
 
         playerOnGround.put(pUUID, PlayerUtils.isPlayerOnGround(p));
+        if (isPlayerOnGround(p))
+        {
+            if (!playerOnGroundMoves.containsKey(pUUID))
+                playerOnGroundMoves.put(pUUID, 1);
+            else
+                playerOnGroundMoves.put(pUUID, playerOnGroundMoves.get(pUUID) + 1);
+        }
+        else
+            playerOnGroundMoves.put(pUUID, 0);
     }
 
     public void raiseChecks(PlayerMoveEvent event)
@@ -203,6 +213,15 @@ public class MovementBase implements Listener
         return teleportedPlayers.contains(pUUID);
     }
 
+    public boolean isPlayerOnGround(UUID pUUID)
+    {
+        if (!playerOnGround.containsKey(pUUID))
+        {
+            playerOnGround.put(pUUID, PlayerUtils.isPlayerOnGround(Bukkit.getPlayer(pUUID)));
+        }
+        return playerOnGround.get(pUUID);
+    }
+
     public boolean isPlayerOnGround(Player p)
     {
         UUID pUUID = p.getUniqueId();
@@ -211,6 +230,18 @@ public class MovementBase implements Listener
             playerOnGround.put(pUUID, PlayerUtils.isPlayerOnGround(p));
         }
         return playerOnGround.get(pUUID);
+    }
+
+    public int getPlayerOnGroundMoves(UUID pUUID)
+    {
+        if (!playerOnGroundMoves.containsKey(pUUID))
+        {
+            if (isPlayerOnGround(pUUID))
+                playerOnGroundMoves.put(pUUID, 1);
+            else
+                playerOnGroundMoves.put(pUUID, 0);
+        }
+        return playerOnGroundMoves.get(pUUID);
     }
 
     public boolean isPlayerUsingItem(UUID pUUID)

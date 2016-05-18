@@ -23,14 +23,16 @@ public class Speed extends AbstractMovementCheck
     private double velocity = 2;
     private double speedPotion = 1.32;
     private double slowPotion = 0.997;
-    private double bandFactor = 5;
 
-    private ViolationManager bandVlManager;
+    private double bandFactor = 5;
+    private int bandInvalidateThreshold = 12000;
+
+    private ViolationManager bandVLManager;
 
     public Speed(NTAC pl, MovementBase movementBase)
     {
         super(pl, movementBase, "Speed");
-        bandVlManager = new ViolationManager();
+        bandVLManager = new ViolationManager();
     }
 
     @Override
@@ -64,7 +66,7 @@ public class Speed extends AbstractMovementCheck
             speed = ice;
         if (PlayerUtils.isInWeb(p.getLocation()))
             speed = cobweb;
-        if (!movementBase.isPlayerOnGround(p))
+        if (isJumping(p, to))
             speed *= jump;
         if (System.currentTimeMillis() - movementBase.getLastVeleocityTime(pUUID) > 1000)
             speed *= velocity;
@@ -74,23 +76,28 @@ public class Speed extends AbstractMovementCheck
             speed *= PlayerUtils.getPotionEffect(p, PotionEffectType.SLOW).getAmplifier() * slowPotion;
         speed *= 0.1;
 
-        p.sendMessage("Expected speed: " + speed + " DistSQ: " + distSq);
+        p.sendMessage((distSq > speed ? "§c" : "§a") + "Expected speed: " + speed + " DistSQ: " + distSq);
 
         if (distSq > speed)
         {
             double vlIncrement = (distSq - speed) * bandFactor;
-            bandVlManager = new ViolationManager();
-            bandVlManager.addViolation(p, vlIncrement);
-
-            if (bandVlManager.getViolation(p) > 8)
+            bandVLManager.addViolation(p, 1);
+            p.sendMessage("Band-VL: " + bandVLManager.getViolation(p));
+            if (bandVLManager.getViolation(p) > 8)
             {
-                p.teleport(bandVlManager.getFirstViolationLocation(p));
+                p.sendMessage("Resetting");
+                p.teleport(bandVLManager.getFirstViolationLocation(p));
             }
         }
         else
-            bandVlManager.resetPlayerViolation(p);
+            bandVLManager.subtractViolation(p, 0.5);
     }
 
+    private boolean isJumping(Player p, Location to)
+    {
+        p.sendMessage("Moves on ground: " + movementBase.getPlayerOnGroundMoves(p.getUniqueId()));
+        return !movementBase.isPlayerOnGround(p) || !PlayerUtils.isLocationOnGroundNTAC(to);
+    }
 
     @Override
     public void loadConfig()

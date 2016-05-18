@@ -24,14 +24,19 @@ public class PlayerUtils
         return isPlayerOnGroundNTAC(p);
     }
 
-    public static boolean isPlayerOnGroundNTAC(Player p)
+    public static boolean isLocationOnGroundNTAC(Location loc)
     {
-        List<Material> materials = getMaterialsAround(p.getLocation().clone().add(0, -GROUND_THRESHOLD, 0));
+        List<Material> materials = getMaterialsAround(loc.clone().add(0, -GROUND_THRESHOLD, 0));
         for (Material m : materials)
             if (!MaterialUtils.isUnsolid(m) && m != Material.WATER && m != Material.STATIONARY_WATER &&
                     m != Material.LAVA && m != Material.STATIONARY_LAVA)
                 return true;
         return false;
+    }
+
+    public static boolean isPlayerOnGroundNTAC(Player p)
+    {
+        return isLocationOnGroundNTAC(p.getLocation());
     }
 
     public static boolean isPlayerOnGroundNTACOld(Player p)

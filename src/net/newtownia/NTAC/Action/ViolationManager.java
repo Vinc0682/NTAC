@@ -122,7 +122,7 @@ public class ViolationManager {
         return playerFirstViolationLocations.get(pUUID);
     }
 
-    public void resetAllOldViolation(double threshold)
+    public void resetAllOldViolation(int threshold)
     {
         List<UUID> toReset = new ArrayList<>();
         for(UUID pUUID : playerLastViolationTimes.keySet())
@@ -133,6 +133,16 @@ public class ViolationManager {
         }
         for(UUID pUUID : toReset)
             resetPlayerViolation(pUUID);
+    }
+
+    public void resetOldPlayerViolation(Player p, int threshold)
+    {
+        UUID pUUID = p.getUniqueId();
+        if (playerLastViolationTimes.containsKey(pUUID) &&
+                System.currentTimeMillis() >= playerLastViolationTimes.get(pUUID) + threshold)
+        {
+            resetPlayerViolation(p);
+        }
     }
 
     public Map<UUID, Double> getAllViolations()
