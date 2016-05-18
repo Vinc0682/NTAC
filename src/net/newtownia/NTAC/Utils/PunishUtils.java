@@ -43,13 +43,13 @@ public class PunishUtils
 
     public static void runViolationAction(Player p, ViolationManager manager, ActionData data)
     {
-        int vl = manager.getViolation(p);
+        int vl = manager.getViolationInt(p);
         runViolationAction(p, vl, vl, data);
     }
 
     public static void runViolationActionWithValidation(Player p, ViolationManager manager, ActionData data)
     {
-        int vl = manager.getViolation(p);
+        int vl = manager.getViolationInt(p);
         runViolationAction(p, data.getValidViolationLevel(vl), vl, data);
     }
 

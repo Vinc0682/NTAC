@@ -1,6 +1,7 @@
 package net.newtownia.NTAC.Utils;
 
 import org.bukkit.Location;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.util.Vector;
 
 import java.util.List;
@@ -59,5 +60,10 @@ public class MathUtils
         double min = a - threshold;
         double max = a + threshold;
         return b > min && b < max;
+    }
+
+    public static double getYDiff(PlayerMoveEvent event)
+    {
+        return event.getTo().getY() - event.getFrom().getY();
     }
 }

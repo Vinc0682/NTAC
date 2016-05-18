@@ -109,7 +109,7 @@ public class BanManger
 
     public int getVL(UUID pUUID)
     {
-        return vlManager.getViolation(pUUID);
+        return (int) vlManager.getViolation(pUUID);
     }
 
     private void load()
@@ -130,7 +130,7 @@ public class BanManger
         for (Map.Entry<String, Object> vl : vlSection.getValues(false).entrySet())
         {
             vlManager.setViolationWithoutSetbackPos(UUID.fromString(vl.getKey()),
-                    Integer.valueOf(vlSection.getString(vl.getKey())));
+                    Double.valueOf(vlSection.getString(vl.getKey())));
         }
     }
 
@@ -146,7 +146,7 @@ public class BanManger
             config.set(uuid + ".Time", ban.getValue());
             config.set(uuid + ".Reason", banReasons.get(ban.getKey()));
         }
-        for (Map.Entry<UUID, Integer> violation : vlManager.getAllViolations().entrySet())
+        for (Map.Entry<UUID, Double> violation : vlManager.getAllViolations().entrySet())
         {
             config.set(CONFIG_VL_PREFIX + violation.getKey().toString(), violation.getValue());
         }

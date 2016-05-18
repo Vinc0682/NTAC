@@ -6,14 +6,19 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class PlayerUtils
 {
+    private static final double GROUND_THRESHOLD = 0.001;
+
     public static boolean isPlayerOnGround(Player p)
     {
         return isPlayerOnGroundNTAC(p);
@@ -21,7 +26,7 @@ public class PlayerUtils
 
     public static boolean isPlayerOnGroundNTAC(Player p)
     {
-        List<Material> materials = getMaterialsAround(p.getLocation().clone().add(0, -0.001, 0));
+        List<Material> materials = getMaterialsAround(p.getLocation().clone().add(0, -GROUND_THRESHOLD, 0));
         for (Material m : materials)
             if (!MaterialUtils.isUnsolid(m) && m != Material.WATER && m != Material.STATIONARY_WATER &&
                     m != Material.LAVA && m != Material.STATIONARY_LAVA)
@@ -46,10 +51,21 @@ public class PlayerUtils
                 loc.getBlock().getRelative(BlockFace.UP).getType() == Material.WEB;
     }
 
+    public static boolean isOnClimbable(Location loc)
+    {
+        return loc.getBlock().getType() == Material.LADDER || loc.getBlock().getType() == Material.VINE;
+    }
+
     public static boolean isUnderBlock(Player p)
     {
         Block blockAbove = p.getEyeLocation().getBlock().getRelative(BlockFace.UP);
         return blockAbove != null && !MaterialUtils.isUnsolid(blockAbove);
+    }
+
+    public static boolean isOnIce(Player p)
+    {
+        List<Material> materials = getMaterialsAround(p.getLocation().clone().add(0, -GROUND_THRESHOLD, 0));
+        return materials.contains(Material.ICE) || materials.contains(Material.PACKED_ICE);
     }
 
     public static Location getPlayerStandOnBlockLocation(Location locationUnderPlayer, Material mat) {
@@ -130,6 +146,19 @@ public class PlayerUtils
     public static boolean materialsBelowContains(Player p, Material m)
     {
         return getMaterialsBelowOld(p).contains(m);
+    }
+
+    public static PotionEffect getPotionEffect(Player p, PotionEffectType type)
+    {
+        PotionEffect effect = null;
+        Iterator<PotionEffect> iterator = p.getActivePotionEffects().iterator();
+        while (iterator.hasNext())
+        {
+            effect = iterator.next();
+            if (effect.getType() == type)
+                break;
+        }
+        return effect;
     }
 
     public static int getPing(Player p)

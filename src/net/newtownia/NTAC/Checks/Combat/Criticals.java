@@ -3,6 +3,7 @@ package net.newtownia.NTAC.Checks.Combat;
 import net.newtownia.NTAC.Action.ActionData;
 import net.newtownia.NTAC.Action.ViolationManager;
 import net.newtownia.NTAC.NTAC;
+import net.newtownia.NTAC.Utils.PlayerUtils;
 import net.newtownia.NTAC.Utils.PunishUtils;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.EntityType;
@@ -50,13 +51,16 @@ public class Criticals extends AbstractCombatCheck
             p.getLocation().getBlock().getRelative(BlockFace.UP).isLiquid())
             return;
 
+        if (PlayerUtils.isOnClimbable(p.getLocation()))
+            return;
+
         if (!p.isOnGround() && !p.isFlying())
         {
             if (p.getLocation().getY() % 1.0D == 0.0D &&
                     p.getLocation().getBlock().getRelative(BlockFace.DOWN).getType().isSolid())
             {
                 vlManager.addViolation(p, 1);
-                int vl = vlManager.getViolation(p);
+                int vl = vlManager.getViolationInt(p);
                 if(actionData.doesLastViolationCommandsContains(vl, "cancel"))
                     event.setCancelled(true);
                 PunishUtils.runViolationAction(p, vl, vl, actionData);

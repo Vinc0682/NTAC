@@ -3,12 +3,12 @@ package net.newtownia.NTAC.Checks.Movement;
 import net.newtownia.NTAC.Action.ActionData;
 import net.newtownia.NTAC.Action.ViolationManager;
 import net.newtownia.NTAC.NTAC;
+import net.newtownia.NTAC.Utils.MathUtils;
+import net.newtownia.NTAC.Utils.PlayerUtils;
 import net.newtownia.NTAC.Utils.PunishUtils;
 import org.bukkit.Achievement;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.block.BlockFace;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -91,19 +91,14 @@ public class InventoryMove extends AbstractMovementCheck
         UUID pUUID = p.getUniqueId();
 
         if (hasInventoryOpenWithGrace(p) &&
-                p.getFallDistance() == 0 &&
+                !movementBase.isTeleporting(pUUID) &&
+                MathUtils.getYDiff(event) >= 0 &&
+                !PlayerUtils.isOnIce(p) &&
                 p.getVehicle() == null &&
-                p.getLocation().getBlock().getRelative(BlockFace.DOWN).getType() != Material.ICE &&
                 !p.isLeashed())
         {
-            if (teleported.contains(pUUID))
-            {
-                teleported.remove(pUUID);
-                return;
-            }
-
             vlManager.addViolation(p, 1);
-            int vl = vlManager.getViolation(p);
+            int vl = vlManager.getViolationInt(p);
             if (actionData.doesLastViolationCommandsContains(vl, "cancel"))
             {
                 Location resetLoc = vlManager.getFirstViolationLocation(p);

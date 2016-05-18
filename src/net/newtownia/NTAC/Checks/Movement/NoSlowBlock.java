@@ -90,7 +90,7 @@ public class NoSlowBlock extends AbstractMovementCheck
             {
                 vlManger.addViolation(p, 1);
 
-                int vl = vlManger.getViolation(p);
+                int vl = vlManger.getViolationInt(p);
                 if(actionData.doesLastViolationCommandsContains(vl, "cancel"))
                 {
                     Location resetLoc = vlManger.getFirstViolationLocation(p);

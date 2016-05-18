@@ -7,6 +7,7 @@ import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import net.newtownia.NTAC.Utils.MaterialUtils;
+import net.newtownia.NTAC.Utils.MathUtils;
 import net.newtownia.NTAC.Utils.PlayerUtils;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -14,11 +15,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.player.PlayerVelocityEvent;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class MovementBase implements Listener
 {
@@ -27,8 +26,11 @@ public class MovementBase implements Listener
 
     private Map<UUID, Long> playerLastTPTimes;
     private Map<UUID, Location> playerLastTPLocations;
+    private List<UUID> teleportedPlayers;
 
     private Map<UUID, Boolean> playerOnGround;
+    private Map<UUID, Integer> playerOnGroundMoves;
+    private Map<UUID, Long> playerLastVelocityTime;
     private Map<UUID, Boolean> playerUsingItem;
 
     int newMoveTimeThreshold = 500;
@@ -44,8 +46,11 @@ public class MovementBase implements Listener
 
         playerLastTPTimes = new HashMap<>();
         playerLastTPLocations = new HashMap<>();
+        teleportedPlayers = new ArrayList<>();
 
         playerOnGround = new HashMap<>();
+
+        playerLastVelocityTime = new HashMap<>();
         playerUsingItem = new HashMap<>();
 
         movementChecks = new ArrayList<>();
@@ -64,18 +69,15 @@ public class MovementBase implements Listener
     @EventHandler
     public void onMove(PlayerMoveEvent event)
     {
-        updateCache(event);
+        Location origTo = event.getTo().clone();
+        Location origFrom = event.getFrom().clone();
+
+        updateCachePreMove(event);
         raiseChecks(event);
+        updateCachePostMove(event, origTo, origFrom);
     }
 
-    @EventHandler
-    public void onTeleport(PlayerTeleportEvent event)
-    {
-        playerLastTPTimes.put(event.getPlayer().getUniqueId(), System.currentTimeMillis());
-        playerLastTPLocations.put(event.getPlayer().getUniqueId(), event.getTo());
-    }
-
-    public void updateCache(PlayerMoveEvent event)
+    public void updateCachePreMove(PlayerMoveEvent event)
     {
         Player p = event.getPlayer();
         UUID pUUID = p.getUniqueId();
@@ -103,6 +105,29 @@ public class MovementBase implements Listener
             check.onPlayerMove(event);
     }
 
+    public void updateCachePostMove(PlayerMoveEvent event, Location origTo, Location origFrom)
+    {
+        Player p = event.getPlayer();
+        UUID pUUID = p.getUniqueId();
+
+        if (teleportedPlayers.contains(pUUID))
+            teleportedPlayers.remove(pUUID);
+    }
+
+    @EventHandler
+    public void onTeleport(PlayerTeleportEvent event)
+    {
+        playerLastTPTimes.put(event.getPlayer().getUniqueId(), System.currentTimeMillis());
+        playerLastTPLocations.put(event.getPlayer().getUniqueId(), event.getTo());
+        teleportedPlayers.add(event.getPlayer().getUniqueId());
+    }
+
+    @EventHandler
+    public void onVelocity(PlayerVelocityEvent event)
+    {
+        playerLastVelocityTime.put(event.getPlayer().getUniqueId(), System.currentTimeMillis());
+    }
+
     //Useless
     private void handleItemUsePacket(PacketEvent event)
     {
@@ -128,9 +153,16 @@ public class MovementBase implements Listener
 
     //region Getters for the caching
 
+    public long getLastVeleocityTime(UUID pUUID)
+    {
+        if (!playerLastVelocityTime.containsKey(pUUID))
+            return 0;
+        return playerLastVelocityTime.get(pUUID);
+    }
+
     public boolean hasPlayerMoveTimePassed(Player p, int milliseconds)
     {
-        return System.currentTimeMillis() >= playerStartMoveTimes.get(p.getUniqueId()) + milliseconds;
+        return hasPlayerMoveTimePassed(p.getUniqueId(), milliseconds);
     }
 
     public boolean hasPlayerMoveTimePassed(UUID pUUID, int milliseconds)
@@ -146,18 +178,29 @@ public class MovementBase implements Listener
         return playerStartMoveLocations.get(p.getUniqueId());
     }
 
-    public long getPlayerLastTPTime(Player p)
+    public long getPlayerLastTPTime(UUID pUUID)
     {
-        if (!playerLastTPTimes.containsKey(p.getUniqueId()))
+        if (!playerLastTPTimes.containsKey(pUUID))
             return -1;
-        return playerLastTPTimes.get(p.getUniqueId());
+        return playerLastTPTimes.get(pUUID);
     }
 
-    public Location getPlayerLastTPLocation(Player p)
+    public Location getPlayerLastTPLocation(UUID pUUID)
     {
-        if (!playerLastTPLocations.containsKey(p.getUniqueId()))
+        if (!playerLastTPLocations.containsKey(pUUID))
             return null;
-        return playerLastTPLocations.get(p.getUniqueId());
+        return playerLastTPLocations.get(pUUID);
+    }
+
+    public boolean isTeleportingTo(UUID pUUID, Location to)
+    {
+        Location tpTo = getPlayerLastTPLocation(pUUID);
+        return isTeleporting(pUUID) && tpTo != null && MathUtils.isPositionSame(to, tpTo, 0);
+    }
+
+    public boolean isTeleporting(UUID pUUID)
+    {
+        return teleportedPlayers.contains(pUUID);
     }
 
     public boolean isPlayerOnGround(Player p)

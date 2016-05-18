@@ -93,7 +93,7 @@ public class AutoClicker extends AbstractCombatCheck
             if (delaysSame)
             {
                 vlManager.addViolation(p, 1);
-                int vl = vlManager.getViolation(p);
+                int vl = vlManager.getViolationInt(p);
                 PunishUtils.runViolationAction(p, vl, vl, actionData);
             }
         }

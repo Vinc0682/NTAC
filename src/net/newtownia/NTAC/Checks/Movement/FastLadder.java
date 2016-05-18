@@ -3,10 +3,11 @@ package net.newtownia.NTAC.Checks.Movement;
 import net.newtownia.NTAC.Action.ActionData;
 import net.newtownia.NTAC.Action.ViolationManager;
 import net.newtownia.NTAC.NTAC;
+import net.newtownia.NTAC.Utils.MathUtils;
+import net.newtownia.NTAC.Utils.PlayerUtils;
 import net.newtownia.NTAC.Utils.PunishUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -47,16 +48,12 @@ public class FastLadder extends AbstractMovementCheck implements Listener
     {
         if (!isEnabled())
             return;
-
         Player p = event.getPlayer();
-
+        UUID pUUID = p.getUniqueId();
         if (p.hasPermission("ntac.bypass.fastladder") || p.isFlying())
             return;
 
-        UUID pUUID = p.getUniqueId();
-
-        Material m = p.getLocation().getBlock().getType();
-        if (m == Material.LADDER || m == Material.VINE)
+        if (PlayerUtils.isOnClimbable(p.getLocation()))
         {
             if (!playerOnLadderY.containsKey(pUUID) || playerOnLadderY.get(pUUID) == null)
             {
@@ -64,18 +61,16 @@ public class FastLadder extends AbstractMovementCheck implements Listener
                 return;
             }
 
-            double diffY = event.getTo().getY() - event.getFrom().getY();
-
+            double diffY = MathUtils.getYDiff(event);
             if (diffY < 0)
                 return;
-
             if ((event.getTo().getY() - playerOnLadderY.get(pUUID)) > startSpeed)
             {
                 if (diffY > climbingSpeed)
                 {
                     vlManager.addViolation(p, 1);
 
-                    int vl = vlManager.getViolation(p);
+                    int vl = vlManager.getViolationInt(p);
                     if(actionData.doesLastViolationCommandsContains(vl, "cancel"))
                     {
                         Location resetLoc = vlManager.getFirstViolationLocation(p);

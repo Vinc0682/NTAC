@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 import java.util.*;
 
 public class ViolationManager {
-    private Map<UUID, Integer> playerViolations;
+    private Map<UUID, Double> playerViolations;
     private Map<UUID, Location> playerFirstViolationLocations;
     private Map<UUID, Long> playerLastViolationTimes;
 
@@ -17,7 +17,7 @@ public class ViolationManager {
         playerLastViolationTimes = new HashMap<>();
     }
 
-    public int getViolation(Player p)
+    public double getViolation(Player p)
     {
         UUID pUUID = p.getUniqueId();
         if (!playerViolations.containsKey(pUUID))
@@ -26,14 +26,23 @@ public class ViolationManager {
         return playerViolations.get(pUUID);
     }
 
-    public int getViolation(UUID pUUID)
+    public int getViolationInt(Player p)
+    {
+        UUID pUUID = p.getUniqueId();
+        if (!playerViolations.containsKey(pUUID))
+            return 0;
+
+        return (int)(double)(playerViolations.get(pUUID));
+    }
+
+    public double getViolation(UUID pUUID)
     {
         if (!playerViolations.containsKey(pUUID))
             return 0;
         return playerViolations.get(pUUID);
     }
 
-    public void setViolation(Player p, int newViolation)
+    public void setViolation(Player p, double newViolation)
     {
         UUID pUUID = p.getUniqueId();
         if(newViolation <= 0 && playerViolations.containsKey(pUUID))
@@ -47,22 +56,22 @@ public class ViolationManager {
         setViolationWithoutSetbackPos(p, newViolation);
     }
 
-    public void setViolationWithoutSetbackPos(Player p, int newViolation)
+    public void setViolationWithoutSetbackPos(Player p, double newViolation)
     {
         setViolationWithoutSetbackPos(p.getUniqueId(), newViolation);
     }
 
-    public void setViolationWithoutSetbackPos(UUID pUUID, int newViolation)
+    public void setViolationWithoutSetbackPos(UUID pUUID, double newViolation)
     {
         playerViolations.put(pUUID, newViolation);
         playerLastViolationTimes.put(pUUID, System.currentTimeMillis());
     }
 
-    public void addViolation(Player p, int amount) {
+    public void addViolation(Player p, double amount) {
         setViolation(p, getViolation(p) + amount);
     }
 
-    public void subtractViolation(Player p, int amount)
+    public void subtractViolation(Player p, double amount)
     {
         setViolation(p, getViolation(p) - amount);
     }
@@ -79,7 +88,7 @@ public class ViolationManager {
         playerLastViolationTimes.remove(pUUID);
     }
 
-    public void addViolationToAll(int amount)
+    public void addViolationToAll(double amount)
     {
         for(UUID pUUID : playerViolations.keySet())
         {
@@ -89,14 +98,9 @@ public class ViolationManager {
         }
     }
 
-    public void subtractViolationToAll(int amount)
+    public void subtractViolationToAll(double amount)
     {
-        for(UUID pUUID : playerViolations.keySet())
-        {
-            Player p = Bukkit.getPlayer(pUUID);
-            if(p != null)
-                subtractViolation(p, amount);
-        }
+        addViolationToAll(-amount);
     }
 
     public void resetAllViolations()
@@ -118,7 +122,7 @@ public class ViolationManager {
         return playerFirstViolationLocations.get(pUUID);
     }
 
-    public void resetAllOldViolation(int threshold)
+    public void resetAllOldViolation(double threshold)
     {
         List<UUID> toReset = new ArrayList<>();
         for(UUID pUUID : playerLastViolationTimes.keySet())
@@ -131,7 +135,7 @@ public class ViolationManager {
             resetPlayerViolation(pUUID);
     }
 
-    public Map<UUID, Integer> getAllViolations()
+    public Map<UUID, Double> getAllViolations()
     {
         return playerViolations;
     }

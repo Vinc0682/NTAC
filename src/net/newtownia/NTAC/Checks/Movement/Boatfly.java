@@ -3,6 +3,7 @@ package net.newtownia.NTAC.Checks.Movement;
 import net.newtownia.NTAC.Action.ActionData;
 import net.newtownia.NTAC.Action.ViolationManager;
 import net.newtownia.NTAC.NTAC;
+import net.newtownia.NTAC.Utils.MathUtils;
 import net.newtownia.NTAC.Utils.PunishUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -53,7 +54,7 @@ public class Boatfly extends AbstractMovementCheck
 
         if (p.isInsideVehicle() && p.getVehicle() instanceof Boat)
         {
-            double yDiff = event.getTo().getY() - event.getFrom().getY();
+            double yDiff = MathUtils.getYDiff(event);
             Boat boat = (Boat)p.getVehicle();
 
             if (yDiff > -minDownSpeed && isOffWater(boat))
@@ -74,7 +75,7 @@ public class Boatfly extends AbstractMovementCheck
                 if (playerOffGroundMoves.get(p.getUniqueId()) > minOffgroundMoves)
                 {
                     vlManager.addViolation(p, 1);
-                    int vl = vlManager.getViolation(p);
+                    int vl = vlManager.getViolationInt(p);
                     if((cancelAllUpMotions && yDiff > 0) ||
                             actionData.doesLastViolationCommandsContains(vl, "cancel"))
                     {

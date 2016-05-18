@@ -8,7 +8,6 @@ import net.newtownia.NTAC.Action.ViolationManager;
 import net.newtownia.NTAC.NTAC;
 import net.newtownia.NTAC.Utils.MaterialUtils;
 import net.newtownia.NTAC.Utils.NCPUtils;
-import net.newtownia.NTAC.Utils.PlayerUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -49,7 +48,7 @@ public class NCPDragDownHook implements NCPHook
         if (p.hasPermission("ntac.bypass.ncp-drag-down"))
             return false;
 
-        if (vlInfo.willCancel() && !PlayerUtils.isPlayerOnGround(p))
+        if (vlInfo.willCancel() && !ncpDragDown.getMovementBase().isPlayerOnGround(p))
         {
             vlManager.setViolation(p, 1);
             Location loc = vlManager.getFirstViolationLocation(p).clone();
@@ -77,7 +76,7 @@ public class NCPDragDownHook implements NCPHook
     public void onPlayerMove(PlayerMoveEvent event)
     {
         Player p = event.getPlayer();
-        if (vlManager.getViolation(p) > 0 && PlayerUtils.isPlayerOnGround(p))
+        if (vlManager.getViolation(p) > 0 && ncpDragDown.getMovementBase().isPlayerOnGround(p))
             vlManager.resetPlayerViolation(p);
     }
 

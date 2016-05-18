@@ -128,7 +128,7 @@ public class Jesus extends AbstractMovementCheck
     {
         vlManager.addViolation(p, 1);
 
-        int vl = vlManager.getViolation(p);
+        int vl = vlManager.getViolationInt(p);
         if(actionData.doesLastViolationCommandsContains(vl, "cancel"))
         {
             Location resetLoc = vlManager.getFirstViolationLocation(p);
