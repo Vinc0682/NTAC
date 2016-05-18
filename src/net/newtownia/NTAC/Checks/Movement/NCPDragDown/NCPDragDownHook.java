@@ -43,11 +43,11 @@ public class NCPDragDownHook implements NCPHook
     public boolean onCheckFailure(CheckType checkType, Player p, IViolationInfo vlInfo)
     {
         if (!ncpDragDown.isEnabled())
-            return true;
+            return false;
         if (checkType != CheckType.MOVING_SURVIVALFLY)
-            return true;
+            return false;
         if (p.hasPermission("ntac.bypass.ncp-drag-down"))
-            return true;
+            return false;
 
         if (vlInfo.willCancel() && !PlayerUtils.isPlayerOnGround(p))
         {
@@ -67,11 +67,11 @@ public class NCPDragDownHook implements NCPHook
 
             if (b == null || isUnsolid(b))
                 p.teleport(loc, PlayerTeleportEvent.TeleportCause.UNKNOWN);
-            return false;
+            return true;
         }
         else
             vlManager.resetPlayerViolation(p);
-        return true;
+        return false;
     }
 
     public void onPlayerMove(PlayerMoveEvent event)
