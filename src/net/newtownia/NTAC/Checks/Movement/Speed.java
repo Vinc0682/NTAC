@@ -68,7 +68,7 @@ public class Speed extends AbstractMovementCheck
         double speed = sprinting;
         if (p.isSneaking())
             speed = sneaking;
-        if (PlayerUtils.isOnIce(p))
+        if (PlayerUtils.isOnIce(p, false))
             speed = ice;
         if (PlayerUtils.isInWeb(p.getLocation()))
             speed = cobweb;
@@ -81,6 +81,8 @@ public class Speed extends AbstractMovementCheck
         if (p.hasPotionEffect(PotionEffectType.SLOW))
             speed *= (PlayerUtils.getPotionEffect(p, PotionEffectType.SLOW).getAmplifier() + 1) * slowPotion;
         speed *= 0.1;
+
+        //p.sendMessage("Expected: " + speed + " Real: " + distSq);
 
         if (distSq > speed)
         {

@@ -77,6 +77,8 @@ public class AntiKnockback extends AbstractCombatCheck
 
         if (p.hasPermission("ntac.bypass.antiknockback"))
             return;
+        if (!PlayerUtils.isPlayerOnGround(p))
+            return;
 
         int keepAliveId = rnd.nextInt(20000) + 50;
         playerKeepAliveID.put(pUUID, keepAliveId);
@@ -151,7 +153,7 @@ public class AntiKnockback extends AbstractCombatCheck
             return false;
         if (PlayerUtils.isUnderBlock(p))
             return false;
-        if (p.isInsideVehicle())
+        if (p.isInsideVehicle() || PlayerUtils.isGlidingWithElytra(p))
             return false;
         if (p.getPassenger() != null)
             return false;

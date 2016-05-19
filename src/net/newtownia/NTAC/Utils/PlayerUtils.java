@@ -68,10 +68,20 @@ public class PlayerUtils
         return blockAbove != null && !MaterialUtils.isUnsolid(blockAbove);
     }
 
-    public static boolean isOnIce(Player p)
+    public static boolean isOnIce(Player p, boolean strict)
     {
-        List<Material> materials = getMaterialsAround(p.getLocation().clone().add(0, -GROUND_THRESHOLD, 0));
-        return materials.contains(Material.ICE) || materials.contains(Material.PACKED_ICE);
+        if (isPlayerOnGround(p) || strict)
+        {
+            List<Material> materials = getMaterialsAround(p.getLocation().clone().add(0, -GROUND_THRESHOLD, 0));
+            return materials.contains(Material.ICE) || materials.contains(Material.PACKED_ICE);
+        }
+        else
+        {
+            List<Material> m1 = getMaterialsAround(p.getLocation().clone().add(0, -1, 0));
+            List<Material> m2 = getMaterialsAround(p.getLocation().clone().add(0, -2, 0));
+            return m1.contains(Material.ICE) || m1.contains(Material.PACKED_ICE) ||
+                    m2.contains(Material.ICE) || m2.contains(Material.PACKED_ICE);
+        }
     }
 
     public static Location getPlayerStandOnBlockLocation(Location locationUnderPlayer, Material mat) {

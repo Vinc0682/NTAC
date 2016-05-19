@@ -94,7 +94,7 @@ public class InventoryMove extends AbstractMovementCheck
                 !movementBase.isTeleporting(pUUID) &&
                 movementBase.hasPlayerMoveTimePassed(pUUID, graceTime) &&
                 MathUtils.getYDiff(event) >= 0 &&
-                !PlayerUtils.isOnIce(p) &&
+                !PlayerUtils.isOnIce(p, false) &&
                 p.getVehicle() == null &&
                 !p.isLeashed() &&
                 !PlayerUtils.isGlidingWithElytra(p))

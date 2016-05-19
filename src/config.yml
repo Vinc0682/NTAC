@@ -27,7 +27,7 @@ Enabled:
   Auto-Armor: false # Stable, take a look at InvMove too! DEFAULT: true
 
   #Movement (all require movement base enabled)
-  Speed: true # Stable, fixes Speeds bypassing NC+ DEFAULT: true
+  Speed: true # Stable, fixes Speeds bypassing NC+, BETA, please report any false positives DEFAULT: true
   Boat-Fly: true # Stable, fixes the most common 1.9 fly bypass using boats. :D DEFAULT: true
   NCP-Drag-Down: true # Drag players down if NoCheatPlus detects fly
   Jesus: true # Stable DEFAULT: true (by HorizonCode)
