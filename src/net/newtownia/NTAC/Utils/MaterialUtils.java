@@ -19,6 +19,11 @@ public class MaterialUtils
     private static List<Material> unsolidMaterials = Arrays.asList(Material.AIR, Material.SIGN, Material.SIGN_POST,
             Material.TRIPWIRE, Material.TRIPWIRE_HOOK, Material.SUGAR_CANE_BLOCK, Material.LONG_GRASS, Material.FLOWER_POT,
             Material.YELLOW_FLOWER);
+    private static List<Material> stepableMaterials = Arrays.asList(Material.STEP, Material.ACACIA_STAIRS, Material.BIRCH_WOOD_STAIRS,
+            Material.BIRCH_WOOD_STAIRS, Material.BRICK_STAIRS, Material.COBBLESTONE_STAIRS, Material.DARK_OAK_STAIRS,
+            Material.JUNGLE_WOOD_STAIRS, Material.NETHER_BRICK_STAIRS, Material.PURPUR_STAIRS, Material.QUARTZ_STAIRS,
+            Material.RED_SANDSTONE_STAIRS, Material.SANDSTONE_STAIRS, Material.SMOOTH_STAIRS, Material.SPRUCE_WOOD_STAIRS,
+            Material.WOOD_STAIRS, Material.STONE_SLAB2, Material.PURPUR_SLAB);
 
     public static List<Material> getSwords()
     {
@@ -154,5 +159,17 @@ public class MaterialUtils
     public static boolean isUnsolid(Block b)
     {
         return isUnsolid(b.getType());
+    }
+
+    public static List<Material> getStepableMaterials() {
+        return stepableMaterials;
+    }
+    public static boolean isStepable(Material m)
+    {
+        return getStepableMaterials().contains(m);
+    }
+    public static boolean isStepable(Block b)
+    {
+        return isStepable(b.getType());
     }
 }

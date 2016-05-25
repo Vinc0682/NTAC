@@ -173,7 +173,7 @@ Anti-Knockback:
   Adjustment: 3
 
   # Every velocity which is weaker than the given value on the y axis will be ignored
-  Minimum-Y-Velocity: 0.001
+  Minimum-Y-Velocity: 0.1
 
   # The time until the VL get's invalidated (in ms)
   # NOTE: The VL only get's invalidated when there are no new VLs.
@@ -230,8 +230,8 @@ Speed:
   # Basic speeds
   Sprinting: 0.83
   Sneaking: 0.215
-  Cobweb: 0.1
-  Ice: 0.71
+  Cobweb: 0.2
+  Ice: 1.7
 
   Jump-Multiplier: 1.8
   Velocity-Multiplier: 2

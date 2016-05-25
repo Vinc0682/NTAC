@@ -20,8 +20,8 @@ public class Speed extends AbstractMovementCheck
 {
     private double sprinting = 0.83;
     private double sneaking = 0.215;
-    private double cobweb = 0.1;
-    private double ice = 0.71;
+    private double cobweb = 0.2;
+    private double ice = 1.7;
     private double jump = 1.8;
     private double velocity = 2;
     private double speedPotion = 1.45;
@@ -53,13 +53,14 @@ public class Speed extends AbstractMovementCheck
 
         if (PlayerUtils.isUnderBlock(p))
             return;
-        if (p.isFlying() || PlayerUtils.isGlidingWithElytra(p))
+        if (PlayerUtils.isGlidingWithElytra(p))
             return;
 
         Location from = event.getFrom();
         Location to = event.getTo();
-        double dX = from.getX() - to.getX();
-        double dZ = from.getZ() - to.getZ();
+        double dX = to.getX() - from.getX();
+        double dY = to.getY() - from.getY();
+        double dZ = to.getZ() - from.getZ();
         double distSq = dX * dX + dZ * dZ;
 
         if (movementBase.isTeleporting(pUUID))
@@ -72,7 +73,7 @@ public class Speed extends AbstractMovementCheck
             speed = ice;
         if (PlayerUtils.isInWeb(p.getLocation()))
             speed = cobweb;
-        if (isJumping(p, to))
+        if (isJumping(p, from, to))
             speed *= jump;
         if (!movementBase.hasVelocityTimePassed(pUUID, 1000))
             speed *= velocity;
@@ -101,9 +102,12 @@ public class Speed extends AbstractMovementCheck
             vlManager.subtractViolation(p, vlDecrease);
     }
 
-    private boolean isJumping(Player p, Location to)
+    private boolean isJumping(Player p, Location from, Location to)
     {
-        return !movementBase.isPlayerOnGround(p) || !PlayerUtils.isLocationOnGroundNTAC(to);
+        boolean stepping = false;
+        if (to.getY() > from.getY())
+            stepping = PlayerUtils.isOnSteps(p);
+        return !movementBase.isPlayerOnGround(p) || !PlayerUtils.isLocationOnGroundNTAC(to) || stepping;
     }
 
     @Override

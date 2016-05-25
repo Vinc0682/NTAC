@@ -1,7 +1,7 @@
 name: NTAC
 prefix: NTAC
 main: net.newtownia.NTAC.NTAC
-version: '1.9-b11'
+version: '1.9-b12'
 depend: [NTApi, ProtocolLib]
 softdepend: [NoCheatPlus]
 author: VincBreaker
@@ -12,10 +12,6 @@ commands:
     description: 'General NTAC-handling'
     usage: '/ntac'
     permission: ntac.command
-  ntacreload:
-    description: 'Laedt das Plugin neu.'
-    usuage: '/ntacreload'
-    permission: ntac.reload
 
 permissions:
   ntac.bypass.killaura.npc:

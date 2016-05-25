@@ -84,6 +84,15 @@ public class PlayerUtils
         }
     }
 
+    public static boolean isOnSteps(Player p)
+    {
+        List<Material> materials = getMaterialsAround(p.getLocation().clone().add(0, -GROUND_THRESHOLD, 0));
+        for (Material m : materials)
+            if (MaterialUtils.isStepable(m))
+                return true;
+        return false;
+    }
+
     public static Location getPlayerStandOnBlockLocation(Location locationUnderPlayer, Material mat) {
         Location b11 = locationUnderPlayer.clone().add(0.3, 0, -0.3);
         if (b11.getBlock().getType() != mat) {
