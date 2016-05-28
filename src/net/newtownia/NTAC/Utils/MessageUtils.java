@@ -33,10 +33,7 @@ public class MessageUtils
     public void printMessage(CommandSender cs, String message, Object... args)
     {
         String msg = messages.get("Prefix") + String.format(messages.get(message), args);
-        msg = formatMessage(msg);
-        if (!(cs instanceof Player))
-            msg = ChatColor.stripColor(msg);
-        cs.sendMessage(msg);
+        cs.sendMessage(formatMessage(msg));
     }
 
     public void printNotify(String[] args)
@@ -49,7 +46,7 @@ public class MessageUtils
         }
         String msg = messages.get("Notify-Prefix") + sb.toString();
         msg = formatMessage(msg);
-        Bukkit.getLogger().info(ChatColor.stripColor(msg));
+        LogUtils.printToConsole(msg);
         for(Player p : Bukkit.getOnlinePlayers())
             if(p.hasPermission("ntac.notify"))
                 p.sendMessage(msg);

@@ -1,6 +1,7 @@
 package net.newtownia.NTAC.Action;
 
 import net.newtownia.NTAC.NTAC;
+import net.newtownia.NTAC.Utils.LogUtils;
 import net.newtownia.NTAC.Utils.PunishUtils;
 import net.newtownia.NTApi.Config.ConfigManager;
 import org.bukkit.Bukkit;
@@ -153,7 +154,7 @@ public class BanManger
         try {
             ConfigManager.SaveConfigurationToFile(config, fileName, pl);
         } catch (IOException e) {
-            Bukkit.getLogger().info("Error saving bans :(");
+            LogUtils.error("Error saving bans :(");
             e.printStackTrace();
         }
     }

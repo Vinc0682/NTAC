@@ -6,9 +6,9 @@ import fr.neatmonster.nocheatplus.hooks.NCPHook;
 import fr.neatmonster.nocheatplus.hooks.NCPHookManager;
 import net.newtownia.NTAC.Action.ViolationManager;
 import net.newtownia.NTAC.NTAC;
+import net.newtownia.NTAC.Utils.LogUtils;
 import net.newtownia.NTAC.Utils.MaterialUtils;
 import net.newtownia.NTAC.Utils.NCPUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -99,7 +99,7 @@ public class NCPDragDownHook implements NCPHook
         }
         if (!NCPUtils.hasNoCheatPlus())
         {
-            Bukkit.getLogger().info("NoCheatPlus is required for NCP-Drag-Down.");
+            LogUtils.info("NoCheatPlus is required for NCP-Drag-Down.");
         }
     }
 

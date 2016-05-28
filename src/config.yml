@@ -40,6 +40,7 @@ Enabled:
   # Player
   SkinDerp: true # Stable, even in AAC --> Hive! DEFAULT: true
   Headless: true # Stable :D
+  Abilities: true # Cancel suspicious client abilities (e.g. vanilla-fly) (by HorizonCode)
 
   # Render
   #Tracers: true # Not implemented yet :/
@@ -105,6 +106,12 @@ Killaura-NPC:
   # How far away should the bot be (on x and y axis)
   Min-Distance: 2
   Max-Distance: 4
+
+  # Which angle should the bot have in relation the the player pitch
+  Angle: 90
+
+  # Set to something >= 100 to disable the bot going down, will unpatch some bypasses
+  Down-Probability: 95
 
   # Slow weapon vl increasement
   # How much should the vl be increased when the player is using a slow weapon, e.g. an axe
@@ -440,3 +447,13 @@ Headless:
     1:
       - 'ntac kick %PLAYER% %%Kick-Derp%%'
       - 'ntac notify %%Notify-Derp-Kick%%'
+
+Abilities:
+
+  # This abuses a bug in almost every vanilla-fly (creative-fly)
+  Vanilla-Fly: true
+
+  Actions:
+    10:
+      - 'ntac kick %PLAYER% %%Kick-Actions%%'
+      - 'ntac notify %%Notify-Abilities-Kick%%'

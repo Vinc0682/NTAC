@@ -12,9 +12,9 @@ import net.newtownia.NTAC.NTAC;
 import net.newtownia.NTAC.Utils.EntityUtils;
 import net.newtownia.NTAC.Utils.FakePlayer.FakePlayer;
 import net.newtownia.NTAC.Utils.FakePlayer.Identity;
+import net.newtownia.NTAC.Utils.LogUtils;
 import net.newtownia.NTAC.Utils.MaterialUtils;
 import net.newtownia.NTAC.Utils.PunishUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
@@ -36,6 +36,8 @@ public class KillauraNPC extends AbstractCombatCheck
     private double maxHeight = 4;
     private double minDist = 2;
     private double maxDist = 4;
+    private double angle = 90;
+    private double downProbability = 0.95;
 
     private Map<UUID, Long> playerLastHitTime;
     private Map<UUID, Long> playerFirstHitTime;
@@ -127,7 +129,7 @@ public class KillauraNPC extends AbstractCombatCheck
                 Entity attacked = EntityUtils.getEntityByEntityID(packet.getTargetID(), p.getLocation().getWorld());
                 if (attacked == null)
                 {
-                    Bukkit.getLogger().info("Unable to find attacked entity");
+                    LogUtils.error("Unable to find attacked entity");
                     return;
                 }
 
@@ -189,8 +191,9 @@ public class KillauraNPC extends AbstractCombatCheck
         double height = minHeight + rnd.nextDouble() * (maxHeight - minHeight);
         double dist = minDist + rnd.nextDouble() * (maxDist - minDist);
 
-        double rot = Math.toRadians(-p.getLocation().getPitch());
-        if (rnd.nextDouble() > 0.9)
+        double angledPitch = -(p.getLocation().getPitch() + angle);
+        double rot = Math.toRadians(angledPitch);
+        if (rnd.nextDouble() > downProbability)
             rot = Math.toRadians(91);
         height *= Math.cos(rot);
         dist *= Math.sin(rot);
@@ -210,6 +213,8 @@ public class KillauraNPC extends AbstractCombatCheck
         maxHeight = Double.parseDouble(config.getString("Killaura-NPC.Max-Height"));
         minDist = Double.parseDouble(config.getString("Killaura-NPC.Min-Distance"));
         maxDist = Double.parseDouble(config.getString("Killaura-NPC.Max-Distance"));
+        angle = Double.parseDouble(config.getString("Killaura-NPC.Angle")) - 90;
+        downProbability = Double.parseDouble(config.getString("Killaura-NPC.Down-Probability")) / 100;
         slowWeaponVLIncrement = Integer.parseInt(config.getString("Killaura-NPC.Slow-Weapon-Increment"));
 
         actionData = new ActionData(config, "Killaura-NPC.Actions");

@@ -6,6 +6,7 @@ import net.newtownia.NTAC.Action.ActionData;
 import net.newtownia.NTAC.Action.ViolationManager;
 import net.newtownia.NTAC.NTAC;
 import net.newtownia.NTAC.Utils.EntityUtils;
+import net.newtownia.NTAC.Utils.LogUtils;
 import net.newtownia.NTAC.Utils.MathUtils;
 import net.newtownia.NTAC.Utils.PunishUtils;
 import org.bukkit.Bukkit;
@@ -70,7 +71,7 @@ public class Aimbot extends AbstractCombatCheck
         Entity attacked = EntityUtils.getEntityByEntityID(packet.getTargetID(), p.getLocation().getWorld());
         if (attacked == null)
         {
-            Bukkit.getLogger().info("Unable to find attacked entity");
+            LogUtils.error("Unable to find attacked entity");
             return;
         }
         if (EntityUtils.isPassive(attacked))

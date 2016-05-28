@@ -17,7 +17,7 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 public class Abilities extends AbstractCheck
 {
-    PacketAdapter settingsPacketEvent;
+    private boolean fly = true;
 
     public Abilities(NTAC pl)
     {
@@ -25,40 +25,42 @@ public class Abilities extends AbstractCheck
 
         loadConfig();
 
-        settingsPacketEvent = new PacketAdapter(pl, ListenerPriority.HIGH, PacketType.Play.Client.ABILITIES) {
+        PacketAdapter abilitiesPacketEvent = new PacketAdapter(pl, ListenerPriority.HIGH, PacketType.Play.Client.ABILITIES) {
             @Override
-            public void onPacketReceiving(PacketEvent event) {
-                handleClientSettingsEvent(event);
+            public void onPacketReceiving(PacketEvent event)
+            {
+                handleClientAbilitiesEvent(event);
             }
         };
-
-        ProtocolLibrary.getProtocolManager().addPacketListener(settingsPacketEvent);
+        ProtocolLibrary.getProtocolManager().addPacketListener(abilitiesPacketEvent);
     }
 
-    public void handleClientSettingsEvent(PacketEvent event)
+    public void handleClientAbilitiesEvent(PacketEvent event)
     {
-        if (isEnabled())
+        if (!isEnabled())
             return;
-
         WrapperPlayClientAbilities packet = new WrapperPlayClientAbilities(event.getPacket());
         final Player p = event.getPlayer();
         if (p.hasPermission("ntac.bypass.abilities"))
             return;
-        if (p.getGameMode() == GameMode.CREATIVE || p.getGameMode() == GameMode.SPECTATOR)
-            return;
-        if (packet.canFly() || packet.isFlying() && !p.getAllowFlight() || !p.isFlying()) {
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    p.setFlying(false);
-                }
-            }.runTask(pl);
+        if (fly)
+        {
+            if (p.getGameMode() == GameMode.CREATIVE || p.getGameMode() == GameMode.SPECTATOR)
+                return;
+            if (packet.canFly() || packet.isFlying() && !p.getAllowFlight() || !p.isFlying()) {
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        p.setFlying(false);
+                    }
+                }.runTask(pl);
+            }
         }
-
     }
 
     @Override
-    public void loadConfig() {
+    public void loadConfig()
+    {
 
     }
 }

@@ -25,8 +25,8 @@ public class PacketGenerator
         spawnPacket.setPitch(loc.getPitch());
 
         WrappedDataWatcher meta = new WrappedDataWatcher();
-        if (!id.visible)
-            meta.setObject(0, (byte)0x20);
+        //if (!id.visible)
+        //    meta.setObject(0, (byte)0x20);
 
         spawnPacket.setMetadata(meta);
 
@@ -49,8 +49,8 @@ public class PacketGenerator
         spawnPacket.setHeadPitch(loc.getPitch());
 
         WrappedDataWatcher meta = new WrappedDataWatcher();
-        if(!id.visible)
-            meta.setObject(0, (byte) 0x20);
+        //if(!id.visible)
+        //    meta.setObject(0, (byte) 0x20);
         spawnPacket.setMetadata(meta);
 
         return spawnPacket;
