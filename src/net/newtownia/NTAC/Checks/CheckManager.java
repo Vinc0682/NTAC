@@ -10,9 +10,11 @@ import net.newtownia.NTAC.Checks.Player.Headless;
 import net.newtownia.NTAC.Checks.Player.SkinDerp;
 import net.newtownia.NTAC.NTAC;
 import net.newtownia.NTAC.Utils.LogUtils;
+import net.newtownia.NTApi.Config.ConfigManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -117,5 +119,20 @@ public class CheckManager
             check.setEnabled(Boolean.valueOf(pl.getConfiguration().getString("Enabled." + check.getName())));
             LogUtils.info((check.isEnabled() ? "&aEnabled" : "&cDisabled") + " " + check.getName());
         }
+    }
+
+    public void saveToConfig()
+    {
+        for (AbstractCheck check : allChecks)
+            pl.getConfiguration().set("Enabled." + check.getName(), check.isEnabled());
+        try {
+            ConfigManager.SaveConfigurationToFile(pl.getConfiguration(), "config.yml", pl);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public List<AbstractCheck> getAllChecks() {
+        return allChecks;
     }
 }

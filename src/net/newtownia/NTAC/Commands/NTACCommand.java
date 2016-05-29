@@ -25,6 +25,7 @@ public class NTACCommand implements CommandExecutor
         add(new Banlist());
         add(new Unban());
         add(new AddBanPoint());
+        add(new Gui());
     }
 
     @Override

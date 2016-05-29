@@ -1,0 +1,14 @@
+Title: '&cNTAC'
+
+Settings-Material: 'DIAMOND_HOE'
+Settings-Title: '&aSettings'
+Settings-Lore: '&7Toggle checks!'
+
+Reload-Material: 'WATCH'
+Reload-Title: '&aReload'
+Reload-Lore: '&7Reload NTAC-Settings.'
+
+Check-Enabled-Title: '&a%1s'
+Check-Enabled-Lore: '&7Click to turn off.'
+Check-Disabled-Title: '&c%1s'
+Check-Disabled-Lore: '&7Click to turn on.'

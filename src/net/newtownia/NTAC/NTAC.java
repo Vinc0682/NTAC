@@ -3,6 +3,7 @@ package net.newtownia.NTAC;
 import net.newtownia.NTAC.Action.BanManger;
 import net.newtownia.NTAC.Checks.CheckManager;
 import net.newtownia.NTAC.Commands.NTACCommand;
+import net.newtownia.NTAC.Gui.Gui;
 import net.newtownia.NTAC.Utils.MessageUtils;
 import net.newtownia.NTApi.Config.ConfigManager;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -20,6 +21,7 @@ public class NTAC extends JavaPlugin
     private MessageUtils messageUtils;
     private CheckManager checkManager;
     private BanManger banManger;
+    private Gui gui;
 
 	@Override
 	public void onEnable() {
@@ -36,6 +38,7 @@ public class NTAC extends JavaPlugin
 
         reload();
         checkManager = new CheckManager(this);
+        gui = new Gui(this);
 	}
 
     public void reload()
@@ -57,6 +60,8 @@ public class NTAC extends JavaPlugin
 
         if (checkManager != null)
             checkManager.reload();
+        if (gui != null)
+            gui.reload();
     }
 
     private void updateConfig(YamlConfiguration original, YamlConfiguration newest)
@@ -93,16 +98,19 @@ public class NTAC extends JavaPlugin
 	public YamlConfiguration getConfiguration() {
 		return config;
 	}
-
+    public CheckManager getCheckManager() {
+        return checkManager;
+    }
     public static NTAC getInstance() {
         return instance;
     }
-
     public MessageUtils getMessageUtils() {
         return messageUtils;
     }
-
     public BanManger getBanManger() {
         return banManger;
+    }
+    public Gui getGui() {
+        return gui;
     }
 }

@@ -2,6 +2,9 @@ Prefix: '&7<< &c&lNTAC&7 <<&f '
 Notify-Prefix: '&cNTAC&7: '
 
 NoPermission: '&cYou dont have the permission to do this!'
+PlayerNotFound: "&cDidn't find player %s!"
+NotPlayer: "You need to be a player to run this command!"
+
 Version: '&cVersion %s &7|&c Upgrading NoCheatplus!'
 Reload: '&aConfig reloaded.'
 
@@ -12,8 +15,6 @@ BanlistFormat: '&c%1s&7 - &c%2s&7 - &c%3s' # Player - Time - Reason
 BanlistEmpty: '&aNo players banned :)'
 Unbanned: '&fUnbanned &a%s&f!'
 AddedBanPoint: '&fAdded %1d ban-point(s) to &c%1s&f!'
-
-PlayerNotFound: "&cDidn't find player %s!"
 
 # You can define custom messages here, you can acces then later on by {{<MessageName>}}
 # Example:

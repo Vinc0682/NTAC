@@ -27,7 +27,6 @@ public class LogUtils
 
     public static void debug(Player p, String message)
     {
-        printToConsole("Hi");
         if (DEBUG)
             p.sendMessage(message);
         debug(message);

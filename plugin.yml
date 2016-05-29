@@ -1,7 +1,7 @@
 name: NTAC
 prefix: NTAC
 main: net.newtownia.NTAC.NTAC
-version: '1.9-b12'
+version: '1.9-b13'
 depend: [NTApi, ProtocolLib]
 softdepend: [NoCheatPlus]
 author: VincBreaker
@@ -14,6 +14,24 @@ commands:
     permission: ntac.command
 
 permissions:
+  ntac.notify:
+    default: OP
+  ntac.command.notify:
+    default: OP
+  ntac.command.gui:
+    default: OP
+  ntac.command.reload:
+    default: OP
+  ntac.command.punish.kick:
+    default: OP
+  ntac.command.punish.ban:
+    default: OP
+  ntac.command.punish.unban:
+    default: OP
+  ntac.command.punish.banlist:
+    default: OP
+  ntac.command.punish.addbanpoint:
+    default: OP
   ntac.bypass.killaura.npc:
     default: OP
   ntac.bypass.aimbot:
@@ -29,6 +47,8 @@ permissions:
   ntac.bypass.skinderp:
     default: OP
   ntac.bypass.headless:
+      default: OP
+  ntac.bypass.abilities:
       default: OP
   ntac.bypass.speed:
     default: OP
@@ -47,20 +67,4 @@ permissions:
   ntac.bypass.ncp-dragdown:
     default: OP
   ntac.bypass.jesus:
-    default: OP
-  ntac.command.notify:
-    default: OP
-  ntac.command.punish.kick:
-    default: OP
-  ntac.command.punish.ban:
-    default: OP
-  ntac.command.punish.unban:
-    default: OP
-  ntac.command.punish.banlist:
-    default: OP
-  ntac.command.punish.addbanpoint:
-    default: OP
-  ntac.command.reload:
-    default: OP
-  ntac.notify:
     default: OP
