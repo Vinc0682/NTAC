@@ -96,6 +96,7 @@ public class CheckManager
             allChecks.add(new NCPDragDown(pl, movementBase));
             allChecks.add(new Jesus(pl, movementBase));
             allChecks.add(new Speed(pl, movementBase));
+            allChecks.add(new BadPackets(pl, movementBase));
 
             //allChecks.add(new Tracers(pl));
             allChecks.add(new AntiChorus(pl));

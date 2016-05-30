@@ -31,6 +31,7 @@ Enabled:
   Boat-Fly: true # Stable, fixes the most common 1.9 fly bypass using boats. :D DEFAULT: true
   NCP-Drag-Down: true # Drag players down if NoCheatPlus detects fly
   Jesus: true # Stable DEFAULT: true (by HorizonCode)
+  Bad-Packets: true # Fixes blink / damage exploits / regen, all movement spammy hacks
   Sneak: true # Stable, patches a NC+ Bypass DEFAULT: true
   Fast-Ladder: true # Stable, NC+ is unable to fix it :(
   Inventory-Move: true # Blocks all moves when inventory is open / item-actions if inv is not open,
@@ -303,6 +304,14 @@ Jesus:
     5:
       - 'ntac kick %PLAYER% %%Kick-Movement%%'
       - 'ntac notify %%Notify-Jesus-Kick%%'
+
+Bad-Packets:
+
+  # VL is equal to the packets send withing 3 ticks
+  Actions:
+    50:
+     - 'cancel'
+     - 'ntac notify %%Notify-Bad-Packets-Suspect%%'
 
 # Sneak properties
 # NOTE: This check isn't ment to be a completly check for Sneak. It is a patch for NC+ fixes a bypass (for NC+)

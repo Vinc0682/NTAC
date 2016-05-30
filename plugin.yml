@@ -1,7 +1,7 @@
 name: NTAC
 prefix: NTAC
 main: net.newtownia.NTAC.NTAC
-version: '1.9-b13'
+version: '1.9-b14'
 depend: [NTApi, ProtocolLib]
 softdepend: [NoCheatPlus]
 author: VincBreaker
@@ -43,6 +43,8 @@ permissions:
   ntac.bypass.criticals:
     default: OP
   ntac.bypass.autoarmor:
+    default: OP
+  ntac.bypass.badpackets:
     default: OP
   ntac.bypass.skinderp:
     default: OP

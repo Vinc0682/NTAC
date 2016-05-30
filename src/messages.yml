@@ -62,5 +62,6 @@ Notify-InvMove-Kick: '%%Notify-Kicked-For%% invmove %%Notify-VL%%'
 Notify-FastLadder-Kick: '%%Notify-Kicked-For%% fastladder %%Notify-VL%%'
 Notify-Jesus-Kick: '%%Notify-Kicked-For%% jesus %%Notify-VL%%'
 Notify-Abilities-Kick: '%%Notify-Kicked-For%% abilities %%Notify-VL%%'
+Notify-Bad-Packets-Suspect: '%%Notify-Player-Suspected%% badpackets %%Notify-VL%%'
 
 Ban-Default-Reason: '%%Kick-Prefix%% Banned%n%n&c          The ban will end in %DURATION%!%n%n'
