@@ -121,7 +121,8 @@ Killaura-NPC:
   #The commands run when a player is suspected for killaura
   #Each violation is equal to a hit
   Actions:
-    4:
+    4: "ntac respawn %PLAYER%"
+    8:
       - "ntac addbanpoint %PLAYER% 1"
       - "ntac kick %PLAYER% %%Kick-Killaura%%"
       - "ntac notify %%Notify-Killaura-Kick%%"
@@ -164,7 +165,9 @@ Auto-Clicker:
 
   # The vl is equal to the amount of detected attacs
   Actions:
-    5: 'ntac notify %%Notify-Autoclicker-Suspect%%'
+    5:
+      - 'ntac notify %%Notify-Autoclicker-Suspect%%'
+      - 'ntac respawn %PLAYER%'
     10:
       - 'ntac addbanpoint %PLAYER% 1'
       - 'ntac kick %PLAYER% %%Kick-Autoclicker%%'
@@ -202,6 +205,9 @@ Criticals:
   # Action data, VL equal to the count of suspicious attacks
   Actions:
     3: 'cancel'
+    5:
+      - "ntac respawn %PLAYER%"
+      - "cancel"
     20:
       - 'ntac kick %PLAYER% %%Kick-Criticals%%'
       - 'ntac notify %%Notify-Criticals-Kick%%'
@@ -312,6 +318,7 @@ Bad-Packets:
     50:
      - 'cancel'
      - 'ntac notify %%Notify-Bad-Packets-Suspect%%'
+     - "ntac respawn %PLAYER%"
 
 # Sneak properties
 # NOTE: This check isn't ment to be a completly check for Sneak. It is a patch for NC+ fixes a bypass (for NC+)

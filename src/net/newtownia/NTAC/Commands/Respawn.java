@@ -34,6 +34,28 @@ public class Respawn extends SubCommand
                     victim.hidePlayer(p);
                     victim.showPlayer(p);
                 }
+                /*for (Entity e : victim.getWorld().getNearbyEntities(victim.getLocation(), 40, 40, 40))
+                {
+                    if (e.getType() == EntityType.PLAYER)
+                        continue;
+
+                    PacketGenerator.getDestroyPacket(e.getEntityId()).sendPacket(victim);
+
+                    final Entity tmp = e;
+                    Bukkit.getScheduler().runTaskLater(pl, new Runnable() {
+                        @Override
+                        public void run()
+                        {
+                            LogUtils.debug("Spawning: " + tmp.getName());
+                            Identity entityID = new Identity();
+                            entityID.name = tmp.getName();
+                            entityID.type = tmp.getType();
+                            entityID.uuid = tmp.getUniqueId();
+                            entityID.isAlreadyOnline = true;
+                            PacketGenerator.getIdentityNotPlayerSpawnPacket(entityID, tmp.getEntityId(), tmp.getLocation());
+                        }
+                    }, 2);
+                }*/
             }
             else
                 pl.getMessageUtils().printMessage(cs, "PlayerNotFound", args[1]);

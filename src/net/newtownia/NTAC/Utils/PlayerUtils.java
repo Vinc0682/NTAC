@@ -5,6 +5,8 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -177,6 +179,14 @@ public class PlayerUtils
     {
         ItemStack chestplate = p.getInventory().getChestplate();
         return p.isGliding() && chestplate != null && chestplate.getType() == Material.ELYTRA;
+    }
+
+    public static boolean isOnEntity(Player p, EntityType type)
+    {
+        for (Entity e : p.getWorld().getNearbyEntities(p.getLocation(), 1, 1, 1))
+            if (e.getType() == type && e.getLocation().getY() < p.getLocation().getY())
+                return true;
+        return false;
     }
 
     public static PotionEffect getPotionEffect(Player p, PotionEffectType type)

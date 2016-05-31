@@ -191,7 +191,7 @@ public class KillauraNPC extends AbstractCombatCheck
         double height = minHeight + rnd.nextDouble() * (maxHeight - minHeight);
         double dist = minDist + rnd.nextDouble() * (maxDist - minDist);
 
-        double angledPitch = -(p.getLocation().getPitch() + angle);
+        double angledPitch = -(p.getLocation().getPitch() - angle);
         double rot = Math.toRadians(angledPitch);
         if (rnd.nextDouble() > downProbability)
             rot = Math.toRadians(91);

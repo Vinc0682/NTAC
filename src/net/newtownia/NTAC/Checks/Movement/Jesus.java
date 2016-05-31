@@ -8,6 +8,7 @@ import net.newtownia.NTAC.Utils.PunishUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerMoveEvent;
 
@@ -53,7 +54,8 @@ public class Jesus extends AbstractMovementCheck
 
         if (PlayerUtils.isInWeb(from) || PlayerUtils.isInWeb(to))
             return;
-
+        if (PlayerUtils.isOnEntity(p, EntityType.BOAT))
+            return;
 
         Block fromBlock = from.getBlock();
         List<Material> arround = new ArrayList<>();
