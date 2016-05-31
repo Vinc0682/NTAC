@@ -9,7 +9,10 @@ import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
 import net.newtownia.NTAC.Action.ActionData;
 import net.newtownia.NTAC.Action.ViolationManager;
+import net.newtownia.NTAC.Checks.Movement.MovementBase;
 import net.newtownia.NTAC.NTAC;
+import net.newtownia.NTAC.Utils.LogUtils;
+import net.newtownia.NTAC.Utils.MathUtils;
 import net.newtownia.NTAC.Utils.PlayerUtils;
 import net.newtownia.NTAC.Utils.PunishUtils;
 import org.bukkit.Bukkit;
@@ -25,6 +28,7 @@ import java.util.UUID;
 
 public class AntiKnockback extends AbstractCombatCheck
 {
+    private MovementBase movementBase;
     private double minVelocityY = 0.05;
     private int adjustment = 3;
     private int invalidateThreshold = 60000;
@@ -36,9 +40,10 @@ public class AntiKnockback extends AbstractCombatCheck
 
     private PacketAdapter keepAlivePacketEvent;
 
-    public AntiKnockback(NTAC pl, CombatBase combatBase)
+    public AntiKnockback(NTAC pl, CombatBase combatBase, MovementBase movementBase)
     {
         super(pl, combatBase, "Anti-Knockback");
+        this.movementBase = movementBase;
 
         playerKeepAliveID = new HashMap<>();
         vlManager = new ViolationManager();
@@ -77,6 +82,9 @@ public class AntiKnockback extends AbstractCombatCheck
 
         Player p = event.getPlayer();
         UUID pUUID = p.getUniqueId();
+
+        if (MathUtils.getYDiff(movementBase.getLastMovement(pUUID)) < 0)
+            return;
 
         if (p.hasPermission("ntac.bypass.antiknockback"))
             return;
@@ -123,6 +131,7 @@ public class AntiKnockback extends AbstractCombatCheck
 
                 if (playerKeepAliveID.containsKey(pUUID))
                 {
+                    LogUtils.debug(p, "Suspected for antiknockback");
                     vlManager.addViolation(p, 1);
                     PunishUtils.runViolationAction(p, vlManager, actionData);
                 }

@@ -24,6 +24,7 @@ public class MovementBase implements Listener
 {
     private Map<UUID, Long> playerStartMoveTimes;
     private Map<UUID, Location> playerStartMoveLocations;
+    private Map<UUID, PlayerMoveEvent> playerLastMovement;
 
     private Map<UUID, Long> playerLastTPTimes;
     private Map<UUID, Location> playerLastTPLocations;
@@ -44,6 +45,7 @@ public class MovementBase implements Listener
     {
         playerStartMoveLocations = new HashMap<>();
         playerStartMoveTimes = new HashMap<>();
+        playerLastMovement = new HashMap<>();
 
         playerLastTPTimes = new HashMap<>();
         playerLastTPLocations = new HashMap<>();
@@ -120,6 +122,8 @@ public class MovementBase implements Listener
         Player p = event.getPlayer();
         UUID pUUID = p.getUniqueId();
 
+        playerLastMovement.put(pUUID, event);
+
         if (teleportedPlayers.contains(pUUID))
             teleportedPlayers.remove(pUUID);
     }
@@ -162,6 +166,13 @@ public class MovementBase implements Listener
     }
 
     //region Getters for the caching
+
+    public PlayerMoveEvent getLastMovement(UUID pUUID)
+    {
+        if (!playerLastMovement.containsKey(pUUID))
+            return null;
+        return playerLastMovement.get(pUUID);
+    }
 
     public long getLastVelocityTime(UUID pUUID)
     {
