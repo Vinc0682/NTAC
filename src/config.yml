@@ -122,7 +122,7 @@ Killaura-NPC:
   #Each violation is equal to a hit
   Actions:
     4: "ntac respawn %PLAYER%"
-    8:
+    6:
       - "ntac addbanpoint %PLAYER% 1"
       - "ntac kick %PLAYER% %%Kick-Killaura%%"
       - "ntac notify %%Notify-Killaura-Kick%%"
@@ -184,7 +184,7 @@ Anti-Knockback:
   Adjustment: 3
 
   # Every velocity which is weaker than the given value on the y axis will be ignored
-  Minimum-Y-Velocity: 0.1
+  Minimum-Y-Velocity: 0.05
 
   # The time until the VL get's invalidated (in ms)
   # NOTE: The VL only get's invalidated when there are no new VLs.

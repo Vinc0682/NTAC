@@ -25,7 +25,7 @@ import java.util.UUID;
 
 public class AntiKnockback extends AbstractCombatCheck
 {
-    private double minVelocityY = 0.001;
+    private double minVelocityY = 0.05;
     private int adjustment = 3;
     private int invalidateThreshold = 60000;
     private ActionData actionData;
@@ -69,6 +69,9 @@ public class AntiKnockback extends AbstractCombatCheck
         if (!isEnabled())
             return;
 
+        double vel = event.getVelocity().getY();
+        if (vel < 0)
+            vel *= -1;
         if (event.getVelocity().getY() < minVelocityY)
             return;
 
