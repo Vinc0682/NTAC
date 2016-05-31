@@ -72,7 +72,7 @@ public class AntiKnockback extends AbstractCombatCheck
         double vel = event.getVelocity().getY();
         if (vel < 0)
             vel *= -1;
-        if (event.getVelocity().getY() < minVelocityY)
+        if (vel < minVelocityY)
             return;
 
         Player p = event.getPlayer();
