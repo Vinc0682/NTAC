@@ -11,7 +11,6 @@ import net.newtownia.NTAC.Action.ActionData;
 import net.newtownia.NTAC.Action.ViolationManager;
 import net.newtownia.NTAC.Checks.Movement.MovementBase;
 import net.newtownia.NTAC.NTAC;
-import net.newtownia.NTAC.Utils.LogUtils;
 import net.newtownia.NTAC.Utils.MathUtils;
 import net.newtownia.NTAC.Utils.PlayerUtils;
 import net.newtownia.NTAC.Utils.PunishUtils;
@@ -38,8 +37,6 @@ public class AntiKnockback extends AbstractCombatCheck
     private ViolationManager vlManager;
     private Random rnd;
 
-    private PacketAdapter keepAlivePacketEvent;
-
     public AntiKnockback(NTAC pl, CombatBase combatBase, MovementBase movementBase)
     {
         super(pl, combatBase, "Anti-Knockback");
@@ -48,15 +45,12 @@ public class AntiKnockback extends AbstractCombatCheck
         playerKeepAliveID = new HashMap<>();
         vlManager = new ViolationManager();
         rnd = new Random(System.currentTimeMillis());
-        keepAlivePacketEvent = new PacketAdapter(pl, ListenerPriority.HIGH, PacketType.Play.Client.KEEP_ALIVE)
-        {
+        ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(pl, ListenerPriority.HIGH, PacketType.Play.Client.KEEP_ALIVE) {
             @Override
-            public void onPacketReceiving(PacketEvent event)
-            {
+            public void onPacketReceiving(PacketEvent event) {
                 handleKeepAlivePacket(event);
             }
-        };
-        ProtocolLibrary.getProtocolManager().addPacketListener(keepAlivePacketEvent);
+        });
 
         loadConfig();
 
@@ -131,7 +125,6 @@ public class AntiKnockback extends AbstractCombatCheck
 
                 if (playerKeepAliveID.containsKey(pUUID))
                 {
-                    LogUtils.debug(p, "Suspected for antiknockback");
                     vlManager.addViolation(p, 1);
                     PunishUtils.runViolationAction(p, vlManager, actionData);
                 }

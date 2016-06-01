@@ -42,6 +42,8 @@ public class BadPackets extends AbstractMovementCheck
             @Override
             public void run()
             {
+                if (!isEnabled())
+                    return;
                 for (Player p : Bukkit.getOnlinePlayers())
                 {
                     int vl = vlManager.getViolationInt(p);

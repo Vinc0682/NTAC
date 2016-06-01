@@ -47,7 +47,7 @@ public class Abilities extends AbstractCheck
         {
             if (p.getGameMode() == GameMode.CREATIVE || p.getGameMode() == GameMode.SPECTATOR)
                 return;
-            if (packet.canFly() || packet.isFlying() && !p.getAllowFlight() || !p.isFlying()) {
+            if ((packet.canFly() || packet.isFlying()) && !(p.getAllowFlight() || p.isFlying())) {
                 new BukkitRunnable() {
                     @Override
                     public void run() {
