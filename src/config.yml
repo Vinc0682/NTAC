@@ -296,9 +296,6 @@ NCP-Drag-Down:
   # NOTE: The VL only get's invalidated when there are no new VLs.
   Invalidate-Threshold: 250
 
-  # How fast should players be dragged down, be careful to not lead into bugs...
-  Down-Speed: 0.5
-
 Jesus:
 
   # Should jesus care about the jumping in water? This will fix several bypasses

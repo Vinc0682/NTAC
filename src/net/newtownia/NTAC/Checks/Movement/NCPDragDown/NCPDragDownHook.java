@@ -24,7 +24,6 @@ public class NCPDragDownHook implements NCPHook
 {
     private NTAC pl;
     private NCPDragDown ncpDragDown;
-    private double downSpeed = 0.5;
 
     private ViolationManager vlManager;
     private boolean hooked = false;
@@ -51,21 +50,19 @@ public class NCPDragDownHook implements NCPHook
         if (vlInfo.willCancel() && !ncpDragDown.getMovementBase().isPlayerOnGround(p))
         {
             vlManager.setViolation(p, 1);
-            Location loc = vlManager.getFirstViolationLocation(p).clone();
-            loc.setY(p.getLocation().getY() - downSpeed);
-            loc.setYaw(p.getLocation().getYaw());
-            loc.setPitch(p.getLocation().getPitch());
-            Block b = loc.getWorld().getBlockAt(loc);
-
-            if (loc.getY() - loc.getBlockY() < downSpeed)
-            {
-                Block bDown = b.getRelative(BlockFace.DOWN);
-                if (!isUnsolid(bDown))
-                    loc.setY(loc.getBlockY());
+            Location ploc = vlManager.getFirstViolationLocation(p).clone();
+            Block bDown = p.getLocation().getBlock().getRelative(BlockFace.DOWN);
+            ploc.setX(p.getLocation().getX());
+            if (bDown.getType() == Material.AIR) {
+                ploc.setY(bDown.getLocation().getBlockY());
             }
+            ploc.setZ(p.getLocation().getZ());
+            ploc.setPitch(p.getLocation().getPitch());
+            ploc.setYaw(p.getLocation().getYaw());
 
-            if (b == null || isUnsolid(b))
-                p.teleport(loc, PlayerTeleportEvent.TeleportCause.UNKNOWN);
+            if (p != null && ploc != null) {
+                p.teleport(ploc, PlayerTeleportEvent.TeleportCause.UNKNOWN);
+            }
             return true;
         }
         else
@@ -87,7 +84,6 @@ public class NCPDragDownHook implements NCPHook
 
     public void loadConfig()
     {
-        downSpeed = Double.parseDouble(pl.getConfiguration().getString("NCP-Drag-Down.Down-Speed"));
     }
 
     public void hook()
