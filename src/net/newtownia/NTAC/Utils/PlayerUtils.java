@@ -53,6 +53,34 @@ public class PlayerUtils
         return false;
     }
 
+    public static Location getPlayerStandOnBlockLocationstair(Location locationUnderPlayer) {
+        Location b11 = locationUnderPlayer.clone().add(0.3, 0, -0.3);
+        if (b11.getBlock().getType().name().contains("STAIR")) {
+            return b11;
+        }
+        Location b12 = locationUnderPlayer.clone().add(-0.3, 0, -0.3);
+        if (b12.getBlock().getType().name().contains("STAIR")) {
+            return b12;
+        }
+        Location b21 = locationUnderPlayer.clone().add(0.3, 0, 0.3);
+        if (b21.getBlock().getType().name().contains("STAIR")) {
+            return b21;
+        }
+        Location b22 = locationUnderPlayer.clone().add(-0.3, 0, +0.3);
+        if (b22.getBlock().getType().name().contains("STAIR")) {
+            return b22;
+        }
+        return locationUnderPlayer;
+    }
+
+    public static boolean isOnStair(Player p) {
+        Location loc = p.getLocation().subtract(0, GROUND_THRESHOLD, 0);
+        if (getPlayerStandOnBlockLocationstair(loc).getBlock().getType().name().contains("STAIR")) {
+            return true;
+        }
+        return false;
+    }
+
     public static boolean isInWeb(Location loc)
     {
         return loc.getBlock().getType() == Material.WEB ||

@@ -26,6 +26,7 @@ public class Speed extends AbstractMovementCheck
     private double velocity = 2;
     private double speedPotion = 1.45;
     private double slowPotion = 0.8;
+    private double stairs = 1.5;
 
     private double vlDecrease = 0.5;
     private double maxVL = 10;
@@ -73,6 +74,8 @@ public class Speed extends AbstractMovementCheck
             speed = ice;
         if (PlayerUtils.isInWeb(p.getLocation()))
             speed = cobweb;
+        if (PlayerUtils.isOnStair(p))
+            speed *= stairs;
         if (isJumping(p, from, to))
             speed *= jump;
         if (!movementBase.hasVelocityTimePassed(pUUID, 1000))
@@ -122,6 +125,7 @@ public class Speed extends AbstractMovementCheck
         velocity = Double.valueOf(config.getString("Speed.Velocity-Multiplier"));
         speedPotion = Double.valueOf(config.getString("Speed.Speed-Potion"));
         slowPotion = Double.valueOf(config.getString("Speed.Slow-Potion"));
+        stairs = Double.valueOf(config.getString("Speed.Stairs"));
         vlDecrease = Double.valueOf(config.getString("Speed.VL-Decrease"));
         maxVL = Double.valueOf(config.getString("Speed.Max-VL"));
         actionData = new ActionData(config, "Speed.Actions");

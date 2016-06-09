@@ -246,6 +246,7 @@ Speed:
   Sneaking: 0.215
   Cobweb: 0.2
   Ice: 1.7
+  Stairs: 1.5
 
   Jump-Multiplier: 1.8
   Velocity-Multiplier: 2
