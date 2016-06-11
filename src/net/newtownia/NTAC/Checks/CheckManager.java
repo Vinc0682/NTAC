@@ -76,7 +76,7 @@ public class CheckManager
         {
             allChecks = new ArrayList<>();
 
-            allChecks.add(new KillauraNPC(pl, combatBase));
+            allChecks.add(new KillauraNPC(pl, combatBase, movementBase));
             allChecks.add(new Aimbot(pl, combatBase));
             allChecks.add(new AntiKnockback(pl, combatBase, movementBase));
             allChecks.add(new AutoClicker(pl, combatBase));

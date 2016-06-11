@@ -77,6 +77,8 @@ public class AntiKnockback extends AbstractCombatCheck
         Player p = event.getPlayer();
         UUID pUUID = p.getUniqueId();
 
+        if (p.getFireTicks() > 0)
+            return;
         if (MathUtils.getYDiff(movementBase.getLastMovement(pUUID)) < 0)
             return;
 

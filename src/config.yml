@@ -103,6 +103,7 @@ Killaura-NPC:
   # How high should the bot be, anything under 2.7 may affect PvP, anything above 4.5 may be out of range
   Min-Height: 3.4
   Max-Height: 4
+  Jump-Multiplier: 1.3
 
   # How far away should the bot be (on x and y axis)
   Min-Distance: 2

@@ -8,6 +8,7 @@ import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
 import net.newtownia.NTAC.Action.ActionData;
 import net.newtownia.NTAC.Action.ViolationManager;
+import net.newtownia.NTAC.Checks.Movement.MovementBase;
 import net.newtownia.NTAC.NTAC;
 import net.newtownia.NTAC.Utils.EntityUtils;
 import net.newtownia.NTAC.Utils.FakePlayer.FakePlayer;
@@ -20,10 +21,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 public class KillauraNPC extends AbstractCombatCheck
 {
@@ -34,36 +32,39 @@ public class KillauraNPC extends AbstractCombatCheck
 
     private double minHeight = 3.4;
     private double maxHeight = 4;
+    private double jumpMultiplier = 1.3;
     private double minDist = 2;
     private double maxDist = 4;
     private double angle = 90;
     private double downProbability = 0.95;
 
     private Map<UUID, Long> playerLastHitTime;
-    private Map<UUID, Long> playerFirstHitTime;
-    private Map<UUID, Identity> playerBotIdentitys;
+    private Map<UUID, Identity> playerBotIdentity;
+    private Map<UUID, Integer> playerBotDownStage;
 
-    private PacketAdapter moveLookPacketEvent;
+    private MovementBase movementBase;
     private FakePlayer bot;
 
     private Random rnd = new Random(System.currentTimeMillis());
+    private List<Integer> botDownRotations = Arrays.asList(0, 45, 91, 45, 0);
 
     private ActionData actionData;
     private ViolationManager vlManager;
 
-    public KillauraNPC(NTAC pl, CombatBase combatBase)
+    public KillauraNPC(NTAC pl, CombatBase combatBase, MovementBase movementBase)
     {
         super(pl, combatBase, "Killaura-NPC");
+        this.movementBase = movementBase;
 
         playerLastHitTime = new HashMap<>();
-        playerFirstHitTime = new HashMap<>();
-        playerBotIdentitys = new HashMap<>();
+        playerBotIdentity = new HashMap<>();
+        playerBotDownStage = new HashMap<>();
 
         vlManager = new ViolationManager();
 
         bot = new FakePlayer(9910 + rnd.nextInt(90));
 
-        moveLookPacketEvent = new PacketAdapter(pl, ListenerPriority.HIGH, PacketType.Play.Client.POSITION,
+        PacketAdapter moveLookPacketEvent = new PacketAdapter(pl, ListenerPriority.HIGH, PacketType.Play.Client.POSITION,
                 PacketType.Play.Client.LOOK,
                 PacketType.Play.Client.POSITION_LOOK) {
             @Override
@@ -91,9 +92,9 @@ public class KillauraNPC extends AbstractCombatCheck
             {
                 playerLastHitTime.remove(pUUID);
 
-                if(playerBotIdentitys.containsKey(pUUID))
+                if(playerBotIdentity.containsKey(pUUID))
                 {
-                    Identity playerBotIdentity = playerBotIdentitys.get(pUUID);
+                    Identity playerBotIdentity = this.playerBotIdentity.get(pUUID);
 
                     if(!playerBotIdentity.isAlreadyOnline)
                     {
@@ -102,7 +103,7 @@ public class KillauraNPC extends AbstractCombatCheck
 
                     bot.destroyForPlayer(p);
 
-                    playerBotIdentitys.remove(pUUID);
+                    this.playerBotIdentity.remove(pUUID);
                     vlManager.resetPlayerViolation(p);
                     return;
                 }
@@ -123,7 +124,7 @@ public class KillauraNPC extends AbstractCombatCheck
 
         if(!playerLastHitTime.containsKey(pUUID) && !p.hasPermission("ntac.bypass.killaura.npc"))
         {
-            Identity botId = null;
+            Identity botId;
             if (copyAttackedType)
             {
                 Entity attacked = EntityUtils.getEntityByEntityID(packet.getTargetID(), p.getLocation().getWorld());
@@ -142,8 +143,7 @@ public class KillauraNPC extends AbstractCombatCheck
                 botId = Identity.Generator.generateIdentityForPlayer(p);
             botId.visible = true;
             bot.spawnForPlayerWithIdentity(p, getBotLoc(p), botId);
-            playerBotIdentitys.put(pUUID, botId);
-            playerFirstHitTime.put(pUUID, System.currentTimeMillis());
+            playerBotIdentity.put(pUUID, botId);
         }
 
         if(packet.getTargetID() == bot.getEntityID())
@@ -168,8 +168,7 @@ public class KillauraNPC extends AbstractCombatCheck
         UUID pUUID = p.getUniqueId();
         vlManager.resetPlayerViolation(pUUID);
         playerLastHitTime.remove(pUUID);
-        playerFirstHitTime.remove(pUUID);
-        playerBotIdentitys.remove(pUUID);
+        playerBotIdentity.remove(pUUID);
     }
 
     private boolean hasAttackTimePassed(UUID pUUID, int milliseconds)
@@ -188,13 +187,33 @@ public class KillauraNPC extends AbstractCombatCheck
 
     private Location getBotLoc(Player p)
     {
+        UUID pUUID = p.getUniqueId();
+
         double height = minHeight + rnd.nextDouble() * (maxHeight - minHeight);
         double dist = minDist + rnd.nextDouble() * (maxDist - minDist);
 
+        if (movementBase.getPlayerOnGroundMoves(pUUID) < 3)
+            height *= jumpMultiplier;
+
         double angledPitch = -(p.getLocation().getPitch() - angle);
         double rot = Math.toRadians(angledPitch);
-        if (rnd.nextDouble() > downProbability)
-            rot = Math.toRadians(91);
+
+        if (playerBotDownStage.containsKey(pUUID))
+        {
+            int stage = playerBotDownStage.get(pUUID);
+            double downRotation = botDownRotations.get(stage);
+            if (rot < downRotation)
+                rot = downRotation;
+            if (stage == botDownRotations.size() - 1)
+                playerBotDownStage.remove(pUUID);
+            else
+                playerBotDownStage.put(pUUID, stage + 1);
+        }
+        else
+        {
+            if (rnd.nextDouble() > downProbability)
+                playerBotDownStage.put(pUUID, 0);
+        }
         height *= Math.cos(rot);
         dist *= Math.sin(rot);
 
@@ -211,6 +230,7 @@ public class KillauraNPC extends AbstractCombatCheck
         copyAttackedType = Boolean.valueOf(config.getString("Killaura-NPC.Copy-Attacked-Type"));
         minHeight = Double.parseDouble(config.getString("Killaura-NPC.Min-Height"));
         maxHeight = Double.parseDouble(config.getString("Killaura-NPC.Max-Height"));
+        jumpMultiplier = Double.parseDouble(config.getString("Killaura-NPC.Jump-Multiplier"));
         minDist = Double.parseDouble(config.getString("Killaura-NPC.Min-Distance"));
         maxDist = Double.parseDouble(config.getString("Killaura-NPC.Max-Distance"));
         angle = Double.parseDouble(config.getString("Killaura-NPC.Angle")) - 90;

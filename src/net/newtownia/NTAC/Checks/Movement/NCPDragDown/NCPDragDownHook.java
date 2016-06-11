@@ -53,16 +53,14 @@ public class NCPDragDownHook implements NCPHook
             Location ploc = vlManager.getFirstViolationLocation(p).clone();
             Block bDown = p.getLocation().getBlock().getRelative(BlockFace.DOWN);
             ploc.setX(p.getLocation().getX());
-            if (bDown.getType() == Material.AIR) {
+            if (isUnsolid(bDown))
                 ploc.setY(bDown.getLocation().getBlockY());
-            }
+
             ploc.setZ(p.getLocation().getZ());
             ploc.setPitch(p.getLocation().getPitch());
             ploc.setYaw(p.getLocation().getYaw());
 
-            if (p != null && ploc != null) {
-                p.teleport(ploc, PlayerTeleportEvent.TeleportCause.UNKNOWN);
-            }
+            p.teleport(ploc, PlayerTeleportEvent.TeleportCause.UNKNOWN);
             return true;
         }
         else
@@ -106,6 +104,6 @@ public class NCPDragDownHook implements NCPHook
 
     @Override
     public String getHookVersion() {
-        return "1.0";
+        return "1.2";
     }
 }

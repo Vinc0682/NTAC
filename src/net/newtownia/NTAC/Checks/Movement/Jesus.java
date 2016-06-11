@@ -71,6 +71,9 @@ public class Jesus extends AbstractMovementCheck
         if (arround.contains(Material.WATER_LILY))
             return;
 
+        if (PlayerUtils.isOnSteps(p))
+            return;
+
         Material inType = p.getLocation().add(0, 0.5, 0).getBlock().getType();
         if (inType == Material.WATER || inType == Material.STATIONARY_WATER)
         {

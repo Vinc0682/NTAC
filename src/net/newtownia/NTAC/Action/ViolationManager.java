@@ -6,7 +6,8 @@ import org.bukkit.entity.Player;
 
 import java.util.*;
 
-public class ViolationManager {
+public class ViolationManager
+{
     private Map<UUID, Double> playerViolations;
     private Map<UUID, Location> playerFirstViolationLocations;
     private Map<UUID, Long> playerLastViolationTimes;
