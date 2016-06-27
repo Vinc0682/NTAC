@@ -9,6 +9,7 @@ import com.comphenix.protocol.wrappers.EnumWrappers;
 import net.newtownia.NTAC.Utils.MaterialUtils;
 import net.newtownia.NTAC.Utils.MathUtils;
 import net.newtownia.NTAC.Utils.PlayerUtils;
+import net.newtownia.NTAC.Utils.Velocity;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -33,6 +34,7 @@ public class MovementBase implements Listener
     private Map<UUID, Boolean> playerOnGround;
     private Map<UUID, Integer> playerOnGroundMoves;
     private Map<UUID, Long> playerLastVelocityTime;
+    private Map<UUID, Velocity> playerLastVelocitys;
     private Map<UUID, Boolean> playerUsingItem;
 
     int newMoveTimeThreshold = 500;
@@ -54,19 +56,10 @@ public class MovementBase implements Listener
         playerOnGround = new HashMap<>();
         playerOnGroundMoves = new HashMap<>();
         playerLastVelocityTime = new HashMap<>();
+        playerLastVelocitys = new HashMap<>();
         playerUsingItem = new HashMap<>();
 
         movementChecks = new ArrayList<>();
-
-        //Disabled since it's buggy as hell
-        /*useItemAdapter = new PacketAdapter(NTAC.getInstance(), ListenerPriority.HIGH, PacketType.Play.Client.BLOCK_DIG,
-                PacketType.Play.Client.BLOCK_PLACE) {
-            @Override
-            public void onPacketReceiving(PacketEvent event) {
-                handleItemUsePacket(event);
-            }
-        };
-        ProtocolLibrary.getProtocolManager().addPacketListener(useItemAdapter);*/
     }
 
     @EventHandler
@@ -126,6 +119,9 @@ public class MovementBase implements Listener
 
         if (teleportedPlayers.contains(pUUID))
             teleportedPlayers.remove(pUUID);
+
+        if (playerLastVelocitys.containsKey(pUUID) && !isAffectedByVelocity(p))
+            playerLastVelocitys.remove(pUUID);
     }
 
     @EventHandler
@@ -140,6 +136,7 @@ public class MovementBase implements Listener
     public void onVelocity(PlayerVelocityEvent event)
     {
         playerLastVelocityTime.put(event.getPlayer().getUniqueId(), System.currentTimeMillis());
+        playerLastVelocitys.put(event.getPlayer().getUniqueId(), new Velocity(event));
     }
 
     //Useless
@@ -184,6 +181,17 @@ public class MovementBase implements Listener
     public boolean hasVelocityTimePassed(UUID pUUID, int time)
     {
         return System.currentTimeMillis() - getLastVelocityTime(pUUID) > time;
+    }
+
+    public Velocity getLastVelocity(UUID pUUID)
+    {
+        return playerLastVelocitys.containsKey(pUUID) ? playerLastVelocitys.get(pUUID) : null;
+    }
+
+    public boolean isAffectedByVelocity(Player p)
+    {
+        Velocity velocity = getLastVelocity(p.getUniqueId());
+        return velocity != null && velocity.isWithinVelocityRange(p.getLocation());
     }
 
     public boolean hasPlayerMoveTimePassed(Player p, int milliseconds)

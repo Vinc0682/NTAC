@@ -13,9 +13,6 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.UUID;
 
-/**
- * Created by HorizonCode on 17.05.2016. Recoded by VincBreaker on 18.05.2016.
- */
 public class Speed extends AbstractMovementCheck
 {
     private double sprinting = 0.83;
@@ -68,7 +65,7 @@ public class Speed extends AbstractMovementCheck
             return;
 
         double speed = sprinting;
-        if (p.isSneaking())
+        if (p.isSneaking() && !movementBase.hasVelocityTimePassed(pUUID, 1000))
             speed = sneaking;
         if (PlayerUtils.isOnIce(p, false))
             speed = ice;
@@ -79,7 +76,14 @@ public class Speed extends AbstractMovementCheck
         if (isJumping(p, from, to))
             speed *= jump;
         if (!movementBase.hasVelocityTimePassed(pUUID, 1000))
+        {
             speed *= velocity;
+            /*if (movementBase.getLastVelocity(pUUID) != null)
+            {
+                speed *= movementBase.getLastVelocity(pUUID).getVelocityDistance();
+            }
+            LogUtils.debug(p, "Speed affected by velocity");*/
+        }
         if (p.hasPotionEffect(PotionEffectType.SPEED))
             speed *= (PlayerUtils.getPotionEffect(p, PotionEffectType.SPEED).getAmplifier() + 1) * speedPotion;
         if (p.hasPotionEffect(PotionEffectType.SLOW))

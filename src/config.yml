@@ -95,9 +95,14 @@ Killaura-NPC:
   # DEFAULT: 5000  (equals 5 seconds)
   Combat-Time: 5000
 
+  # Should NTAC always create a fake identity, this fixes some incompatiblity issues
+  # but allowes some bypasses
+  Only-Random-Identity: false
+
   # Should the bot be of the same type as the attacked entity?
   # Used to patch mobaura which ignores players.
   # If false, the bot will always be a player
+  # Only-Random-Identity need to be set to false to apply this value!
   Copy-Attacked-Type: true
 
   # How high should the bot be, anything under 2.7 may affect PvP, anything above 4.5 may be out of range

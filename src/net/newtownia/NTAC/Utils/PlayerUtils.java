@@ -15,7 +15,6 @@ import org.bukkit.potion.PotionEffectType;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class PlayerUtils
@@ -220,12 +219,13 @@ public class PlayerUtils
     public static PotionEffect getPotionEffect(Player p, PotionEffectType type)
     {
         PotionEffect effect = null;
-        Iterator<PotionEffect> iterator = p.getActivePotionEffects().iterator();
-        while (iterator.hasNext())
+        for (PotionEffect tmp : p.getActivePotionEffects())
         {
-            effect = iterator.next();
-            if (effect.getType() == type)
+            if (tmp.getType() == type)
+            {
+                effect = tmp;
                 break;
+            }
         }
         return effect;
     }

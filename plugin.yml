@@ -1,7 +1,7 @@
 name: NTAC
 prefix: NTAC
 main: net.newtownia.NTAC.NTAC
-version: '1.9-b16'
+version: '1.9-b17'
 depend: [NTApi, ProtocolLib]
 softdepend: [NoCheatPlus]
 author: VincBreaker
@@ -11,7 +11,6 @@ commands:
   ntac:
     description: 'General NTAC-handling'
     usage: '/ntac'
-    permission: ntac.command
 
 permissions:
   ntac.notify:

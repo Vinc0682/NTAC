@@ -25,8 +25,8 @@ import java.util.*;
 
 public class KillauraNPC extends AbstractCombatCheck
 {
-    //int threshold = 5;
     private int combatTime = 5000;
+    private boolean onlyRandomIdentity = false;
     private boolean copyAttackedType = true;
     private int slowWeaponVLIncrement = 2;
 
@@ -125,7 +125,9 @@ public class KillauraNPC extends AbstractCombatCheck
         if(!playerLastHitTime.containsKey(pUUID) && !p.hasPermission("ntac.bypass.killaura.npc"))
         {
             Identity botId;
-            if (copyAttackedType)
+            if (onlyRandomIdentity)
+                botId = Identity.Generator.generateRandomIdentity();
+            else if (copyAttackedType)
             {
                 Entity attacked = EntityUtils.getEntityByEntityID(packet.getTargetID(), p.getLocation().getWorld());
                 if (attacked == null)
@@ -227,6 +229,7 @@ public class KillauraNPC extends AbstractCombatCheck
         YamlConfiguration config = pl.getConfiguration();
 
         combatTime = Integer.parseInt(config.getString("Killaura-NPC.Combat-Time"));
+        onlyRandomIdentity = Boolean.valueOf(config.getString("Killaura-NPC.Only-Random-Identity"));
         copyAttackedType = Boolean.valueOf(config.getString("Killaura-NPC.Copy-Attacked-Type"));
         minHeight = Double.parseDouble(config.getString("Killaura-NPC.Min-Height"));
         maxHeight = Double.parseDouble(config.getString("Killaura-NPC.Max-Height"));
