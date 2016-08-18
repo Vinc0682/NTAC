@@ -13,13 +13,10 @@ import java.util.Map;
 
 public class MessageUtils
 {
-    JavaPlugin pl;
-    Map<String, String> messages;
+    private Map<String, String> messages;
 
     public MessageUtils(JavaPlugin pl, String fileName)
     {
-        this.pl = pl;
-
         messages = new HashMap<>();
 
         YamlConfiguration config = ConfigManager.loadOrCreateConfigFile(fileName, pl);

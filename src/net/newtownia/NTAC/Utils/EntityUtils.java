@@ -15,7 +15,10 @@ public class EntityUtils
     private static List<EntityType> passiveEntitys = Arrays.asList(EntityType.BOAT, EntityType.MINECART,
             EntityType.ITEM_FRAME, EntityType.ARMOR_STAND, EntityType.MINECART_CHEST, EntityType.MINECART_COMMAND,
             EntityType.MINECART_FURNACE, EntityType.MINECART_HOPPER, EntityType.MINECART_MOB_SPAWNER,
-            EntityType.MINECART_TNT);
+            EntityType.MINECART_TNT, EntityType.SHULKER, EntityType.SHULKER_BULLET, EntityType.AREA_EFFECT_CLOUD,
+            EntityType.DRAGON_FIREBALL, EntityType.FIREBALL, EntityType.FISHING_HOOK, EntityType.LIGHTNING,
+            EntityType.PRIMED_TNT, EntityType.WEATHER, EntityType.DROPPED_ITEM, EntityType.ARROW,
+            EntityType.LINGERING_POTION, EntityType.LEASH_HITCH, EntityType.ENDER_PEARL);
 
     public static Entity getEntityByEntityID(int entityID, World world)
     {

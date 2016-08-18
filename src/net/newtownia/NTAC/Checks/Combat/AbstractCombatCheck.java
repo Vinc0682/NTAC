@@ -6,6 +6,7 @@ import net.newtownia.NTAC.Checks.AbstractCheck;
 import net.newtownia.NTAC.NTAC;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * Created by Vinc0682 on 15.05.2016.
@@ -26,4 +27,11 @@ public abstract class AbstractCombatCheck extends AbstractCheck
 
     @Override
     public void onUpdate(Player p) {}
+
+    // Required for the Smoke obfuscator
+    private void a()
+    {
+        JavaPlugin pl2 = pl;
+        loadConfig();
+    }
 }
