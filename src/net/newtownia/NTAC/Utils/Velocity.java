@@ -52,6 +52,6 @@ public class Velocity
         double dZ = current.getZ() - startLocation.getZ();
         double currentDistance = Math.sqrt(dX * dX + dY * dY + dZ * dZ);
 
-        return currentDistance < getVelocityDistance() * 2;
+        return currentDistance < getVelocityDistance() * 4;
     }
 }

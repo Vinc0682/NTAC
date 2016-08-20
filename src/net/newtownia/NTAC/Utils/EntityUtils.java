@@ -31,7 +31,7 @@ public class EntityUtils
 
     public static boolean isPassive(EntityType type)
     {
-        return passiveEntitys.contains(passiveEntitys);
+        return passiveEntitys.contains(type);
     }
     public static boolean isPassive(Entity entity)
     {
