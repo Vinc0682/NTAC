@@ -127,7 +127,7 @@ Killaura-NPC:
   #The commands run when a player is suspected for killaura
   #Each violation is equal to a hit
   Actions:
-    4: "ntac respawn %PLAYER%"
+    2: "ntac respawn %PLAYER%"
     6:
       - "ntac addbanpoint %PLAYER% 1"
       - "ntac kick %PLAYER% %%Kick-Killaura%%"
@@ -261,14 +261,18 @@ Speed:
   Speed-Potion: 1.45
   Slow-Potion: 0.8
 
+  # The vl is increased by (expectedSpeed - actualSpeed) * thisValue
+  VL-Multiplier: 3
   # How fast should the VL decrease
   VL-Decrease: 0.5
+  # How long (after an detection) should the vl NOT decrease (in milliseconds)
+  No-Decrease-Time: 500
   # To prevent setback-exploits
   Max-VL: 10
 
   # VL equals the amount of suspicious moves
   Actions:
-    8: 'cancel' # DON'T LOWER THIS!
+    8: 'cancel' # The VL can increase up to 4 in combat by knockback and up to 1 by jumping...
 
 Boat-Fly:
 

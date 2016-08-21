@@ -25,7 +25,9 @@ public class Speed extends AbstractMovementCheck
     private double slowPotion = 0.8;
     private double stairs = 1.5;
 
+    private double vlMultiplier = 3;
     private double vlDecrease = 0.5;
+    private int noDecreaseTime = 300;
     private double maxVL = 10;
     private ActionData actionData;
 
@@ -95,7 +97,10 @@ public class Speed extends AbstractMovementCheck
         if (distSq > speed)
         {
             if (vlManager.getViolation(p) < maxVL)
-                vlManager.addViolation(p, 1);
+            {
+                vlManager.addViolation(p, vlMultiplier * (distSq - speed));
+            }
+            p.sendMessage("Current VL: " + vlManager.getViolation(p));
             int vl = vlManager.getViolationInt(p);
             if(actionData.doesLastViolationCommandsContains(vl, "cancel"))
             {
@@ -105,8 +110,6 @@ public class Speed extends AbstractMovementCheck
             }
             PunishUtils.runViolationAction(p, vl, vl, actionData);
         }
-        else
-            vlManager.subtractViolation(p, vlDecrease);
     }
 
     private boolean isJumping(Player p, Location from, Location to)
@@ -114,7 +117,16 @@ public class Speed extends AbstractMovementCheck
         boolean stepping = false;
         if (to.getY() > from.getY())
             stepping = PlayerUtils.isOnSteps(p);
-        return !movementBase.isPlayerOnGround(p) || !PlayerUtils.isLocationOnGroundNTAC(to) || stepping;
+        return !movementBase.isPlayerOnGround(p) || !PlayerUtils.isLocationOnGroundNTAC(to) ||
+                movementBase.getPlayerOnGroundMoves(p.getUniqueId()) <= 3 || stepping;
+    }
+
+    @Override
+    public void onUpdate(Player p)
+    {
+        if (vlManager.hasViolation(p.getUniqueId()) &&
+                System.currentTimeMillis() >= vlManager.getLastViolationTime(p) + noDecreaseTime)
+            vlManager.subtractViolation(p, vlDecrease);
     }
 
     @Override
@@ -130,6 +142,7 @@ public class Speed extends AbstractMovementCheck
         speedPotion = Double.valueOf(config.getString("Speed.Speed-Potion"));
         slowPotion = Double.valueOf(config.getString("Speed.Slow-Potion"));
         stairs = Double.valueOf(config.getString("Speed.Stairs"));
+        vlMultiplier = Double.valueOf(config.getString("Speed.VL-Multiplier"));
         vlDecrease = Double.valueOf(config.getString("Speed.VL-Decrease"));
         maxVL = Double.valueOf(config.getString("Speed.Max-VL"));
         actionData = new ActionData(config, "Speed.Actions");

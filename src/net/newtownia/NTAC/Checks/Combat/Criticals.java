@@ -12,9 +12,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
-/**
- * Created by HorizonCode on 17.05.2016.
- */
 public class Criticals extends AbstractCombatCheck
 {
     private ActionData actionData;

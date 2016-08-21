@@ -18,29 +18,26 @@ public class ViolationManager
         playerLastViolationTimes = new HashMap<>();
     }
 
+    public double getViolation(UUID pUUID)
+    {
+        if (!hasViolation(pUUID))
+            return 0;
+        return playerViolations.get(pUUID);
+    }
+
     public double getViolation(Player p)
     {
-        UUID pUUID = p.getUniqueId();
-        if (!playerViolations.containsKey(pUUID))
-            return 0;
-
-        return playerViolations.get(pUUID);
+        return getViolation(p.getUniqueId());
     }
 
     public int getViolationInt(Player p)
     {
-        UUID pUUID = p.getUniqueId();
-        if (!playerViolations.containsKey(pUUID))
-            return 0;
-
-        return (int)(double)(playerViolations.get(pUUID));
+        return (int)getViolation(p);
     }
 
-    public double getViolation(UUID pUUID)
+    public boolean hasViolation(UUID pUUID)
     {
-        if (!playerViolations.containsKey(pUUID))
-            return 0;
-        return playerViolations.get(pUUID);
+        return playerViolations.containsKey(pUUID);
     }
 
     public void setViolation(Player p, double newViolation)
@@ -144,6 +141,18 @@ public class ViolationManager
         {
             resetPlayerViolation(p);
         }
+    }
+
+    public long getLastViolationTime(UUID pUUID)
+    {
+        if (!playerLastViolationTimes.containsKey(pUUID))
+            return -1;
+        return playerLastViolationTimes.get(pUUID);
+    }
+
+    public long getLastViolationTime(Player p)
+    {
+        return getLastViolationTime(p.getUniqueId());
     }
 
     public Map<UUID, Double> getAllViolations()
