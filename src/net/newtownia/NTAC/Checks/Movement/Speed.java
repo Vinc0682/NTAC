@@ -80,11 +80,6 @@ public class Speed extends AbstractMovementCheck
         if (!movementBase.hasVelocityTimePassed(pUUID, 1000))
         {
             speed *= velocity;
-            /*if (movementBase.getLastVelocity(pUUID) != null)
-            {
-                speed *= movementBase.getLastVelocity(pUUID).getVelocityDistance();
-            }
-            LogUtils.debug(p, "Speed affected by velocity");*/
         }
         if (p.hasPotionEffect(PotionEffectType.SPEED))
             speed *= (PlayerUtils.getPotionEffect(p, PotionEffectType.SPEED).getAmplifier() + 1) * speedPotion;
@@ -92,15 +87,12 @@ public class Speed extends AbstractMovementCheck
             speed *= (PlayerUtils.getPotionEffect(p, PotionEffectType.SLOW).getAmplifier() + 1) * slowPotion;
         speed *= 0.1;
 
-        //p.sendMessage("Expected: " + speed + " Real: " + distSq);
-
         if (distSq > speed)
         {
             if (vlManager.getViolation(p) < maxVL)
             {
                 vlManager.addViolation(p, vlMultiplier * (distSq - speed));
             }
-            p.sendMessage("Current VL: " + vlManager.getViolation(p));
             int vl = vlManager.getViolationInt(p);
             if(actionData.doesLastViolationCommandsContains(vl, "cancel"))
             {

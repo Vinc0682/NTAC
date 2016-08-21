@@ -264,9 +264,9 @@ Speed:
   # The vl is increased by (expectedSpeed - actualSpeed) * thisValue
   VL-Multiplier: 3
   # How fast should the VL decrease
-  VL-Decrease: 0.5
+  VL-Decrease: 2
   # How long (after an detection) should the vl NOT decrease (in milliseconds)
-  No-Decrease-Time: 500
+  No-Decrease-Time: 300
   # To prevent setback-exploits
   Max-VL: 10
 

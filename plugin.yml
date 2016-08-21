@@ -1,7 +1,7 @@
 name: NTAC
 prefix: NTAC
 main: net.newtownia.NTAC.NTAC
-version: '1.9-b17'
+version: '1.9-b19'
 depend: [NTApi, ProtocolLib]
 softdepend: [NoCheatPlus]
 author: VincBreaker
