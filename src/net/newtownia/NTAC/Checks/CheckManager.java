@@ -82,6 +82,7 @@ public class CheckManager
             allChecks.add(new AutoClicker(pl, combatBase));
             allChecks.add(new AutoArmor(pl, combatBase));
             allChecks.add(new Criticals(pl, combatBase));
+            allChecks.add(new CombatReach(pl, combatBase));
 
             allChecks.add(new SkinDerp(pl));
             allChecks.add(new Headless(pl));
@@ -97,6 +98,7 @@ public class CheckManager
             allChecks.add(new Jesus(pl, movementBase));
             allChecks.add(new Speed(pl, movementBase));
             allChecks.add(new BadPackets(pl, movementBase));
+            allChecks.add(new Freecam(pl, movementBase));
 
             //allChecks.add(new Tracers(pl));
             allChecks.add(new AntiChorus(pl));

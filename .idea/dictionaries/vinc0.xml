@@ -2,11 +2,13 @@
   <dictionary name="vinc0">
     <words>
       <w>despawn</w>
+      <w>freecam</w>
       <w>killaura</w>
       <w>knockback</w>
       <w>ntac</w>
       <w>requierd</w>
       <w>teleport</w>
+      <w>teleported</w>
     </words>
   </dictionary>
 </component>

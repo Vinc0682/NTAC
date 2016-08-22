@@ -1,12 +1,5 @@
 package net.newtownia.NTAC.Checks.Movement;
 
-import com.comphenix.packetwrapper.WrapperPlayClientBlockDig;
-import com.comphenix.packetwrapper.WrapperPlayClientBlockPlace;
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.events.PacketAdapter;
-import com.comphenix.protocol.events.PacketEvent;
-import com.comphenix.protocol.wrappers.EnumWrappers;
-import net.newtownia.NTAC.Utils.MaterialUtils;
 import net.newtownia.NTAC.Utils.MathUtils;
 import net.newtownia.NTAC.Utils.PlayerUtils;
 import net.newtownia.NTAC.Utils.Velocity;
@@ -26,6 +19,7 @@ public class MovementBase implements Listener
     private Map<UUID, Long> playerStartMoveTimes;
     private Map<UUID, Location> playerStartMoveLocations;
     private Map<UUID, PlayerMoveEvent> playerLastMovement;
+    private Map<UUID, Long> playerLastMoveTime;
 
     private Map<UUID, Long> playerLastTPTimes;
     private Map<UUID, Location> playerLastTPLocations;
@@ -37,17 +31,14 @@ public class MovementBase implements Listener
     private Map<UUID, Velocity> playerLastVelocitys;
     private Map<UUID, Boolean> playerUsingItem;
 
-    int newMoveTimeThreshold = 500;
-
     private ArrayList<AbstractMovementCheck> movementChecks;
-
-    PacketAdapter useItemAdapter;
 
     public MovementBase()
     {
         playerStartMoveLocations = new HashMap<>();
         playerStartMoveTimes = new HashMap<>();
         playerLastMovement = new HashMap<>();
+        playerLastMoveTime = new HashMap<>();
 
         playerLastTPTimes = new HashMap<>();
         playerLastTPLocations = new HashMap<>();
@@ -73,7 +64,7 @@ public class MovementBase implements Listener
         updateCachePostMove(event, origTo, origFrom);
     }
 
-    public void updateCachePreMove(PlayerMoveEvent event)
+    private void updateCachePreMove(PlayerMoveEvent event)
     {
         Player p = event.getPlayer();
         UUID pUUID = p.getUniqueId();
@@ -85,6 +76,7 @@ public class MovementBase implements Listener
         }
         else
         {
+            int newMoveTimeThreshold = 500;
             if(hasPlayerMoveTimePassed(pUUID, newMoveTimeThreshold))
             {
                 playerStartMoveTimes.put(pUUID, System.currentTimeMillis());
@@ -92,8 +84,9 @@ public class MovementBase implements Listener
             }
         }
 
-        playerOnGround.put(pUUID, PlayerUtils.isPlayerOnGround(p));
-        if (isPlayerOnGround(p))
+        boolean onGround = PlayerUtils.isPlayerOnGround(p);
+        playerOnGround.put(pUUID, onGround);
+        if (onGround)
         {
             if (!playerOnGroundMoves.containsKey(pUUID))
                 playerOnGroundMoves.put(pUUID, 1);
@@ -104,18 +97,19 @@ public class MovementBase implements Listener
             playerOnGroundMoves.put(pUUID, 0);
     }
 
-    public void raiseChecks(PlayerMoveEvent event)
+    private void raiseChecks(PlayerMoveEvent event)
     {
         for (AbstractMovementCheck check : movementChecks)
             check.onPlayerMove(event);
     }
 
-    public void updateCachePostMove(PlayerMoveEvent event, Location origTo, Location origFrom)
+    private void updateCachePostMove(PlayerMoveEvent event, Location origTo, Location origFrom)
     {
         Player p = event.getPlayer();
         UUID pUUID = p.getUniqueId();
 
         playerLastMovement.put(pUUID, event);
+        playerLastMoveTime.put(pUUID, System.currentTimeMillis());
 
         if (teleportedPlayers.contains(pUUID))
             teleportedPlayers.remove(pUUID);
@@ -127,9 +121,11 @@ public class MovementBase implements Listener
     @EventHandler
     public void onTeleport(PlayerTeleportEvent event)
     {
-        playerLastTPTimes.put(event.getPlayer().getUniqueId(), System.currentTimeMillis());
-        playerLastTPLocations.put(event.getPlayer().getUniqueId(), event.getTo());
-        teleportedPlayers.add(event.getPlayer().getUniqueId());
+        UUID pUUID = event.getPlayer().getUniqueId();
+        playerLastTPTimes.put(pUUID, System.currentTimeMillis());
+        playerLastTPLocations.put(pUUID, event.getTo());
+        playerLastMoveTime.put(pUUID, System.currentTimeMillis());
+        teleportedPlayers.add(pUUID);
     }
 
     @EventHandler
@@ -137,29 +133,6 @@ public class MovementBase implements Listener
     {
         playerLastVelocityTime.put(event.getPlayer().getUniqueId(), System.currentTimeMillis());
         playerLastVelocitys.put(event.getPlayer().getUniqueId(), new Velocity(event));
-    }
-
-    //Useless
-    private void handleItemUsePacket(PacketEvent event)
-    {
-        Player p = event.getPlayer();
-        UUID pUUID = p.getUniqueId();
-
-        if (event.getPacketType() == PacketType.Play.Client.BLOCK_DIG)
-        {
-            p.sendMessage("Gotta dig packet");
-            WrapperPlayClientBlockDig packet = new WrapperPlayClientBlockDig(event.getPacket());
-
-            if (packet.getStatus() == EnumWrappers.PlayerDigType.RELEASE_USE_ITEM)
-                playerUsingItem.put(pUUID, false);
-        }
-        else if (event.getPacketType() == PacketType.Play.Client.BLOCK_PLACE)
-        {
-            p.sendMessage("Gotta place packet");
-            WrapperPlayClientBlockPlace packet = new WrapperPlayClientBlockPlace(event.getPacket());
-            if (MaterialUtils.isUsable(p.getInventory().getItemInMainHand()))
-                playerUsingItem.put(pUUID, true);
-        }
     }
 
     //region Getters for the caching
@@ -268,16 +241,16 @@ public class MovementBase implements Listener
         return playerOnGroundMoves.get(pUUID);
     }
 
-    public boolean isPlayerUsingItem(UUID pUUID)
+    public long getLastMoveTime(UUID pUUID)
     {
-        if (!playerUsingItem.containsKey(pUUID))
-            return false;
-        return playerUsingItem.get(pUUID);
+        if (!playerLastMoveTime.containsKey(pUUID))
+            return -1;
+        return playerLastMoveTime.get(pUUID);
     }
     //endregion
 
     //region Observator functions
-    public void registerMovementCheck(AbstractMovementCheck movementCheck)
+    void registerMovementCheck(AbstractMovementCheck movementCheck)
     {
         movementChecks.add(movementCheck);
     }

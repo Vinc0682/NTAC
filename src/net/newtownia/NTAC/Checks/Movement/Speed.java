@@ -90,9 +90,7 @@ public class Speed extends AbstractMovementCheck
         if (distSq > speed)
         {
             if (vlManager.getViolation(p) < maxVL)
-            {
                 vlManager.addViolation(p, vlMultiplier * (distSq - speed));
-            }
             int vl = vlManager.getViolationInt(p);
             if(actionData.doesLastViolationCommandsContains(vl, "cancel"))
             {

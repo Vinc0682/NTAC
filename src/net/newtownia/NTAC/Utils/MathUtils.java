@@ -66,4 +66,11 @@ public class MathUtils
     {
         return event.getTo().getY() - event.getFrom().getY();
     }
+
+    public static double getXZDistanceSq(Location loc1, Location loc2)
+    {
+        double diffX = loc2.getX() - loc1.getX();
+        double diffZ = loc2.getZ() - loc1.getZ();
+        return diffX * diffX + diffZ * diffZ;
+    }
 }

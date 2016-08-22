@@ -25,6 +25,7 @@ Enabled:
   Auto-Clicker: true # Code stable, customize dat settings DEFAULT: true
   Criticals: true # Stable, by HorizonCode DEFAULT: true
   Auto-Armor: false # Stable, take a look at InvMove too! DEFAULT: true
+  Combat-Reach: true # Stable, DEFAULT: true
 
   #Movement (all require movement base enabled)
   Speed: true # Stable, fixes Speeds bypassing NC+, BETA, please report any false positives DEFAULT: true
@@ -37,6 +38,7 @@ Enabled:
   Inventory-Move: true # Blocks all moves when inventory is open / item-actions if inv is not open,
     # may fuck up archivements, may have false positives DEFAULT: true
   Anti-AFK: false # Beta, testing on newtownia.net + more subchecks'll be added soon! DEFAULT: true
+  Freecam: true # Blocks freecam by abusing a bug in many freecams...
 
   # Player
   SkinDerp: true # Stable, even in AAC --> Hive! DEFAULT: true
@@ -237,6 +239,23 @@ Auto-Armor:
     8:
       - 'ntac kick %PLAYER% %%Kick-AutoArmor%%'
       - 'ntac notify %%Notify-AutoArmor-Kick%%'
+
+# Deny hitting entities to far away from the player...
+Combat-Reach:
+
+  # How far away should the attacker be from the target to be counted as hacker?
+  Max-Reach: 3.6
+
+  # The time until the VL get's invalidated (in ms)
+  # NOTE: The VL only get's invalidated when there are no new VLs.
+  Invalidate-Threshold: 60000
+
+  # The vl is equal to the amount of hits which are to far away from the target.
+  Actions:
+    3: 'cancel'
+    8:
+      - 'ntac kick %PLAYER% %%Kick-CombatReach%%'
+      - 'ntac notify %%Notify-CombatReach-Kick%%'
 
 # ///////////////////////////////////////////////////////////////////
 # Movement hacks
